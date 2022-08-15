@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('avatar');
             $table->boolean('is_admin')->default(false);
-            $table->dropColumn(['name', 'email_verified_at', 'remember_token']);
+            $table->dropColumn('name');
         });
     }
 

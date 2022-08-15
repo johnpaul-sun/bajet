@@ -17,6 +17,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        date_default_timezone_set('Asia/Manila');
         $fname = str_replace(' ', '', strtolower($this->faker->firstName()));
         static $id = 2;
 
@@ -26,6 +27,7 @@ class UserFactory extends Factory
             'avatar' => "https://api.multiavatar.com/$fname&id=" . $id++ . ".png",
             'email' => $this->faker->unique()->safeEmail(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password 
+            'email_verified_at' => date('Y-M-d H:i:s'),
             'is_admin' => false
         ];
     }

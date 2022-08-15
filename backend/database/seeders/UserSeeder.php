@@ -15,12 +15,14 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        date_default_timezone_set('Asia/Manila');
         User::create([
             'first_name' => 'Super',
             'last_name' => 'Admin',
             'avatar' => 'https://api.multiavatar.com/admin&id=1.png',
             'email' => 'admin@super.com',
             'password' => bcrypt('letmein'),
+            'email_verified_at' => date('Y-M-d H:i:s'),
             'is_admin' => true
         ]);
 
