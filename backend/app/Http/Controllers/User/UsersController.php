@@ -30,7 +30,7 @@ class UsersController extends Controller
         $fname = str_replace(' ', '', strtolower($request->first_name));
 
         User::create([
-            'first_name' => $fname,
+            'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'avatar' => "https://api.multiavatar.com/$fname&id=$user_id.png",
             'email' => $request->email,
