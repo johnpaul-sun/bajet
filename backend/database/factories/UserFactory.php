@@ -17,13 +17,13 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $fname = $this->faker->firstName();
+        $fname = str_replace(' ', '', strtolower($this->faker->firstName()));
         static $id = 2;
 
         return [
             'first_name' => $fname,
             'last_name' => $this->faker->lastName(),
-            'avatar' => "https://api.multiavatar.com/" . $id++ . "/$fname",
+            'avatar' => "https://api.multiavatar.com/$fname&id=" . $id++ . ".png",
             'email' => $this->faker->unique()->safeEmail(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password 
             'is_admin' => false

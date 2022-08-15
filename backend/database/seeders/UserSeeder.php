@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'first_name' => 'Super',
             'last_name' => 'Admin',
-            'avatar' => 'https://api.multiavatar.com/1/admin.png',
+            'avatar' => 'https://api.multiavatar.com/admin&id=1.png',
             'email' => 'admin@super.com',
             'password' => bcrypt('letmein'),
             'is_admin' => true
