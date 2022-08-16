@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::group(['prefix' => '/v1'], function () {
     // User Routes. 
     Route::post('/users', [UserController::class, 'register']);
     Route::post('/users/login', [UserController::class, 'login']);
+    // Route::get('/users/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 });
 
 //------------------All-Private-Routes------------------//
@@ -37,4 +39,6 @@ Route::group([
     Route::put('/users', [UserController::class, 'update']);
     Route::put('/users/avatar', [UserController::class, 'updateAvatar']);
     Route::post('/users/logout', [UserController::class, 'logout']);
+
+    Route::get('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 });

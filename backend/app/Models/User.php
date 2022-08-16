@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -16,8 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $guarded = [];
 
     protected $hidden = [
-        'password',
-        'verification_token',
+        'password'
     ];
 
     protected $casts = [
@@ -26,24 +26,28 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public static function id()
     {
-        return auth('sanctum')->user()->id;
+        return auth('sanctum')->id();
     }
 
-    public static function registerUser($request)
+    public static function registerUser(Request $request)
     {
-        $user_id = count(User::get()) + 1;
+        $user_id = User::get()[count(User::get()) - 1]->id + 1;
+
         $fname = str_replace(' ', '', strtolower($request->first_name));
 
-        $user = User::create([
+        User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'avatar' => "https://api.multiavatar.com/$fname&id=$user_id.png",
             'email' => $request->email,
             'password' => bcrypt($request->password),
-        ]);
+        ])->sendEmailVerificationNotification();
+
+        $token = User::findOrFail($user_id)->createToken('bajetapp')->plainTextToken;
 
         return response()->json([
-            'message' => 'Account Created Successfully'
+            'message' => 'Success! an email verification link has been sent to your email address.',
+            'token' => $token
         ], 201);
     }
 
