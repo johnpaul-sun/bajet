@@ -5,12 +5,12 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Dashborad from "../pages/private/admin/Dashboard/Dashborad";
-import Dashboard from "../pages/private/user/Dashboard/Dashboard";
+import AuthChecker from "./middlewares/AuthChecker";
 import Error from "../pages/public/Error/Error";
 import Login from "../pages/public/user/Login";
 import Register from "../pages/public/user/Register/Register";
-import AuthChecker from "./middlewares/AuthChecker";
+import Dashborad from "../pages/private/admin/Dashboard/Dashborad";
+import Dashboard from "../pages/private/user/Dashboard/Dashboard";
 
 export const roles: {
   admin: string,
