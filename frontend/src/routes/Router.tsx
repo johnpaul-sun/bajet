@@ -12,6 +12,7 @@ import Register from "../pages/public/user/Register/Register";
 import Dashborad from "../pages/private/admin/Dashboard/Dashborad";
 import Dashboard from "../pages/private/user/Dashboard/Dashboard";
 import VerifyEmail from "src/pages/private/user/VerifyEmail/VerifyEmail";
+import ForgotPassword from "src/pages/public/user/ForgotPassword/ForgotPassword";
 
 export const roles: {
   admin: string,
@@ -41,6 +42,7 @@ function Router() {
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
 
         {/*--------------- Admin Private Routes ---------------*/}
