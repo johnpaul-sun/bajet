@@ -5,12 +5,13 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import AuthChecker from "./middlewares/AuthChecker";
+import AuthChecker from "../middlewares/AuthChecker";
 import Error from "../pages/public/Error/Error";
 import Login from "../pages/public/user/Login";
 import Register from "../pages/public/user/Register/Register";
 import Dashborad from "../pages/private/admin/Dashboard/Dashborad";
 import Dashboard from "../pages/private/user/Dashboard/Dashboard";
+import VerifyEmail from "src/pages/private/user/VerifyEmail/VerifyEmail";
 
 export const roles: {
   admin: string,
@@ -39,6 +40,7 @@ function Router() {
         <Route element={<AuthChecker userRoles={roles.user} />}>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
         </Route>
 
         {/*--------------- Admin Private Routes ---------------*/}
