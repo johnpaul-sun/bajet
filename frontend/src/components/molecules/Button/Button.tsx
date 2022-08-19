@@ -8,8 +8,8 @@ type ButtonTypes = {
   height?: string,
   disabled?: boolean,
   fontType?: string,
-  onClick: () => void,
-  path: string
+  onClick?: () => void,
+  path?: string
 };
 
 function Button({
@@ -18,8 +18,8 @@ function Button({
   height = 'large',
   disabled = false,
   fontType = 'light',
-  onClick,
-  path
+  onClick = () => { },
+  path = ""
 }: ButtonTypes) {
 
   const styleType: any = {
