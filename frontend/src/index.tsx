@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import './index.css';
-import './assets/tailwind.output.css';
 import Router from './routes';
+import './index.css';
+import './assets/styles/tailwind.output.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
