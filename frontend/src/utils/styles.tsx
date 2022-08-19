@@ -1,4 +1,4 @@
-export const style = {
+const style = {
   body: {
     default: 'w-screen p-px-24 px-px-30 bg-gradient-to-b from-tertiary-30 to-sky-50 overflow-x-hidden',
   },
@@ -21,8 +21,8 @@ export const style = {
     password: 'placeholder:text-12 p-px-9 h-px-36 border-2 border-primary-60 bg-primary-10 focus:outline-primary-100 rounded-px-3 w-full',
   },
   button: {
-    primary: 'flex flex-row items-center justify-center bg-secondary-100 text-light-100 h-px-40 rounded-px-3',
-    secondary: 'flex flex-row items-center justify-center h-px-42 border-2 border-secondary-60 rounded-px-3',
+    primary: 'flex flex-row items-center justify-center bg-secondary-100 text-light-100 h-px-40 rounded-px-3 w-full',
+    secondary: 'flex flex-row items-center justify-center h-px-40 border-2 border-secondary-60 rounded-px-3 w-full',
   },
 }
 

@@ -1,9 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import errorBanner from 'src/assets/images/404-image.svg';
+import AlertModal from "src/components/organisms/AlertModal/AlertModal";
 import style from "src/utils/styles";
 
 function Error() {
+  const handleClick = (): void => {
+    console.log('clicked button from alert modal');
+  }
+
   return (
     <div className={`${style.body.default} h-screen flex flex-col justify-between gap-5`} >
       <div className="flex flex-col items-center gap-5">
