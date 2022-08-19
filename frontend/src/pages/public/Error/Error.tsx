@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import errorBanner from 'src/assets/images/404-image.svg';
-import AlertModal from "src/components/organisms/AlertModal/AlertModal";
 import style from "src/utils/styles";
 
 function Error() {
