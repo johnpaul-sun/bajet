@@ -1,38 +1,38 @@
-import { apiCall } from '.';
+import { userApiCall, adminApiCall } from '.';
 
 // Update Type in integration 
 export const userAPI = {
   register: (data: any) => {
-    return apiCall.post('/users', data);
+    return userApiCall.post('/users', data);
   },
-  verifyEmail: (id: number) => {
-    return apiCall.get(`/users/email/verify/${id}`);
+  verifyEmail: () => {
+    return userApiCall.get(`/users/email/verify`);
   },
   resendVerification: () => {
-    return apiCall.get('/users/email/resend');
+    return userApiCall.get('/users/email/resend');
   },
   forgotPassword: (data: any) => {
-    return apiCall.post('/users/forgot-password', data);
+    return userApiCall.post('/users/forgot-password', data);
   },
   inputNewPassword: (data: any) => {
-    return apiCall.post('/users/reset-password', data);
+    return userApiCall.post('/users/reset-password', data);
   },
   login: (data: any) => {
-    return apiCall.post('/users/login', data);
+    return userApiCall.post('/users/login', data);
   },
   updateDetails: (data: any) => {
-    return apiCall.put('/users', data);
+    return userApiCall.put('/users', data);
   },
   updateAvatar: () => {
-    return apiCall.put('/users/avatar');
+    return userApiCall.put('/users/avatar');
   },
   getUser: (id: number) => {
-    return apiCall.get(`/users/${id}`);
+    return userApiCall.get(`/users/${id}`);
   },
   getUsers: () => {
-    return apiCall.get(`/users`);
+    return userApiCall.get(`/users`);
   },
   logout: () => {
-    return apiCall.post('/users/logout');
+    return userApiCall.post('/users/logout');
   },
 } 

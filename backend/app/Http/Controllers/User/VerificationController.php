@@ -10,19 +10,16 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class VerificationController extends Controller
 {
-    public function verify($user_id, Request $request)
+    public function verify(Request $request)
     {
-        if (!$request->hasValidSignature())
-            return response()->json(["msg" => "Invalid/Expired url provided."], 401);
-
-        $user = User::findOrFail($user_id);
+        $user = User::findOrFail($request->id);
 
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
-            return response()->json(["message" => "Thank you for verifying your email."], 200);
+            return redirect("http://127.0.0.1:3000/verify-email?user=$request->id&verified=true");
         }
 
-        return response()->json(["message" => "You already verified your email address."], 200);
+        return redirect("http://127.0.0.1:3000/");
     }
 
     public function resend()
