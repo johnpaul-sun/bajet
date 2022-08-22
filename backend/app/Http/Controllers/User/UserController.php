@@ -36,15 +36,15 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|max:191',
-            'password' => 'required|string',
+            'email' => 'required|email|max:191',
+            'password' => 'required|string|min:9',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
         // Check user credential
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Email or Password is incorrect'], 401);
+            return response()->json(['message' => 'Email or Password is incorrect'], 404);
         }
 
         $token = $user->createToken('elstoken')->plainTextToken;

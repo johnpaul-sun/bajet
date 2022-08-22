@@ -1,5 +1,7 @@
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { userAPI } from "src/api/useAPI";
 import Button from "src/components/molecules/Button/Button";
 import Card from "src/components/molecules/Card/Card";
 import style from "src/utils/styles";
@@ -22,30 +24,40 @@ function VerifyEmail() {
       clearInterval(timer);
       isVerified || setResend(false);
       isVerified ? setRedirectCount(3) : setTimerCount(60);
-      isVerified && handleRedirect();
+      isVerified && navigate('/');
     }, millisec)
   };
 
   const handleClick = (): void => {
     setResend(true);
 
-    // Integrate here
-    console.log('New verification link has been sent!');
+    userAPI.resendVerification()
+      .catch((err) => {
+        navigate('/');
+      });
 
     setTimer(60000);
   };
 
-  const handleRedirect = (): void => {
+  const handleLogout = (): void => {
+    Cookies.remove('user');
+    Cookies.remove('user_token');
     navigate('/');
   };
 
-  const handleLogout = (): void => {
-    console.log('Logout');
-  };
-
   let ignore = false;
+  const [getParams, setGetParams] = useSearchParams();
   useEffect(() => {
     if (!ignore) {
+      const userID = getParams.get('user');
+      userAPI.getUser(Number(userID))
+        .then((res) => {
+          setIsVerified(true);
+        })
+        .catch((err) => {
+          err.response.status === 404 && navigate('/');
+        })
+
       isVerified && setTimer(3000);
     }
     return () => { ignore = true }
@@ -79,7 +91,7 @@ function VerifyEmail() {
           {isVerified
             ? <Button
               type="primary"
-              onClick={handleRedirect}
+              onClick={() => navigate('/')}
               text="Redirect to Dashboard"
               path="/"
             />

@@ -17,7 +17,7 @@ function Card({
   header = false,
   headerCloseButton = true,
   headerText = 'Header Text',
-  opacity = 60,
+  opacity = .6,
   onClick = () => { }
 }: CardTypes) {
   return (
@@ -28,7 +28,7 @@ function Card({
           {children}
         </div>
       </div>
-      <div className={`bg-background-overlay h-screen w-screen absolute z-20 opacity-${opacity}`} onClick={onClick}></div>
+      <div className={`bg-background-overlay h-screen w-screen absolute z-20`} onClick={onClick} style={{ opacity }}></div>
     </div>
   );
 }

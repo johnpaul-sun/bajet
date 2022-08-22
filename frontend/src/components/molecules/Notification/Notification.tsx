@@ -4,12 +4,12 @@ import error from 'src/assets/images/error.png'
 import failed from 'src/assets/images/failed.png'
 
 type NotificationTypes = {
-  onClick: () => void,
+  onClick?: () => void,
   status: string,
   message?: string,
 }
 
-function Notification({ onClick, status, message = '' }: NotificationTypes) {
+function Notification({ onClick = () => { }, status, message = '' }: NotificationTypes) {
   const state: any = {
     success: 'bg-success-100 text-light-100',
     error: 'bg-error-100 text-light-100',
