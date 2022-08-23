@@ -47,7 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return response()->json([
             'message' => 'Success! an email verification link has been sent to your email address.',
-            'token' => $token
+            'token' => $token,
+            'user_id' => $user_id
         ], 201);
     }
 

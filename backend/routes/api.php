@@ -28,7 +28,8 @@ Route::group(['prefix' => '/v1'], function () {
     Route::get('/users/email/verify', [VerificationController::class, 'verify'])->name('verification.verify');
     Route::get('/users/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
     Route::post('/users/forgot-password', [ForgotPasswordController::class, 'forgot'])->name('password.forgot');
-    Route::post('/users/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.reset');
+    Route::get('/users/redirect', [ForgotPasswordController::class, 'redirect'])->name('password.reset');
+    Route::post('/users/reset-password', [ForgotPasswordController::class, 'reset']);
 });
 
 //------------------All-Private-Routes------------------//

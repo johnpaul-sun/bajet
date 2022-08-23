@@ -16,10 +16,10 @@ class VerificationController extends Controller
 
         if (!$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
-            return redirect("http://127.0.0.1:3000/verify-email?user=$request->id&verified=true");
+            return redirect("http://localhost:3000/verify-email?user=$request->id&verified=true");
         }
 
-        return redirect("http://127.0.0.1:3000/");
+        return redirect("http://localhost:3000/");
     }
 
     public function resend()

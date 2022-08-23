@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { userAPI } from "src/api/useAPI";
 import Button from "src/components/molecules/Button/Button";
 import Card from "src/components/molecules/Card/Card";
+import { PreventDefault } from "src/pages/public/user/Register/Register";
 import style from "src/utils/styles";
 
 function VerifyEmail() {
@@ -24,25 +25,25 @@ function VerifyEmail() {
       clearInterval(timer);
       isVerified || setResend(false);
       isVerified ? setRedirectCount(3) : setTimerCount(60);
-      isVerified && navigate('/');
+      isVerified && navigate('/dashboard');
     }, millisec)
   };
 
-  const handleClick = (): void => {
+  const handleClick = (e: PreventDefault): void => {
+    e.preventDefault();
     setResend(true);
+    setTimer(60000);
 
     userAPI.resendVerification()
       .catch((err) => {
         navigate('/');
       });
 
-    setTimer(60000);
   };
 
   const handleLogout = (): void => {
     Cookies.remove('user');
     Cookies.remove('user_token');
-    navigate('/');
   };
 
   let ignore = false;
@@ -50,12 +51,15 @@ function VerifyEmail() {
   useEffect(() => {
     if (!ignore) {
       const userID = getParams.get('user');
-      userAPI.getUser(Number(userID))
+      const verified = getParams.get('verified');
+      verified && userAPI.getUser(Number(userID))
         .then((res) => {
-          setIsVerified(true);
+          Cookies.set('user', JSON.stringify(res.data.data));
+          verified && setIsVerified(true);
         })
         .catch((err) => {
-          err.response.status === 404 && navigate('/');
+          console.log(err);
+          err.response.status == 401 && navigate('/');
         })
 
       isVerified && setTimer(3000);
@@ -91,9 +95,9 @@ function VerifyEmail() {
           {isVerified
             ? <Button
               type="primary"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/dashboard')}
               text="Redirect to Dashboard"
-              path="/"
+              path="/dashboard"
             />
             : <Button
               type="primary"
@@ -101,7 +105,7 @@ function VerifyEmail() {
               text={resend ? `Resend after ${timerCount} seconds` : "Resend verification email"}
               disabled={resend}
             />}
-          {isVerified || <Button type="primaryInvert" onClick={handleLogout} text="Logout" fontType="dark" />}
+          <Button type="primaryInvert" onClick={handleLogout} text="Logout" fontType="dark" path="/" />
         </div>
       </Card>
     </div>

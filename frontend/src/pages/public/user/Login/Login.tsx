@@ -110,7 +110,7 @@ function Login() {
             </span>
             <span className={style.font.dark12Center}>
               Forgot password?&nbsp;
-              <Link to={"/register"} className="text-secondary-100">Reset password</Link>
+              <Link to={"/forgot-password"} className="text-secondary-100">Reset password</Link>
             </span>
           </div>
           <button className={`${style.button.primary} mt-px-12 mb-px-140`}>

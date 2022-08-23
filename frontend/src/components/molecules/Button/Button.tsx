@@ -8,7 +8,7 @@ type ButtonTypes = {
   height?: string,
   disabled?: boolean,
   fontType?: string,
-  onClick?: () => void,
+  onClick?: (e: any) => void,
   path?: string
 };
 
@@ -47,7 +47,7 @@ function Button({
       onClick={(e) => {
         if (disabled)
           return disabled && e.preventDefault()
-        onClick();
+        onClick(e);
       }}
     >
       {text}
