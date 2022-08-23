@@ -34,10 +34,7 @@ function VerifyEmail() {
     setResend(true);
     setTimer(60000);
 
-    userAPI.resendVerification()
-      .catch((err) => {
-        navigate('/');
-      });
+    userAPI.resendVerification();
 
   };
 
@@ -52,10 +49,11 @@ function VerifyEmail() {
     if (!ignore) {
       const userID = getParams.get('user');
       const verified = getParams.get('verified');
+
+      verified && setIsVerified(true);
       verified && userAPI.getUser(Number(userID))
         .then((res) => {
           Cookies.set('user', JSON.stringify(res.data.data));
-          verified && setIsVerified(true);
         })
         .catch((err) => {
           console.log(err);
