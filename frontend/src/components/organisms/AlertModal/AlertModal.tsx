@@ -8,7 +8,7 @@ import failed from "src/assets/images/failed.png";
 type AlertModalTypes = {
   text: string,
   type: string,
-  onClick: () => void,
+  onClick?: () => void,
   path: string
 }
 
@@ -22,7 +22,7 @@ function AlertModal({ text, type, onClick, path }: AlertModalTypes) {
 
   return (
     <Card onClick={onClick}>
-      <div className="py-px-12 flex flex-col justify-between h-px-250">
+      <div className="py-px-12 flex flex-col justify-between h-px-250 z-50">
         <div className="flex flex-col items-center justify-center gap-3">
           <img src={alert[type]} alt="status-icon" className="h-px-100 w-px-100" />
           <h1 className="font-semibold text-18 text-dark-30">{text}</h1>

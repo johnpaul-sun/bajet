@@ -94,7 +94,7 @@ function Register() {
           password_confirmation: ''
         });
         setErrors({ ...errors, isLoading: false });
-        navigate("/verify-email")
+        navigate(`/verify-email?user=${res.data.user_id}`)
       })
       .catch((err) => {
         setErrors({ isError: err.response.data.errors, isLoading: false });
