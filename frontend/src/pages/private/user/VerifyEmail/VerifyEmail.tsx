@@ -34,7 +34,7 @@ function VerifyEmail() {
     setResend(true);
     setTimer(60000);
 
-    userAPI.resendVerification();
+    userAPI.resendVerification().catch(() => console.clear());
 
   };
 

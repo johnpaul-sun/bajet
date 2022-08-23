@@ -118,9 +118,10 @@ function ForgotPassword() {
           <Card
             header={true}
             headerText="Forgot password"
-            headerCloseButton={false}
+            headerCloseButton={true}
             opacity={0}
             className="z-10"
+            onClickHeader={() => navigate('/')}
           >
             <div className="flex flex-col gap-5 z-10">
               <h1 className={`${style.font.dark18} text-15`}>

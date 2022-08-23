@@ -67,9 +67,15 @@ function Login() {
 
     userAPI.login(userCredential)
       .then((res) => {
+        const isVerified = res.data.data.email_verified_at;
         Cookies.set('user_token', res.data.token);
-        Cookies.set('user', JSON.stringify(res.data.data));
-        navigate('/dashboard');
+
+        if (isVerified) {
+          Cookies.set('user', JSON.stringify(res.data.data));
+          navigate('/dashboard')
+        }
+
+        navigate(`/verify-email?user=${res.data.data.id}`);
       })
       .catch((err) => {
         const response = err.response.data;
