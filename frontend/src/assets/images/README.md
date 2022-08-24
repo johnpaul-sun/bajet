@@ -1,0 +1,1 @@
+# Once the project is complete and all necessary images have been exported from folders, clean up the image folder.

@@ -50,6 +50,7 @@ function VerifyEmail() {
       const userID = getParams.get('user');
       const verified = getParams.get('verified');
 
+      userID || navigate('/');
       verified && setIsVerified(true);
       verified && userAPI.getUser(Number(userID))
         .then((res) => {
