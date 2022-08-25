@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { userAPI } from "src/api/useAPI";
 import Button from "src/components/molecules/Button/Button";
-import Card from "src/components/molecules/Card/Card";
+import Card from "src/components/molecules/CardPopup/CardPopup";
 import style from "src/utils/styles";
 import Loading from "src/pages/public/Loading/Loading";
 import { InputTypes, PreventDefault } from "../Register/Register";
