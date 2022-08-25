@@ -49,7 +49,7 @@ module.exports = {
           60: '#A1A33A',
           30: '#F8FC4D',
         },
-        inactive: '#939393'
+        inactive: '#757575'
       },
       colors: {
         primary: {
@@ -83,11 +83,13 @@ module.exports = {
           60: '#A1A33A',
           30: '#F8FC4D',
         },
+        inactive: '#757575',
         background: {
           image: 'linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% )',
           primary: 'linear-gradient(rgb(255, 244, 228), rgb(240, 246, 238))',
           overlay: '#8B8D8A',
           dark: '#21252B',
+          lightDark: '#242830',
           light: '#E0E7F0',
           dropdown: {
             selected: '#21252B',
