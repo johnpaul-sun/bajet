@@ -108,7 +108,7 @@ function PocketDropDown({
             </div>
             <div>
               <h1 className="text-15 text-light-100">{pocketName}</h1>
-              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {netWorth}</span>
+              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-fail-100'}`}>{walletState && '- '}₱ {netWorth}</span>
             </div>
           </div>
           <img src={DropDownIcon} alt="logo" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
