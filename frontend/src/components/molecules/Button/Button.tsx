@@ -9,7 +9,8 @@ type ButtonTypes = {
   disabled?: boolean,
   fontType?: string,
   onClick?: (e: any) => void,
-  path?: string
+  path?: string,
+  className?: string
 };
 
 function Button({
@@ -19,18 +20,19 @@ function Button({
   disabled = false,
   fontType = 'light',
   onClick = () => { },
-  path = ""
+  path = "",
+  className = ""
 }: ButtonTypes) {
 
   const styleType: any = {
     primary: 'bg-secondary-100',
-    primaryInvert: 'border-2 border-secondary-60',
+    primaryInvert: 'border-2 border-secondary-100',
     secondary: 'bg-primary-100',
-    secondaryInvert: 'border-2 border-primary-60',
+    secondaryInvert: 'border-2 border-primary-100',
     success: 'bg-success-100',
     successInvert: 'border-2 border-success-60',
     error: 'bg-error-100',
-    errorInvert: 'border-2 border-error-60',
+    errorInvert: 'border-2 border-error-100',
   };
 
   return (
@@ -38,11 +40,12 @@ function Button({
       to={path}
       className={`
         rounded-px-3
-        ${height === 'medium' ? 'h-px-30' : 'h-px-40'} 
+        ${height === 'medium' ? 'h-px-30 text-13' : 'h-px-40 text-15'} 
         ${style.position.deadCenter} 
         ${disabled && 'opacity-50 cursor-not-allowed'}
         ${styleType[type]} 
         ${fontType === 'light' ? 'text-light-100' : 'text-dark-100'} 
+        ${className}
       `}
       onClick={(e) => {
         if (disabled)
