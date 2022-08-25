@@ -20,6 +20,7 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
   const walletState = parseFloat(netWorth.split(",").join("")) < 0;
+  const transactionType = type === 'income';
 
   const moreData = (
     <div className="bg-background-lightDark px-px-15 py-px-21 rounded-b-px-3">
@@ -31,8 +32,8 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
           <span className="text-inactive text-12">6 minutes ago</span>
         </div>
         <div className="flex flex-col justify-start items-end">
-          <span className={`text-15 ${type === 'income' ? 'text-success-100' : 'text-error-100'}`}>{type === 'expense' && '-'} ₱ {netWorth}</span>
-          <span className={`text-12 ${type === 'income' ? 'text-success-100' : 'text-error-100'}`}>{type === 'expense' ? 'Expense' : 'Icome'}</span>
+          <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {netWorth}</span>
+          <span className={`text-12 ${transactionType ? 'text-success-60' : 'text-error-60'}`}>{!transactionType ? 'Expense' : 'Icome'}</span>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 mt-px-30">
