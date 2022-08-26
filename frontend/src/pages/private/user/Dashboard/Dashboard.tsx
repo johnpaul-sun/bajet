@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { ReactElement, useEffect, useState } from "react";
-import CardContainer from "src/components/molecules/CardContainer";
+import CardContainer from "src/components/organisms/CardContainer/CardContainer";
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
 import Add from 'src/assets/images/add.png'
@@ -9,12 +9,12 @@ import Settings from 'src/assets/images/settings.png'
 import getDate from 'src/utils/getDate';
 import formatNumber from "src/utils/formatNumber";
 import DropDown from "src/components/molecules/DropDown/DropDown";
-import WalletDropDown from "src/components/organisms/WalletDropDown/WalletDropDown";
-import PocketDropDown from "src/components/organisms/PocketDropDown/PocketDropDown";
+import WalletDropDown from "src/components/templates/WalletDropDown/WalletDropDown";
+import PocketDropDown from "src/components/templates/PocketDropDown/PocketDropDown";
 import options from "src/config/optionsDropDownTest.json";
 import walletData from "src/config/walletDataTest.json";
 import pocketData from "src/config/pocketDataTest.json";
-import HistoryBox from "src/components/organisms/HistoryBox/HistoryBox";
+import HistoryBox from "src/components/templates/HistoryBox/HistoryBox";
 import Footer from "src/components/molecules/Footer/Footer";
 import { Link } from "react-router-dom";
 import BackToTop from "src/components/molecules/BackToTop/BackToTop";
@@ -47,6 +47,7 @@ function Dashboard() {
     console.clear();
     resetOnTop();
   }, [])
+
 
   return (
     <div className={`${style.body.default} flex flex-col gap-6`}>
@@ -99,7 +100,7 @@ function Dashboard() {
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
         </div>
-      </CardContainer>
+      </CardContainer >
 
       <CardContainer header={true} headerLeft='Transaction History' hr={true}>
         <HistoryBox historyData={pocketData} />
@@ -116,7 +117,7 @@ function Dashboard() {
 
       {backToTop && <BackToTop />}
       <Footer />
-    </div>
+    </div >
   );
 }
 
