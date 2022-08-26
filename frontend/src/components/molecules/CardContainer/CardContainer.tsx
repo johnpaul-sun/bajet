@@ -28,10 +28,10 @@ function Card({
         <div className={`px-px-21 rounded-t-px-18 ${theme} border-none`}>
           <div className={`py-px-9 flex flex-row justify-between items-center ${hr && `border-b ${isDark ? 'border-inactive' : 'border-black'}`}`}>
             <div className={`text-18 font-medium ${theme}`}>{headerLeft}</div>
-            <div className={theme}>{headerRight}</div>
+            <div className={`${theme} cursor-pointer`}>{headerRight}</div>
           </div>
         </div>}
-      <div className={`${!header ? 'rounded-px-18' : 'rounded-b-px-18'} pt-px-12 pb-px-30 px-px-21 ${theme} ${className}`}>
+      <div className={`${!header ? 'rounded-px-18' : 'rounded-b-px-18'} pt-px-12 pb-px-24 px-px-21 ${theme} ${className}`}>
         {children}
       </div>
     </div>

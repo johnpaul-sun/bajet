@@ -1,4 +1,5 @@
-import React, { ReactElement, useState } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { ReactElement, useEffect, useState } from "react";
 import CardContainer from "src/components/molecules/CardContainer";
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
@@ -10,9 +11,15 @@ import formatNumber from "src/utils/formatNumber";
 import DropDown from "src/components/molecules/DropDown/DropDown";
 import WalletDropDown from "src/components/organisms/WalletDropDown/WalletDropDown";
 import PocketDropDown from "src/components/organisms/PocketDropDown/PocketDropDown";
-import options from "src/context/optionsDropDownTest.json";
-import walletData from "src/context/walletDataTest.json";
-import pocketData from "src/context/pocketDataTest.json";
+import options from "src/config/optionsDropDownTest.json";
+import walletData from "src/config/walletDataTest.json";
+import pocketData from "src/config/pocketDataTest.json";
+import HistoryBox from "src/components/organisms/HistoryBox/HistoryBox";
+import Footer from "src/components/molecules/Footer/Footer";
+import { Link } from "react-router-dom";
+import BackToTop from "src/components/molecules/BackToTop/BackToTop";
+import resetOnTop from "src/utils/resetOnTop";
+import useScrollOnTop from "src/hooks/useScrollOnTop";
 
 function Dashboard() {
   const income: number = 1_500_000;
@@ -34,8 +41,15 @@ function Dashboard() {
     console.log('Pay');
   }
 
+  const { backToTop } = useScrollOnTop(300);
+
+  useEffect(() => {
+    console.clear();
+    resetOnTop();
+  }, [])
+
   return (
-    <div className={`${style.body.default} flex flex-col gap-6 `}>
+    <div className={`${style.body.default} flex flex-col gap-6`}>
       <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} className="mb-px-12">
         <div className="flex flex-row gap-5">
           <img src={Profile} alt="profile" className="w-px-112 h-px-112" />
@@ -88,8 +102,20 @@ function Dashboard() {
       </CardContainer>
 
       <CardContainer header={true} headerLeft='Transaction History' hr={true}>
-
+        <HistoryBox historyData={pocketData} />
+        <HistoryBox historyData={walletData} />
+        <HistoryBox historyData={pocketData} />
+        <div className="flex flex-col justify-center items-center">
+          <div className="border-b mt-px-18 border-inactive w-px-72 ">
+            <div className="border-b mb-px-3 border-inactive ">
+              <Link to={'/history'} ><p className="text-inactive text-center">view all</p></Link>
+            </div>
+          </div>
+        </div>
       </CardContainer>
+
+      {backToTop && <BackToTop />}
+      <Footer />
     </div>
   );
 }

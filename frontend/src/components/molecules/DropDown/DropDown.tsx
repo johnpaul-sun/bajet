@@ -8,6 +8,7 @@ function DropDown({ options }: { options: string[] }) {
 
   const handleDropDown = (): void => {
     setDropDownState(!dropDownState);
+    console.log(options[activeDropDown]);
   }
 
   const dropDownMenu = options.map((option, index) => {

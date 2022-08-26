@@ -1,6 +1,6 @@
 const style = {
   body: {
-    default: ' p-px-15 bg-gradient-to-b from-tertiary-30 to-sky-50 overflow-x-hidden',
+    default: 'scroll-smooth p-px-15 bg-gradient-to-b from-tertiary-30 to-sky-50 overflow-x-hidden',
   },
   position: {
     deadCenter: 'flex items-center justify-center',
