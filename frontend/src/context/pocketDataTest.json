@@ -1,0 +1,10 @@
+{
+  "accountType": "pocket",
+  "type": "income",
+  "netWorth": "1000000",
+  "date": "August Today, 2022",
+  "schedule": "August Today, 2022",
+  "pocketName": "Pocket Name",
+  "pocketDetails": "Lorem ipsum dolor sit amet cosectetur",
+  "unpaidBalance": 0
+}

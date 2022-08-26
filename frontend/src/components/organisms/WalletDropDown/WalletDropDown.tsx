@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Wallet from 'src/assets/images/wallet.png'
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
+import formatNumber from "src/utils/formatNumber";
 
 type WalletDropDownTypes = {
   walletData: {
+    accountType: string,
     type: string,
     netWorth: string,
-    date: Date,
+    date: Date | string | number,
     walletName: string,
     walletDetails: string
   },
@@ -32,7 +34,7 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
           <span className="text-inactive text-12">6 minutes ago</span>
         </div>
         <div className="flex flex-col justify-start items-end">
-          <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {netWorth}</span>
+          <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {formatNumber(netWorth)}</span>
           <span className={`text-12 ${transactionType ? 'text-success-60' : 'text-error-60'}`}>{!transactionType ? 'Expense' : 'Icome'}</span>
         </div>
       </div>
@@ -53,7 +55,7 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
             </div>
             <div>
               <h1 className="text-15 text-light-100">{walletName}</h1>
-              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {netWorth}</span>
+              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {formatNumber(netWorth)}</span>
             </div>
           </div>
           <img src={DropDownIcon} alt="logo" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />

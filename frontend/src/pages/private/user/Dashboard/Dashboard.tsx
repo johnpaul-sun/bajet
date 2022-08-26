@@ -10,56 +10,19 @@ import formatNumber from "src/utils/formatNumber";
 import DropDown from "src/components/molecules/DropDown/DropDown";
 import WalletDropDown from "src/components/organisms/WalletDropDown/WalletDropDown";
 import PocketDropDown from "src/components/organisms/PocketDropDown/PocketDropDown";
+import options from "src/context/optionsDropDownTest.json";
+import walletData from "src/context/walletDataTest.json";
+import pocketData from "src/context/pocketDataTest.json";
 
 function Dashboard() {
   const income: number = 1_500_000;
   const expense: number = 500_000;
   const netWorth: string = formatNumber(income - expense);
 
-  const headerMenu: ReactElement<HTMLDivElement> = (
-    <div className="flex w-fill gap-3 justify-center items-center">
-      <img src={Logo} alt="logo" className="h-px-50" />
-      <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span>
-    </div>
-  );
-  const headerSettings: ReactElement<HTMLImageElement> = (
-    <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => console.log('x')} />
-  );
-  const headerDate: ReactElement<HTMLSpanElement> = (
-    <span className="text-12 opacity-90">{getDate('today')}</span>
-  )
-  const headerAdd: ReactElement<HTMLSpanElement> = (
-    <img src={Add} alt="logo" className="h-px-20" />
-  )
-
-  const options = [
-    'upcoming',
-    'latest - oldest',
-    'oldest - latest',
-    'a - z',
-    'z - a',
-    'highest - lowest',
-    'lowest - highest',
-    'archive',
-  ]
-
-  const walletData = {
-    type: 'expense',
-    netWorth,
-    date: getDate('today'),
-    walletName: 'Wallet Name',
-    walletDetails: 'Lorem ipsum dolor sit amet cosectetur'
-  }
-
-  const pocketData = {
-    type: 'income',
-    netWorth,
-    date: getDate('today'),
-    schedule: getDate('today'),
-    pocketName: 'Pocket Name',
-    pocketDetails: 'Lorem ipsum dolor sit amet cosectetur',
-    unpaidBalance: 0,
-  }
+  const headerMenu: ReactElement<HTMLDivElement> = <div className="flex w-fill gap-3 justify-center items-center"> <img src={Logo} alt="logo" className="h-px-50" /> <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span> </div>;
+  const headerSettings: ReactElement<HTMLImageElement> = <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => console.log('x')} />;
+  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-90">{getDate('today')}</span>;
+  const headerAdd: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" />;
 
   const onClickHistory = (): void => {
     console.log('History');
@@ -72,7 +35,7 @@ function Dashboard() {
   }
 
   return (
-    <div className={`${style.body.default} flex flex-col gap-6`}>
+    <div className={`${style.body.default} flex flex-col gap-6 `}>
       <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} className="mb-px-12">
         <div className="flex flex-row gap-5">
           <img src={Profile} alt="profile" className="w-px-112 h-px-112" />
@@ -122,6 +85,10 @@ function Dashboard() {
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
         </div>
+      </CardContainer>
+
+      <CardContainer header={true} headerLeft='Transaction History' hr={true}>
+
       </CardContainer>
     </div>
   );

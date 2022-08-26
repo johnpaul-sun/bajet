@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import Wallet from 'src/assets/images/wallet.png'
+import Pocket from 'src/assets/images/pocket.png'
 import Calendar from 'src/assets/images/calendar-light.png'
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
-import style from "src/utils/styles";
 import formatNumber from "src/utils/formatNumber";
 
 type PocketDropDownTypes = {
   pocketData: {
+    accountType: string,
     type: string,
     netWorth: string,
-    date: Date,
-    schedule: Date,
+    date: Date | string | number,
+    schedule: Date | string | number,
     pocketName: string,
     pocketDetails: string,
     unpaidBalance: number,
@@ -68,7 +68,7 @@ function PocketDropDown({
             <div className="flex flex-row gap-3">
               <div>
                 <div className="p-px-2 bg-primary-100 rounded-px-3">
-                  <img src={Wallet} alt="wallet" className="w-px-15" />
+                  <img src={Pocket} alt="pocket" className="w-px-15" />
                 </div>
               </div>
               <div className="flex flex-col items-start justify-center">
@@ -77,7 +77,7 @@ function PocketDropDown({
               </div>
             </div>
             <div className="flex flex-col justify-end items-end">
-              <h1 className="text-success-100 text-13">* ₱ {netWorth}</h1>
+              <h1 className="text-success-100 text-13">* ₱ {formatNumber(netWorth)}</h1>
               <span className="text-inactive text-10">* August 10, 2022</span>
             </div>
           </div>
@@ -104,11 +104,11 @@ function PocketDropDown({
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
             <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
-              <img src={Wallet} alt="logo" className="h-px-30 opacity-60" />
+              <img src={Pocket} alt="logo" className="h-px-30 opacity-60" />
             </div>
             <div>
               <h1 className="text-15 text-light-100">{pocketName}</h1>
-              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-fail-100'}`}>{walletState && '- '}₱ {netWorth}</span>
+              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-fail-100'}`}>{walletState && '- '}₱ {formatNumber(netWorth)}</span>
             </div>
           </div>
           <img src={DropDownIcon} alt="logo" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
