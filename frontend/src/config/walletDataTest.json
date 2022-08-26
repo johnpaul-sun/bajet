@@ -3,6 +3,6 @@
   "type": "expense",
   "netWorth": "1000000",
   "date": 10,
-  "walletName": "Wallet Name",
-  "walletDetails": "Lorem ipsum dolor sit amet cosectetur"
+  "name": "Wallet Name",
+  "details": "Lorem ipsum dolor sit amet cosectetur"
 }

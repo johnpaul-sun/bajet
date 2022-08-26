@@ -10,15 +10,19 @@ type WalletDropDownTypes = {
     type: string,
     netWorth: string,
     date: Date | string | number,
-    walletName: string,
-    walletDetails: string
+    name: string,
+    details: string
   },
   onClickHistory?: () => void,
   onClickEdit?: () => void
 }
 
-function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = () => { } }: WalletDropDownTypes) {
-  const { type, netWorth, date, walletName, walletDetails } = walletData;
+function WalletDropDown({
+  walletData,
+  onClickHistory = () => { },
+  onClickEdit = () => { }
+}: WalletDropDownTypes) {
+  const { type, netWorth, date, name, details } = walletData;
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
   const walletState = parseFloat(netWorth.split(",").join("")) < 0;
@@ -29,8 +33,8 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
       <span className="text-light-100 text-15 grid text-center mb-px-18">Latest Transaction</span>
       <div className="flex flex-row justify-between items-star">
         <div className="flex flex-col gap-1">
-          <h1 className="text-light-100 text-15">{walletName}</h1>
-          <span className="text-light-60 text-12 overflow-hidden truncate w-40">{walletDetails}</span>
+          <h1 className="text-light-100 text-15">{name}</h1>
+          <span className="text-light-60 text-12 overflow-hidden truncate w-40">{details}</span>
           <span className="text-inactive text-12">6 minutes ago</span>
         </div>
         <div className="flex flex-col justify-start items-end">
@@ -54,7 +58,7 @@ function WalletDropDown({ walletData, onClickHistory = () => { }, onClickEdit = 
               <img src={Wallet} alt="logo" className="h-px-30 opacity-60" />
             </div>
             <div>
-              <h1 className="text-15 text-light-100">{walletName}</h1>
+              <h1 className="text-15 text-light-100">{name}</h1>
               <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {formatNumber(netWorth)}</span>
             </div>
           </div>

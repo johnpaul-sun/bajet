@@ -12,8 +12,8 @@ type PocketDropDownTypes = {
     netWorth: string,
     date: Date | string | number,
     schedule: Date | string | number,
-    pocketName: string,
-    pocketDetails: string,
+    name: string,
+    details: string,
     unpaidBalance: number,
   },
   onClickHistory?: () => void,
@@ -27,7 +27,7 @@ function PocketDropDown({
   onClickEdit = () => { },
   onClickPay = () => { }
 }: PocketDropDownTypes) {
-  const { netWorth, pocketName, unpaidBalance } = pocketData;
+  const { netWorth, name, unpaidBalance } = pocketData;
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
   const walletState = parseFloat(netWorth.split(",").join("")) < 0;
@@ -100,14 +100,14 @@ function PocketDropDown({
 
   return (
     <>
-      <div className={`wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
+      <div className={`cursor-pointer wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
             <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
               <img src={Pocket} alt="logo" className="h-px-30 opacity-60" />
             </div>
             <div>
-              <h1 className="text-15 text-light-100">{pocketName}</h1>
+              <h1 className="text-15 text-light-100">{name}</h1>
               <span className={`text-15 ${walletState ? 'text-error-100' : 'text-fail-100'}`}>{walletState && '- '}₱ {formatNumber(netWorth)}</span>
             </div>
           </div>
