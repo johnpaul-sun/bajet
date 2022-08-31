@@ -13,7 +13,7 @@ const useScrollOnTop = (YOffset: number) => {
         setBackToTop(false);
       }
     })
-  }, [backToTop])
+  }, [])
 
   return { backToTop };
 }

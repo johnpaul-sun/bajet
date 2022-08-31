@@ -14,12 +14,14 @@ import PocketDropDown from "src/components/templates/PocketDropDown/PocketDropDo
 import options from "src/config/optionsDropDownTest.json";
 import walletData from "src/config/walletDataTest.json";
 import pocketData from "src/config/pocketDataTest.json";
+import paginateDataTest from "src/config/paginateDataTest.json";
 import HistoryBox from "src/components/templates/HistoryBox/HistoryBox";
 import Footer from "src/components/molecules/Footer/Footer";
 import { Link } from "react-router-dom";
 import BackToTop from "src/components/molecules/BackToTop/BackToTop";
 import resetOnTop from "src/utils/resetOnTop";
 import useScrollOnTop from "src/hooks/useScrollOnTop";
+import Paginate from "src/components/molecules/Paginate/Paginate";
 
 function Dashboard() {
   const income: number = 1_500_000;
@@ -51,7 +53,7 @@ function Dashboard() {
 
   return (
     <div className={`${style.body.default} flex flex-col gap-6`}>
-      <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} className="mb-px-12">
+      <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
         <div className="flex flex-row gap-5">
           <img src={Profile} alt="profile" className="w-px-112 h-px-112" />
           <div className="flex flex-col justify-between">
@@ -91,6 +93,7 @@ function Dashboard() {
           <WalletDropDown walletData={walletData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} />
           <WalletDropDown walletData={walletData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} />
         </div>
+        <Paginate data={paginateDataTest} />
       </CardContainer>
 
       <CardContainer header={true} headerLeft='Pockets' headerRight={headerAdd} hr={true}>
@@ -100,9 +103,10 @@ function Dashboard() {
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
           <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
         </div>
+        <Paginate data={paginateDataTest} />
       </CardContainer >
 
-      <CardContainer header={true} headerLeft='Transaction History' hr={true}>
+      <CardContainer header={true} headerLeft='Transaction History' hr={true} headerClass="mb-px-15">
         <HistoryBox historyData={pocketData} />
         <HistoryBox historyData={walletData} />
         <HistoryBox historyData={pocketData} />

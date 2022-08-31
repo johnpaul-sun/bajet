@@ -86,6 +86,7 @@ module.exports = {
           60: '#A1A33A',
           30: '#F8FC4D',
         },
+        dark: '#21252B',
         inactive: '#757575',
         background: {
           image: 'linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% )',
