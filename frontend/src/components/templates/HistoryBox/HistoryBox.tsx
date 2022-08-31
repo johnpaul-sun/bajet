@@ -23,7 +23,7 @@ function HistoryBox({ historyData }: HistoryBoxTypes) {
     console.log('x')
   }
   return (
-    <div className="wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 cursor-pointer" onClick={handleClick}>
+    <div className="wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-px-3 cursor-pointer" onClick={handleClick}>
       <div className="flex flex-row justify-between items-start w-fill">
         <div className="flex flex-row gap-3">
           <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">

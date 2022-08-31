@@ -33,6 +33,8 @@ function Button({
     successInvert: 'border-2 border-success-60',
     error: 'bg-error-100',
     errorInvert: 'border-2 border-error-100',
+    fail: 'bg-fail-100 text-dark-100',
+    failInvert: 'border-2 border-fail-100',
   };
 
   return (
@@ -50,6 +52,7 @@ function Button({
       onClick={(e) => {
         if (disabled)
           return disabled && e.preventDefault()
+        e.preventDefault();
         onClick(e);
       }}
     >
