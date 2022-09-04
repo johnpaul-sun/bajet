@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Card from "src/components/organisms/CardPopup/CardPopup";
 import DropDownIcon from 'src/assets/images/down-light.png'
-import Button from "../Button/Button";
+import Button from "src/components/molecules/Button/Button";
 
-type AddWalletTypes = {
+type EditWalletTypes = {
   onClickHeader: () => void,
   handleSubmit: () => void
 }
 
-function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
+function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(1);
 
@@ -32,7 +32,7 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
     )
   });
   return (
-    <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader} closeModal={onClickHeader}>
+    <Card header={true} headerText="Edit Wallet" onClickHeader={onClickHeader} closeModal={onClickHeader}>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <label htmlFor="wallet_name" className="text-13 font-medium">Wallet name</label>
@@ -51,9 +51,13 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
           <input type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
         </div>
       </div>
-      <Button type="secondary" text="Continue" className="mt-px-50" onClick={handleSubmit} />
+      <div className="mt-px-40 flex flex-row items-center justify-center gap-2">
+        <Button type="error" className="opacity-50 w-full" text="Delete" height="medium" onClick={() => console.log('delete')} />
+        <Button type="success" className="opacity-50 w-full" text="Archive" height="medium" onClick={() => console.log('archive')} />
+      </div>
+      <Button type="secondary" text="Continue" className="mt-px-15" onClick={handleSubmit} />
     </Card>
   );
 }
 
-export default AddWallet;
+export default EditWallet;

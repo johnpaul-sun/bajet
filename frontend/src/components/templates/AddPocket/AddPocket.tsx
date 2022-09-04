@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Card from "src/components/organisms/CardPopup/CardPopup";
 import CalendarIcon from 'src/assets/images/calendar.png'
-import Button from "../Button/Button";
-import Calendar from "../Calendar/Calendar";
+import Button from "src/components/molecules/Button/Button";
+import Calendar from "src/components/molecules/Calendar/Calendar";
 import getOrdinalNumber from 'src/utils/getOrdinalNumber';
 import getMonthWord from "src/utils/getMonthWord";
 
@@ -44,7 +44,7 @@ function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
       {calendar && <Calendar closeCalendar={closeCalendar} selectedDate={selectedDate} />}
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
-          <label htmlFor="pocket_name" className="text-13 font-medium">Wallet name</label>
+          <label htmlFor="pocket_name" className="text-13 font-medium">Pocket name</label>
           <input type="text" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-light-100 text-13 px-px-12" />
         </div>
         <div className="flex flex-col">

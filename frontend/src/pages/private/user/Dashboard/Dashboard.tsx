@@ -22,8 +22,10 @@ import BackToTop from "src/components/molecules/BackToTop/BackToTop";
 import resetOnTop from "src/utils/resetOnTop";
 import useScrollOnTop from "src/hooks/useScrollOnTop";
 import Paginate from "src/components/molecules/Paginate/Paginate";
-import AddPocket from "src/components/molecules/AddPocket/AddPocket";
-import AddWallet from "src/components/molecules/AddWallet/AddWallet";
+import AddPocket from "src/components/templates/AddPocket/AddPocket";
+import AddWallet from "src/components/templates/AddWallet/AddWallet";
+import EditPocket from "src/components/templates/EditPocket/EditPocket";
+import EditWallet from "src/components/templates/EditWallet/EditWallet";
 
 function Dashboard() {
   const income: number = 1_500_000;
@@ -31,7 +33,10 @@ function Dashboard() {
   const netWorth: string = formatNumber(income - expense);
 
   const [addPocketModal, setAddPocketModal] = useState<boolean>(false);
+  const [editPocketModal, setEditPocketModal] = useState<boolean>(false);
+
   const [addWalletModal, setAddWalletModal] = useState<boolean>(false);
+  const [editWalletModal, setEditWalletModal] = useState<boolean>(false);
 
   const headerMenu: ReactElement<HTMLDivElement> = <div className="flex w-fill gap-3 justify-center items-center"> <img src={Logo} alt="logo" className="h-px-50" /> <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span> </div>;
   const headerSettings: ReactElement<HTMLImageElement> = <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => console.log('x')} />;
@@ -39,14 +44,23 @@ function Dashboard() {
   const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddWalletModal(!addWalletModal)} />;
   const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddPocketModal(!addPocketModal)} />;
 
-  const onClickHistory = (): void => {
-    console.log('History');
+  const pocketHistory = (): void => {
+    console.log('pocket history');
   }
-  const onClickEdit = (): void => {
-    console.log('Edit');
+  const editPocket = (): void => {
+    console.log('edit pocket');
+    setEditPocketModal(!editPocketModal);
   }
   const onClickPay = (): void => {
     console.log('Pay');
+  }
+
+  const walletHistory = (): void => {
+    console.log('wallet history');
+  }
+  const editWallet = (): void => {
+    console.log('edit wallet');
+    setEditWalletModal(!editWalletModal);
   }
 
   const { backToTop } = useScrollOnTop(300);
@@ -61,6 +75,9 @@ function Dashboard() {
     <>
       {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} handleSubmit={() => console.log('submit')} />}
       {addPocketModal && <AddPocket onClickHeader={() => setAddPocketModal(!addPocketModal)} handleSubmit={() => console.log('submit')} />}
+      {editPocketModal && <EditPocket onClickHeader={() => setEditPocketModal(!editPocketModal)} handleSubmit={() => console.log('submitted')} />}
+      {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} handleSubmit={() => console.log('submitted')} />}
+
       <div className={`${style.body.default} flex flex-col gap-6`}>
         <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
           <div className="flex flex-row gap-5">
@@ -98,9 +115,9 @@ function Dashboard() {
         <CardContainer header={true} headerLeft='Wallet account' headerRight={addWallet} hr={true}>
           <DropDown options={options} />
           <div className="dropDown flex flex-col mt-px-30">
-            <WalletDropDown walletData={walletData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} />
-            <WalletDropDown walletData={walletData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} />
-            <WalletDropDown walletData={walletData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} />
+            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
+            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
+            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
           </div>
           <Paginate data={paginateDataTest} />
         </CardContainer>
@@ -108,9 +125,9 @@ function Dashboard() {
         <CardContainer header={true} headerLeft='Pockets' headerRight={addPocket} hr={true}>
           <DropDown options={options} />
           <div className="dropDown flex flex-col mt-px-30">
-            <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
-            <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
-            <PocketDropDown pocketData={pocketData} onClickEdit={onClickEdit} onClickHistory={onClickHistory} onClickPay={onClickPay} />
+            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
+            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
+            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
           </div>
           <Paginate data={paginateDataTest} />
         </CardContainer >
