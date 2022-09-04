@@ -21,7 +21,7 @@ function AlertModal({ text, type, onClick, path }: AlertModalTypes) {
   }
 
   return (
-    <Card onClick={onClick}>
+    <Card closeModal={onClick}>
       <div className="py-px-12 flex flex-col justify-between h-px-250 z-50">
         <div className="flex flex-col items-center justify-center gap-3">
           <img src={alert[type]} alt="status-icon" className="h-px-100 w-px-100" />

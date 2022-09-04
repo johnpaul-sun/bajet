@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Pocket\PocketController;
+use App\Http\Controllers\Pocket\PocketTransactionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\VerificationController;
 use App\Http\Controllers\User\ForgotPasswordController;
+use App\Http\Controllers\Wallet\WalletController;
+use App\Http\Controllers\Wallet\WalletTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +47,20 @@ Route::group([
     Route::put('/users', [UserController::class, 'update']);
     Route::put('/users/avatar', [UserController::class, 'updateAvatar']);
     Route::post('/users/logout', [UserController::class, 'logout']);
+
+    // Pocket Routes.
+    Route::resource('/pockets', PocketController::class);
+    Route::get('/pockets/archive/all', [PocketController::class, 'allArchive']);
+    Route::post('/pockets/archive/{pocket_id}', [PocketController::class, 'archive']);
+    Route::post('/pockets/unarchive/{pocket_id}', [PocketController::class, 'unarchive']);
+    Route::get('/pockets/search/{pocket_name}', [PocketController::class, 'search']);
+    Route::post('/pockets/transaction', [PocketTransactionController::class, 'makeTransaction']);
+
+    // Wallet Routes.
+    Route::resource('/wallets', WalletController::class);
+    Route::get('/wallets/archive/all', [WalletController::class, 'allArchive']);
+    Route::post('/wallets/archive/{wallet_id}', [WalletController::class, 'archive']);
+    Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);
+    Route::get('/wallets/search/{wallet_name}', [WalletController::class, 'search']);
+    Route::post('/wallets/transaction', [WalletTransactionController::class, 'makeTransaction']);
 });

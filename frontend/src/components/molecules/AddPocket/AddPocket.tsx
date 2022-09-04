@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Card from "src/components/organisms/CardPopup/CardPopup";
-import Calendar from 'src/assets/images/calendar.png'
+import CalendarIcon from 'src/assets/images/calendar.png'
 import Button from "../Button/Button";
+import Calendar from "../Calendar/Calendar";
+import getOrdinalNumber from 'src/utils/getOrdinalNumber';
+import getMonthWord from "src/utils/getMonthWord";
 
 type AddPocketTypes = {
   onClickHeader: () => void,
@@ -11,9 +14,34 @@ type AddPocketTypes = {
 function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
   const [oneDay, setOneDay] = useState<boolean>(false);
   const [monthly, setMonthly] = useState<boolean>(true);
+  const [calendar, setCalendar] = useState<boolean>(false);
+  const [dateSelected, setDateSelected] = useState<string>('select-date-00');
+
+  const selectedDay = dateSelected.split('-')[2];
+  const selectedMonth = dateSelected.split('-')[1];
+
+  const selectOneDay = (): void => {
+    setOneDay(true);
+    setMonthly(false);
+  }
+
+  const selectMonthly = (): void => {
+    setOneDay(false);
+    setMonthly(true);
+  }
+
+  const closeCalendar = (): void => {
+    setCalendar(!calendar);
+  }
+
+  const selectedDate = (date: string): void => {
+    setDateSelected(date);
+    closeCalendar();
+  }
 
   return (
-    <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader}>
+    <Card header={true} headerText="Add Pocket" onClickHeader={onClickHeader} closeModal={onClickHeader} className="relative">
+      {calendar && <Calendar closeCalendar={closeCalendar} selectedDate={selectedDate} />}
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <label htmlFor="pocket_name" className="text-13 font-medium">Wallet name</label>
@@ -28,23 +56,27 @@ function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
         <div className="flex flex-col gap-2">
           <p className="text-13 font-medium">Schedule</p>
           <div className="flex flex-row gap-2">
-            <Button type="secondary" className={`w-full ${oneDay || 'bg-primary-60'}`} height="medium" text="One day" onClick={() => {
-              setOneDay(true);
-              setMonthly(false);
-            }} />
-            <Button type="secondary" className={`w-full ${monthly || 'bg-primary-60'}`} height="medium" text="Monthly" onClick={() => {
-              setOneDay(false);
-              setMonthly(true);
-            }} />
+            <Button
+              type="secondary"
+              className={`w-full ${oneDay || 'opacity-50'}`}
+              height="medium"
+              text="One day"
+              onClick={selectOneDay} />
+            <Button
+              type="secondary"
+              className={`w-full ${monthly || 'opacity-50'}`}
+              height="medium"
+              text="Monthly"
+              onClick={selectMonthly} />
           </div>
         </div>
         <div className="flex flex-col gap-2 mt-px-12">
           <p className="text-13 font-medium">Schedule date</p>
-          <Button fontType="dark" type="secondaryInvert" className="w-full" height="medium" text="August 31, 2022" onClick={handleSubmit} />
+          <Button fontType="dark" type="secondaryInvert" className="w-full" height="medium" text={dateSelected} onClick={() => setCalendar(!calendar)} />
         </div>
         <div className="flex flex-row gap-2 mt-px-12">
-          <img src={Calendar} alt="dropdown" className='h-px-20 w-px-20' />
-          <p className="text-13 font-medium">on 31st day of August</p>
+          <img src={CalendarIcon} alt="dropdown" className='h-px-20 w-px-20' />
+          <p className="text-13 font-medium">{oneDay ? 'on' : 'every'} {getOrdinalNumber(selectedDay)} of {oneDay ? getMonthWord(selectedMonth) : 'the Month'}</p>
         </div>
       </div>
       <Button type="secondary" text="Continue" className="mt-px-50" onClick={handleSubmit} />

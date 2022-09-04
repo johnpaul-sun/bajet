@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Admin',
             'avatar' => 'https://api.multiavatar.com/admin&id=1.png',
             'email' => 'admin@super.com',
-            'password' => bcrypt('letmein'),
+            'password' => bcrypt('letmein123'),
             'email_verified_at' => date('Y-M-d H:i:s'),
             'is_admin' => true
         ]);

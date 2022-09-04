@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
+use App\Models\Pocket;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -24,32 +25,24 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public function pocket()
+    {
+        return $this->hasMany(Pocket::class);
+    }
+
     public static function id()
     {
         return auth('sanctum')->id();
     }
 
-    public static function registerUser(Request $request)
+    public static function verifyUser($request)
     {
-        $user_id = User::get()[count(User::get()) - 1]->id + 1;
-
-        $fname = str_replace(' ', '', strtolower($request->first_name));
-
-        User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'avatar' => "https://api.multiavatar.com/$fname&id=$user_id.png",
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ])->sendEmailVerificationNotification();
-
-        $token = User::findOrFail($user_id)->createToken('bajetapp')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Success! an email verification link has been sent to your email address.',
-            'token' => $token,
-            'user_id' => $user_id
-        ], 201);
+        $request->validate([
+            'first_name' => 'required|string|max:191',
+            'last_name' => 'required|string|max:191',
+            'email' => 'required|email|unique:users|max:191',
+            'password' => 'required|string|confirmed|min:9',
+        ]);
     }
 
     public static function updateUserDetails($request)

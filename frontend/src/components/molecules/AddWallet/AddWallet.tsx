@@ -32,7 +32,7 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
     )
   });
   return (
-    <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader}>
+    <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader} closeModal={onClickHeader}>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <label htmlFor="wallet_name" className="text-13 font-medium">Wallet name</label>

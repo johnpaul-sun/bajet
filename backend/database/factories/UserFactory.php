@@ -22,7 +22,7 @@ class UserFactory extends Factory
         static $id = 2;
 
         return [
-            'first_name' => $fname,
+            'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'avatar' => "https://api.multiavatar.com/$fname&id=" . $id++ . ".png",
             'email' => $this->faker->unique()->safeEmail(),

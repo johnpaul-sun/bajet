@@ -19,20 +19,31 @@ class UserController extends Controller
         return response()->json(['data' => $users], 200);
     }
 
-    // Store a newly created User in Database.
     public function register(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:191',
-            'last_name' => 'required|string|max:191',
-            'email' => 'required|email|unique:users|max:191',
-            'password' => 'required|string|confirmed|min:9',
-        ]);
+        User::verifyUser($request);
 
-        return User::registerUser($request);
+        $user_id = User::get()[count(User::get()) - 1]->id + 1;
+
+        $fname = str_replace(' ', '', strtolower($request->first_name));
+
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'avatar' => "https://api.multiavatar.com/$fname&id=$user_id.png",
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ])->sendEmailVerificationNotification();
+
+        $token = User::findOrFail($user_id)->createToken('bajetapp')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Success! an email verification link has been sent to your email address.',
+            'token' => $token,
+            'user_id' => $user_id
+        ], 201);
     }
 
-    // Login user and generate access token for authentication.
     public function login(Request $request)
     {
         $request->validate([
@@ -56,7 +67,6 @@ class UserController extends Controller
         ], 201);
     }
 
-    // Display the specified User.
     public function show($user_id)
     {
         if ($user_id === '1') throw new HttpException(404, 'User not found');
@@ -66,7 +76,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // Update the specified User in Database. 
     public function update(Request $request)
     {
         $request->validate([
@@ -80,7 +89,6 @@ class UserController extends Controller
         return User::updateUserDetails($request);
     }
 
-    // Update the specified User in Database. 
     public function updateAvatar()
     {
         $user = User::find(User::id());
@@ -94,7 +102,6 @@ class UserController extends Controller
         return response()->json('success', 201);
     }
 
-    // Logout user and delete the access token from Database. 
     public function logout()
     {
         auth()->user()->tokens()->delete();
