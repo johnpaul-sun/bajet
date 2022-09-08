@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useLayoutEffect, useState } from "react";
 import CardContainer from "src/components/organisms/CardContainer/CardContainer";
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
@@ -12,7 +12,6 @@ import DropDown from "src/components/molecules/DropDown/DropDown";
 import WalletDropDown from "src/components/templates/WalletDropDown/WalletDropDown";
 import PocketDropDown from "src/components/templates/PocketDropDown/PocketDropDown";
 import options from "src/config/optionsDropDownTest.json";
-import walletData from "src/config/walletDataTest.json";
 import pocketData from "src/config/pocketDataTest.json";
 import paginateDataTest from "src/config/paginateDataTest.json";
 import HistoryBox from "src/components/templates/HistoryBox/HistoryBox";
@@ -26,29 +25,84 @@ import AddPocket from "src/components/templates/AddPocket/AddPocket";
 import AddWallet from "src/components/templates/AddWallet/AddWallet";
 import EditPocket from "src/components/templates/EditPocket/EditPocket";
 import EditWallet from "src/components/templates/EditWallet/EditWallet";
+import { userAPI, walletAPI } from "src/api/useAPI";
+import Cookies from "js-cookie";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
+import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+
+export type WalletDataTypes = {
+  amount: number,
+  income_every: string,
+  name: string,
+  created_at?: string,
+  udpated_at?: string,
+  user_id?: number,
+  id?: number,
+  is_active?: number,
+  wallet_transaction: {
+    amount: number,
+    transaction_type: string,
+    id?: number,
+    wallet_id?: number
+    created_at?: string,
+    udpated_at?: string,
+  }[]
+}
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    toast: notification,
+    refresher: [refresher],
+    wallet: {
+      api: {
+        getWallet,
+      },
+      page: [walletPage],
+      data: [walletData, setWalletData],
+      add: [addWalletModal, setAddWalletModal],
+      sort: [sortBy]
+    },
+    pocket: {
+      add: [addPocketModal, setAddPocketModal],
+      edit: [editPocketModal, setEditPocketModal]
+    }
+  } = useContext(MainContext) as MainContextTypes;
+
   const income: number = 1_500_000;
   const expense: number = 500_000;
   const netWorth: string = formatNumber(income - expense);
 
-  const [addPocketModal, setAddPocketModal] = useState<boolean>(false);
-  const [editPocketModal, setEditPocketModal] = useState<boolean>(false);
+  const logout = (): void => {
+    Cookies.remove('user_token');
+    Cookies.remove('user');
+    navigate('/');
+    window.location.reload();
+  }
 
-  const [addWalletModal, setAddWalletModal] = useState<boolean>(false);
-  const [editWalletModal, setEditWalletModal] = useState<boolean>(false);
-
-  const headerMenu: ReactElement<HTMLDivElement> = <div className="flex w-fill gap-3 justify-center items-center"> <img src={Logo} alt="logo" className="h-px-50" /> <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span> </div>;
-  const headerSettings: ReactElement<HTMLImageElement> = <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => console.log('x')} />;
-  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-90">{getDate('today')}</span>;
   const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddWalletModal(!addWalletModal)} />;
   const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddPocketModal(!addPocketModal)} />;
+  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-90">{getDate('today')}</span>;
+  const headerSettings: ReactElement<HTMLImageElement> = <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => {
+    userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
+  }} />;
+  const headerMenu: ReactElement<HTMLDivElement> = (
+    <div className="flex w-fill gap-3 justify-center items-center">
+      <img src={Logo} alt="logo" className="h-px-50" />
+      <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span>
+    </div>
+  );
 
   const pocketHistory = (): void => {
     console.log('pocket history');
   }
   const editPocket = (): void => {
-    console.log('edit pocket');
     setEditPocketModal(!editPocketModal);
   }
   const onClickPay = (): void => {
@@ -58,25 +112,27 @@ function Dashboard() {
   const walletHistory = (): void => {
     console.log('wallet history');
   }
-  const editWallet = (): void => {
-    console.log('edit wallet');
-    setEditWalletModal(!editWalletModal);
-  }
 
   const { backToTop } = useScrollOnTop(300);
 
   useEffect(() => {
     console.clear();
     resetOnTop();
+
+    dispatch(setUser(Cookies.get('user')));
   }, [])
 
+  useEffect(() => {
+    getWallet();
+  }, [walletAPI, walletPage, refresher, sortBy])
 
   return (
     <>
-      {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} handleSubmit={() => console.log('submit')} />}
-      {addPocketModal && <AddPocket onClickHeader={() => setAddPocketModal(!addPocketModal)} handleSubmit={() => console.log('submit')} />}
-      {editPocketModal && <EditPocket onClickHeader={() => setEditPocketModal(!editPocketModal)} handleSubmit={() => console.log('submitted')} />}
-      {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} handleSubmit={() => console.log('submitted')} />}
+      {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} />}
+      {addPocketModal && <AddPocket onClickHeader={() => setAddPocketModal(!addPocketModal)} />}
+      {/* 
+      {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} />}
+      {editPocketModal && <EditPocket onClickHeader={() => setEditPocketModal(!editPocketModal)} />} */}
 
       <div className={`${style.body.default} flex flex-col gap-6`}>
         <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
@@ -113,17 +169,17 @@ function Dashboard() {
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Wallet account' headerRight={addWallet} hr={true}>
-          <DropDown options={options} />
+          <DropDown options={options.wallet} />
           <div className="dropDown flex flex-col mt-px-30">
-            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
-            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
-            <WalletDropDown walletData={walletData} onClickEdit={editWallet} onClickHistory={walletHistory} />
+            {walletData.data?.map((data: WalletDataTypes, index: number) => {
+              return <WalletDropDown walletData={data} onClickHistory={walletHistory} key={index} />
+            })}
           </div>
-          <Paginate data={paginateDataTest} />
+          <Paginate data={walletData} />
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Pockets' headerRight={addPocket} hr={true}>
-          <DropDown options={options} />
+          <DropDown options={options.pocket} />
           <div className="dropDown flex flex-col mt-px-30">
             <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
             <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />

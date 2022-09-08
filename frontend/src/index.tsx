@@ -4,12 +4,20 @@ import reportWebVitals from './reportWebVitals';
 import Router from './routes';
 import './index.css';
 import './assets/styles/tailwind.output.css';
+import { ContextProvider } from './context/MainContext';
+import { Provider } from 'react-redux';
+import { Store } from "src/redux/Store";
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
-    <Router />
+    <ContextProvider>
+      <Provider store={Store}>
+        <Router />
+      </Provider>
+    </ContextProvider>
   </React.StrictMode>
 );
 

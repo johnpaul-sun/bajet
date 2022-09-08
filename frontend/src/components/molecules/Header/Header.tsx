@@ -15,7 +15,7 @@ function Header({ text, headerCloseButton = false, onClick }: HeaderTypes) {
       {text}
       {
         headerCloseButton
-          ? <img src={closeIcon} alt="close" className="h-px-30 w-px-30" onClick={onClick} />
+          ? <img src={closeIcon} alt="close" className="h-px-30 w-px-30 cursor-pointer" onClick={onClick} />
           : <div className="h-px-30 w-px-30"></div>
       }
     </div>

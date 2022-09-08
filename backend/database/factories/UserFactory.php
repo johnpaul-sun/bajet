@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'avatar' => "https://api.multiavatar.com/$fname&id=" . $id++ . ".png",
             'email' => $this->faker->unique()->safeEmail(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password 
+            'password' => bcrypt('password123'),
             'email_verified_at' => date('Y-M-d H:i:s'),
             'is_admin' => false
         ];

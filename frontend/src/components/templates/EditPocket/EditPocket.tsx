@@ -8,7 +8,7 @@ import Calendar from "src/components/molecules/Calendar/Calendar";
 
 type EditPocketTypes = {
   onClickHeader: () => void,
-  handleSubmit: () => void
+  handleSubmit?: () => void
 }
 
 function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {

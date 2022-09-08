@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Wallet from 'src/assets/images/wallet.png'
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
 import formatNumber from "src/utils/formatNumber";
+import Moment from 'react-moment';
+import EditWallet from "../EditWallet/EditWallet";
+import { MainContext, MainContextTypes } from "src/context/MainContext";
 
-type WalletDropDownTypes = {
+export type WalletDropDownTypes = {
   walletData: {
-    accountType: string,
-    type: string,
-    netWorth: string,
-    date: Date | string | number,
+    amount: number,
+    income_every: string,
     name: string,
-    details: string
+    created_at?: string,
+    udpated_at?: string,
+    user_id?: number,
+    id?: number,
+    is_active?: number,
+    wallet_transaction: {
+      amount: number,
+      transaction_type: string,
+      id?: number,
+      wallet_id?: number
+      created_at?: string,
+      udpated_at?: string,
+    }[]
   },
   onClickHistory?: () => void,
   onClickEdit?: () => void
@@ -22,35 +35,55 @@ function WalletDropDown({
   onClickHistory = () => { },
   onClickEdit = () => { }
 }: WalletDropDownTypes) {
-  const { type, netWorth, date, name, details } = walletData;
+  const {
+    wallet: {
+      edit: [editWalletModal, setEditWalletModal],
+      id: [walletId, setWalletId]
+    }
+  } = useContext(MainContext) as MainContextTypes;
+
+  const { amount, name, id } = walletData;
+
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
-  const walletState = parseFloat(netWorth.split(",").join("")) < 0;
-  const transactionType = type === 'income';
+  const walletState: boolean = parseFloat(amount?.toString().split(",").join("")) < 0;
+
+  const onEdit = (): void => {
+    setWalletId(id || 0);
+    setEditWalletModal(!editWalletModal);
+  }
 
   const moreData = (
     <div className="bg-background-lightDark px-px-15 py-px-21 rounded-b-px-3">
-      <span className="text-light-100 text-15 grid text-center mb-px-18">Latest Transaction</span>
-      <div className="flex flex-row justify-between items-star">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-light-100 text-15">{name}</h1>
-          <span className="text-light-60 text-12 overflow-hidden truncate w-40">{details}</span>
-          <span className="text-inactive text-12">6 minutes ago</span>
-        </div>
-        <div className="flex flex-col justify-start items-end">
-          <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {formatNumber(netWorth)}</span>
-          <span className={`text-12 ${transactionType ? 'text-success-60' : 'text-error-60'}`}>{!transactionType ? 'Expense' : 'Icome'}</span>
-        </div>
-      </div>
+      <span className="text-light-100 text-15 grid text-center">Latest Transactions</span>
+      {walletData.wallet_transaction?.length === 0
+        ? <span className="text-error-100 opacity-80 text-12 grid text-center mt-px-12">No transactions</span>
+        : walletData.wallet_transaction?.map((transaction, index: number) => {
+          const transactionType = transaction.transaction_type === 'income';
+
+          return index < 3 && (
+            <div className="flex flex-row justify-between items-star mt-px-18" key={index}>
+              <div className="flex flex-col gap-1">
+                <h1 className="text-light-100 text-15">{name}</h1>
+                {/* <span className="text-light-60 text-12 overflow-hidden truncate w-40">{transaction_type}</span> */}
+                <span className="text-inactive text-12"><Moment format="YYYY/MM/DD - hh:mm A">{transaction.created_at}</Moment></span>
+              </div>
+              <div className="flex flex-col justify-start items-end">
+                <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {formatNumber(transaction.amount)}</span>
+                <span className={`text-12 ${transactionType ? 'text-success-60' : 'text-error-60'}`}>{!transactionType ? 'Expense' : 'Icome'}</span>
+              </div>
+            </div>)
+        })}
       <div className="grid grid-cols-2 gap-3 mt-px-30">
         <Button text="History" type="primaryInvert" height="medium" onClick={onClickHistory} />
-        <Button text="Edit" type="primary" height="medium" onClick={onClickEdit} />
+        <Button text="Edit" type="primary" height="medium" onClick={onEdit} />
       </div>
     </div>
   )
 
   return (
     <>
+      {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} />}
       <div className={`wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
@@ -59,7 +92,7 @@ function WalletDropDown({
             </div>
             <div>
               <h1 className="text-15 text-light-100">{name}</h1>
-              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {formatNumber(netWorth)}</span>
+              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {formatNumber(amount)}</span>
             </div>
           </div>
           <img src={DropDownIcon} alt="logo" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />

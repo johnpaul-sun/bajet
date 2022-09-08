@@ -50,7 +50,6 @@ Route::group([
 
     // Pocket Routes.
     Route::resource('/pockets', PocketController::class);
-    Route::get('/pockets/archive/all', [PocketController::class, 'allArchive']);
     Route::post('/pockets/archive/{pocket_id}', [PocketController::class, 'archive']);
     Route::post('/pockets/unarchive/{pocket_id}', [PocketController::class, 'unarchive']);
     Route::get('/pockets/search/{pocket_name}', [PocketController::class, 'search']);
@@ -58,7 +57,6 @@ Route::group([
 
     // Wallet Routes.
     Route::resource('/wallets', WalletController::class);
-    Route::get('/wallets/archive/all', [WalletController::class, 'allArchive']);
     Route::post('/wallets/archive/{wallet_id}', [WalletController::class, 'archive']);
     Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);
     Route::get('/wallets/search/{wallet_name}', [WalletController::class, 'search']);

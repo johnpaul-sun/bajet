@@ -9,6 +9,7 @@ import { userAPI } from "src/api/useAPI";
 import { InputTypes, PreventDefault } from "../Register/Register";
 import Loading from "../../Loading/Loading";
 import Cookies from "js-cookie";
+import { userApiCall } from "src/api";
 
 type UserCredentialTypes = {
   email: string,
@@ -67,14 +68,22 @@ function Login() {
 
     userAPI.login(userCredential)
       .then((res) => {
-        const isVerified = res.data.data.email_verified_at != null ? true : false;
-        Cookies.set('user_token', res.data.token);
+        const data = res.data.data;
+        const token = res.data.token;
+        const isVerified = data.email_verified_at != null ? true : false;
+
+        Cookies.set('user_token', token);
+        //IDK why this is this not working
+        userApiCall.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         if (isVerified) {
-          Cookies.set('user', JSON.stringify(res.data.data));
-          navigate('/dashboard');
+          Cookies.set('user', JSON.stringify(data));
+          /* I'm having trouble using this, I need to reload the dashboard page on first render. 
+           * I will fix this in the future.
+           * navigate('/dashboard'); */
+          window.location.pathname = "/dashboard";
         } else {
-          navigate(`/verify-email?user=${res.data.data.id}`);
+          navigate(`/verify-email?user=${data.id}`);
         }
       })
       .catch((err) => {

@@ -10,16 +10,18 @@ use App\Models\User;
 class WalletController extends Controller
 {
     // Display all listing of active the Wallet.
-    public function index()
+    public function index(Request $request)
     {
-        $data = Wallet::where("is_active", 1)->with('walletTransaction')->paginate(3);
+        $request->validate([
+            "sort_by" => "string|required",
+            "sort_type" => "string|required",
+            "archive" => "string|required"
+        ]);
 
-        return response($data);
-    }
-
-    public function allArchive()
-    {
-        $data = Wallet::where("is_active", 0)->with('walletTransaction')->get();
+        $data = Wallet::where("is_active", $request->archive)
+            ->with('walletTransaction')
+            ->orderBy($request->sort_type, $request->sort_by)
+            ->paginate(3);
 
         return response($data);
     }

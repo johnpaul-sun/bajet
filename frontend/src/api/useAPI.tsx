@@ -6,7 +6,7 @@ export const userAPI = {
     return userApiCall.post('/users', data);
   },
   verifyEmail: () => {
-    return userApiCall.get(`/users/email/verify`);
+    return userApiCall.get('/users/email/verify');
   },
   resendVerification: () => {
     return userApiCall.get('/users/email/resend');
@@ -35,4 +35,32 @@ export const userAPI = {
   logout: () => {
     return userApiCall.post('/users/logout');
   },
-} 
+}
+
+export const walletAPI = {
+  getAllWallet: (page: number, data: any) => {
+    return userApiCall.get(`/wallets?
+    page=${page}&
+    sort_by=${data.sort_by}&
+    sort_type=${data.sort_type}&
+    archive=${data.archive}`);
+  },
+  createWallet: (data: any) => {
+    return userApiCall.post('/wallets', data);
+  },
+  getSpecificWallet: (id: number) => {
+    return userApiCall.get(`/wallets/${id}`);
+  },
+  updateSpecificWallet: (id: number, data: any) => {
+    return userApiCall.put(`/wallets/${id}`, data);
+  },
+  archiveWallet: (id: number) => {
+    return userApiCall.post(`/wallets/archive/${id}`);
+  },
+  unarchiveWallet: (id: number) => {
+    return userApiCall.post(`/wallets/unarchive/${id}`);
+  },
+  deleteWallet: (id: number) => {
+    return userApiCall.delete(`/wallets/${id}`);
+  }
+}

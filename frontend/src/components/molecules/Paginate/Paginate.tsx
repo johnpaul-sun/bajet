@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ReactPaginate from 'react-paginate';
+import { MainContext } from "src/context/MainContext";
 
 type PaginateTypes = {
-  data: string[]
+  data: any
 }
 
 function Paginate({ data }: PaginateTypes) {
-  const [pageCount, setPageCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState(1);
   // const [itemOffset, setItemOffset] = useState(0);
+  const {
+    wallet: {
+      page: [walletPage, setWalletPage]
+    }
+  } = useContext(MainContext) as any;
 
   useEffect(() => {
-    setPageCount(data[0].length);
-  }, []);
+    setPageCount(data?.last_page || 0);
+    setCurrentPage(data?.current_page);
+  }, [data]);
 
   const handlePageClick = (e: any) => {
-    setCurrentPage(e.selected + 1);
+    const page = e.selected + 1;
+
+    setWalletPage(page);
+    setCurrentPage(page);
   };
 
   return (
@@ -23,7 +33,7 @@ function Paginate({ data }: PaginateTypes) {
       breakLabel="..."
       nextLabel=">>"
       onPageChange={handlePageClick}
-      pageRangeDisplayed={3}
+      pageRangeDisplayed={data.per_page}
       pageCount={pageCount}
       previousLabel="<<"
       activeLinkClassName="text-primary-100 border border-b-primary-100"

@@ -1,19 +1,80 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Card from "src/components/organisms/CardPopup/CardPopup";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
+import { walletAPI } from "src/api/useAPI";
+import { MainContext, MainContextTypes } from "src/context/MainContext";
+import style from "src/utils/styles";
 
 type AddWalletTypes = {
   onClickHeader: () => void,
-  handleSubmit: () => void
+  handleSubmit?: () => void
+}
+
+export type WalletDataTypes = {
+  name: string,
+  amount: number,
+  income_every: string,
 }
 
 function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
+  const {
+    toast: notification,
+    refresher: [refresher, setRefresher],
+    wallet: {
+      add: [addWalletModal, setAddWalletModal]
+    }
+  } = useContext(MainContext) as MainContextTypes;
+
+  const [walletData, setWalletData] = useState<WalletDataTypes>({
+    name: "",
+    amount: 0,
+    income_every: "15 Days",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    amount: ""
+  });
+  const { name: nameError, amount: amountError } = errors;
+
+  const handleChange = (e: any): void => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setWalletData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  const setDropDown = (index: number): void => {
+    setActiveDropDown(index);
+    setWalletData((prev) => ({ ...prev, income_every: options[index] }));
+    setDropDownState(!dropDownState);
+  }
+
+  const onSubmit = (): void => {
+    walletAPI.createWallet(walletData)
+      .then(res => {
+        notification('Wallet Created Successfully!');
+        setRefresher(!refresher);
+        setAddWalletModal(!addWalletModal);
+        setWalletData({
+          name: "",
+          amount: 0,
+          income_every: "15 Days",
+        });
+        setErrors({
+          name: "",
+          amount: ""
+        });
+      })
+      .catch(err => {
+        setErrors(err.response.data.errors);
+      })
+  }
+
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(1);
 
-  const options = [
-    'Day',
+  const options: string[] = [
+    '1 Day',
     '15 Days',
     '30 Days'
   ]
@@ -23,20 +84,19 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
       <div
         key={index}
         className={`selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15  cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
-        onClick={() => {
-          setActiveDropDown(index);
-          setDropDownState(!dropDownState);
-        }} >
+        onClick={() => setDropDown(index)} >
         <span className="text-light-100">{option}</span>
       </div>
     )
   });
+
   return (
     <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader} closeModal={onClickHeader}>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col">
           <label htmlFor="wallet_name" className="text-13 font-medium">Wallet name</label>
-          <input type="text" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-light-100 text-13 px-px-12" />
+          <input value={walletData.name} onChange={handleChange} name="name" type="text" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-light-100 text-13 px-px-12" />
+          <span className={style.inputError}>{nameError}</span>
         </div>
         <div className="flex flex-col">
           <p className="text-13 font-medium">Income every</p>
@@ -48,10 +108,11 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
         </div>
         <div className="flex flex-col">
           <label htmlFor="amount" className="text-13 font-medium">Amount</label>
-          <input type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <input value={walletData.amount} onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <span className={style.inputError}>{amountError}</span>
         </div>
       </div>
-      <Button type="secondary" text="Continue" className="mt-px-50" onClick={handleSubmit} />
+      <Button type="secondary" text="Continue" className="mt-px-50" onClick={onSubmit} />
     </Card>
   );
 }

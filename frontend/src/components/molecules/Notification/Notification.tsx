@@ -29,7 +29,7 @@ function Notification({ onClick = () => { }, status, message = '' }: Notificatio
   }
 
   return (
-    <div className={`absolute w-11/12 top-5 left-4 flex flex-row justify-between items-center rounded-px-12 py-px-6 px-px-18 shadow-modal ${state[status]}`}>
+    <div onClick={onClick} className={`cursor-pointer absolute w-11/12 top-5 left-4 flex flex-row justify-between items-center rounded-px-12 py-px-6 px-px-18 shadow-modal ${state[status]}`}>
       <img src={image[status]} alt="success" className="h-px-18 w-px-18" />
       {message ? message : text[status]}
       <div className="h-px-18 w-px-18"></div>

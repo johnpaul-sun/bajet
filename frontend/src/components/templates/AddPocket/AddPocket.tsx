@@ -8,7 +8,7 @@ import getMonthWord from "src/utils/getMonthWord";
 
 type AddPocketTypes = {
   onClickHeader: () => void,
-  handleSubmit: () => void
+  handleSubmit?: () => void
 }
 
 function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {

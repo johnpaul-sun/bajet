@@ -26,11 +26,9 @@ class Wallet extends Model
     public static function verifyWallet($request)
     {
         $request->validate([
-            'user_id' => 'required|numeric',
             'name' => 'required|string|max:191',
             'income_every' => 'required|string',
             'amount' => 'required|numeric',
-            'is_active' => 'required|boolean',
         ]);
     }
 
