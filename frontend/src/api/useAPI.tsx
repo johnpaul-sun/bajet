@@ -38,6 +38,9 @@ export const userAPI = {
 }
 
 export const walletAPI = {
+  getAllActiveWallet: () => {
+    return userApiCall.get('/wallets/get/all');
+  },
   getAllWallet: (page: number, data: any) => {
     return userApiCall.get(`/wallets?
     page=${page}&
@@ -62,5 +65,36 @@ export const walletAPI = {
   },
   deleteWallet: (id: number) => {
     return userApiCall.delete(`/wallets/${id}`);
+  }
+}
+
+export const pocketAPI = {
+  getAllPocket: (page: number, data: any) => {
+    return userApiCall.get(`/pockets?
+    page=${page}&
+    sort_by=${data.sort_by}&
+    sort_type=${data.sort_type}&
+    archive=${data.archive}`);
+  },
+  createPocket: (data: any) => {
+    return userApiCall.post('/pockets', data);
+  },
+  getSpecificPocket: (id: number) => {
+    return userApiCall.get(`/pockets/${id}`);
+  },
+  updateSpecificPocket: (id: number, data: any) => {
+    return userApiCall.put(`/pockets/${id}`, data);
+  },
+  archivePocket: (id: number) => {
+    return userApiCall.post(`/pockets/archive/${id}`);
+  },
+  unarchivePocket: (id: number) => {
+    return userApiCall.post(`/pockets/unarchive/${id}`);
+  },
+  deletePocket: (id: number) => {
+    return userApiCall.delete(`/pockets/${id}`);
+  },
+  payBalance: (data: any) => {
+    return userApiCall.post('/pockets/pay', data);
   }
 }

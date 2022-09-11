@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Pocket;
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,9 +13,18 @@ class PocketTransaction extends Model
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'wallet_id'
+    ];
+
     public function pocket()
     {
         return $this->belongsTo(Pocket::class);
+    }
+
+    public function wallet()
+    {
+        return $this->belongsTo(Wallet::class);
     }
 
     public static function getPocket($pocket_id)

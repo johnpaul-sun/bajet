@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             PocketSeeder::class,
-            PocketTransactionSeeder::class,
             WalletSeeder::class,
-            WalletTransactionSeeder::class
+            WalletTransactionSeeder::class,
+            PocketTransactionSeeder::class,
         ]);
     }
 }

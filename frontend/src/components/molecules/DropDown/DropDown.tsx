@@ -21,12 +21,15 @@ type OptionTypes = {
   }
 }
 
-function DropDown({ options }: any) {
+function DropDown({ options, type }: any) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(0);
   const {
     wallet: {
-      sort: [sortBy, setSortBy]
+      sort: [, setSortByWallet]
+    },
+    pocket: {
+      sort: [, setSortByPocket]
     }
   } = useContext(MainContext) as MainContextTypes;
   // Inject context here for active state
@@ -38,11 +41,17 @@ function DropDown({ options }: any) {
   const setActive = (index: number): void => {
     setActiveDropDown(index);
     setDropDownState(!dropDownState);
-    setSortBy({
-      sort_by: options[index].sort_by,
-      sort_type: options[index].sort_type,
-      archive: options[index].archive
-    })
+    type === 'wallet'
+      ? setSortByWallet({
+        sort_by: options[index].sort_by,
+        sort_type: options[index].sort_type,
+        archive: options[index].archive
+      })
+      : setSortByPocket({
+        sort_by: options[index].sort_by,
+        sort_type: options[index].sort_type,
+        archive: options[index].archive
+      })
   }
 
   const dropDownMenu = options.map((option: any, index: number) => {

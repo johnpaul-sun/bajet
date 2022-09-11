@@ -17,11 +17,13 @@ class WalletSeeder extends Seeder
     public function run()
     {
         foreach (User::all() as $user) {
+            $income = rand(999, 9999);
             Wallet::create([
                 'user_id' => $user->id,
                 'name' => $user->first_name . ' Wallet',
                 'income_every' => "15 Days",
-                'amount' => 999,
+                'income' => $income,
+                'amount' => $income,
                 'is_active' => true
             ]);
         }

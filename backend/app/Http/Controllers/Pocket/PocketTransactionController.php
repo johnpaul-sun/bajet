@@ -8,10 +8,11 @@ use Illuminate\Http\Request;
 
 class PocketTransactionController extends Controller
 {
-    public function makeTransaction(Request $request)
+    public static function makeTransaction(Request $request)
     {
         PocketTransaction::create([
             "pocket_id" => $request->pocket_id,
+            "wallet_id" => $request->wallet_id,
             "amount" => $request->amount,
             "transaction_type" => $request->transaction_type
         ]);

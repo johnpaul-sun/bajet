@@ -1,18 +1,48 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "src/components/organisms/CardPopup/CardPopup";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import WalletIcon from 'src/assets/images/wallet.png'
 import Button from "../Button/Button";
 import formatNumber from 'src/utils/formatNumber';
+import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { pocketAPI, walletAPI } from "src/api/useAPI";
 
 type UnpaidBalanceTypes = {
   onClickHeader: () => void,
-  handleSubmit: () => void
+  handleSubmit?: () => void,
+  pocketId: number,
+  unpaid: number
 }
 
-function UnpaidBalance({ onClickHeader, handleSubmit }: UnpaidBalanceTypes) {
+type WalletDataTypes = {
+  amount: number,
+  created_at?: string,
+  id?: number,
+  income?: string,
+  income_every?: string,
+  is_active?: number,
+  name?: string,
+  udpated_at?: string,
+  user_id?: number,
+}[]
+
+type PeyeeTypes = {
+  pocket_id: number,
+  wallet_id: number
+}
+
+function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: UnpaidBalanceTypes) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(1);
+  const [walletData, setWalletData] = useState<WalletDataTypes>([]);
+  const [payee, setPayee] = useState<PeyeeTypes>({
+    pocket_id: pocketId,
+    wallet_id: 1
+  });
+  const {
+    toast: notification,
+    refresher: [refresher, setRefresher]
+  } = useContext(MainContext) as MainContextTypes;
 
   const options = [
     {
@@ -32,33 +62,58 @@ function UnpaidBalance({ onClickHeader, handleSubmit }: UnpaidBalanceTypes) {
     }
   ]
 
-  const moreData = options.map((option, index) => {
+  useEffect(() => {
+    walletAPI.getAllActiveWallet()
+      .then(res => {
+        setWalletData(res.data)
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      })
+  }, [])
+
+  const selectPayee = (index: number, id: number): void => {
+    setActiveDropDown(index);
+    setDropDownState(!dropDownState);
+    setPayee(prev => ({ ...prev, wallet_id: id }));
+  }
+
+  const onSubmit = (): void => {
+    pocketAPI.payBalance(payee)
+      .then(res => {
+        onClickHeader();
+        setRefresher(!refresher);
+        notification('Balance Paid Successfully!');
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      })
+  }
+
+  const moreData = walletData?.map((data: any, index: number) => {
     return (
       <div
         key={index}
         className={`selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15  cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
-        onClick={() => {
-          setActiveDropDown(index);
-          setDropDownState(!dropDownState);
-        }} >
+        onClick={() => selectPayee(index, data.id)} >
         <div className="flex flex-row gap-3">
           <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
             <img src={WalletIcon} alt="logo" className="h-px-30 opacity-60" />
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-light-100">{option.name}</p>
-            <p className="text-success-100">₱ {formatNumber(option.balance)}</p>
+            <p className="text-light-100">{data.name}</p>
+            <p className="text-success-100">₱ {formatNumber(data.amount)}</p>
           </div>
         </div>
       </div>
     )
   });
   return (
-    <Card header={true} headerText="Add wallet" onClickHeader={onClickHeader}>
+    <Card header={true} headerText="Pay Amount" onClickHeader={onClickHeader} closeModal={onClickHeader}>
       <div className="flex flex-col gap-2">
         <div>
           <p className="text-13 font-medium">Outstanding balance</p>
-          <p className="text-error-100 text-18 font-medium">₱ 500,000.00</p>
+          <p className="text-error-100 text-18 font-medium">₱ {formatNumber(unpaid)}</p>
         </div>
         <div className="flex flex-col mt-px-15">
           <p className="text-13 font-medium">Pay from</p>
@@ -68,8 +123,8 @@ function UnpaidBalance({ onClickHeader, handleSubmit }: UnpaidBalanceTypes) {
                 <img src={WalletIcon} alt="logo" className="h-px-30 opacity-60" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-light-100">{options[activeDropDown].name}</p>
-                <p className="text-success-100">₱ {formatNumber(options[activeDropDown].balance)}</p>
+                <p className="text-light-100">{walletData && walletData[activeDropDown]?.name}</p>
+                <p className={walletData && walletData[activeDropDown]?.amount < unpaid ? "text-error-100" : "text-success-100"}>₱ {formatNumber(walletData && walletData[activeDropDown]?.amount)}</p>
               </div>
             </div>
             <img src={DropDownIcon} alt="dropdown" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
@@ -77,7 +132,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit }: UnpaidBalanceTypes) {
           {dropDownState && moreData}
         </div>
       </div>
-      <Button type="secondary" text="Pay now" className="mt-px-50" onClick={handleSubmit} />
+      <Button type="secondary" text="Pay now" className="mt-px-50" onClick={onSubmit} />
     </Card>
   );
 }

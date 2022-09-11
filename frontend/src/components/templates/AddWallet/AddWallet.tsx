@@ -13,7 +13,8 @@ type AddWalletTypes = {
 
 export type WalletDataTypes = {
   name: string,
-  amount: number,
+  amount: number | string,
+  income: number | string,
   income_every: string,
 }
 
@@ -28,7 +29,8 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
 
   const [walletData, setWalletData] = useState<WalletDataTypes>({
     name: "",
-    amount: 0,
+    amount: "",
+    income: "",
     income_every: "15 Days",
   });
   const [errors, setErrors] = useState({
@@ -57,7 +59,8 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
         setAddWalletModal(!addWalletModal);
         setWalletData({
           name: "",
-          amount: 0,
+          amount: "",
+          income: "",
           income_every: "15 Days",
         });
         setErrors({
@@ -107,7 +110,7 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
           {dropDownState && moreData}
         </div>
         <div className="flex flex-col">
-          <label htmlFor="amount" className="text-13 font-medium">Amount</label>
+          <label htmlFor="amount" className="text-13 font-medium">Income Amount</label>
           <input value={walletData.amount} onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>

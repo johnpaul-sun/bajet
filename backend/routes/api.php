@@ -50,15 +50,17 @@ Route::group([
 
     // Pocket Routes.
     Route::resource('/pockets', PocketController::class);
+    Route::post('/pockets/pay', [PocketController::class, 'pay']);
+    Route::get('/pockets/search/{pocket_name}', [PocketController::class, 'search']);
     Route::post('/pockets/archive/{pocket_id}', [PocketController::class, 'archive']);
     Route::post('/pockets/unarchive/{pocket_id}', [PocketController::class, 'unarchive']);
-    Route::get('/pockets/search/{pocket_name}', [PocketController::class, 'search']);
     Route::post('/pockets/transaction', [PocketTransactionController::class, 'makeTransaction']);
 
     // Wallet Routes.
     Route::resource('/wallets', WalletController::class);
+    Route::get('/wallets/get/all', [WalletController::class, 'all']);
+    Route::get('/wallets/search/{wallet_name}', [WalletController::class, 'search']);
     Route::post('/wallets/archive/{wallet_id}', [WalletController::class, 'archive']);
     Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);
-    Route::get('/wallets/search/{wallet_name}', [WalletController::class, 'search']);
     Route::post('/wallets/transaction', [WalletTransactionController::class, 'makeTransaction']);
 });

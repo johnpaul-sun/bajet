@@ -22,7 +22,8 @@ class PocketSeeder extends Seeder
                 'name' => $user->first_name . ' Pocket',
                 'schedule' => "monthly",
                 'schedule_date' => "2022-09-03",
-                'amount' => 999,
+                'amount' => rand(999, 9999),
+                'amount_to_pay' => 100,
                 'is_active' => true
             ]);
         }

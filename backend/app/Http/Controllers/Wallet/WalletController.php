@@ -10,6 +10,13 @@ use App\Models\User;
 class WalletController extends Controller
 {
     // Display all listing of active the Wallet.
+    public function all()
+    {
+        $data = Wallet::where("is_active", 1)->get();
+
+        return response($data);
+    }
+
     public function index(Request $request)
     {
         $request->validate([
@@ -36,6 +43,7 @@ class WalletController extends Controller
             "user_id" => $userId,
             "name" => $request->name,
             "amount" => $request->amount,
+            "income" => $request->amount,
             "is_active" => true,
             "income_every" => $request->income_every,
         ]);
@@ -57,6 +65,7 @@ class WalletController extends Controller
 
         $wallet->update([
             "name" => $request->name ? $request->name : $wallet->name,
+            "income" => $request->income ? $request->income : $wallet->income,
             "amount" => $request->amount ? $request->amount : $wallet->amount,
             "income_every" => $request->income_every ? $request->income_every : $wallet->income_every,
         ]);

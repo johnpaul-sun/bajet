@@ -3,16 +3,20 @@ import ReactPaginate from 'react-paginate';
 import { MainContext } from "src/context/MainContext";
 
 type PaginateTypes = {
-  data: any
+  data: any,
+  type: any
 }
 
-function Paginate({ data }: PaginateTypes) {
+function Paginate({ data, type }: PaginateTypes) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
   // const [itemOffset, setItemOffset] = useState(0);
   const {
     wallet: {
-      page: [walletPage, setWalletPage]
+      page: [, setWalletPage]
+    },
+    pocket: {
+      page: [, setPocketPage]
     }
   } = useContext(MainContext) as any;
 
@@ -24,7 +28,7 @@ function Paginate({ data }: PaginateTypes) {
   const handlePageClick = (e: any) => {
     const page = e.selected + 1;
 
-    setWalletPage(page);
+    type === 'setWalletPage' ? setWalletPage(page) : setPocketPage(page)
     setCurrentPage(page);
   };
 

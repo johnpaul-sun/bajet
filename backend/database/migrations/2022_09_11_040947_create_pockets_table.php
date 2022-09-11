@@ -13,14 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pocket_transactions', function (Blueprint $table) {
+        Schema::create('pockets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pocket_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->string('name');
+            $table->string('schedule');
+            $table->string('schedule_date');
             $table->integer('amount');
-            $table->string('transaction_type');
+            $table->integer('amount_to_pay');
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pocket_transactions');
+        Schema::dropIfExists('pockets');
     }
 };

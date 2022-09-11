@@ -5,22 +5,26 @@ namespace App\Http\Controllers\Pocket;
 use App\Http\Controllers\Controller;
 use App\Models\Pocket;
 use App\Models\PocketTransaction;
+use App\Models\Wallet;
 use App\Models\User;
+use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 
 class PocketController extends Controller
 {
     // Display all listing of active the Pocket.
-    public function index()
+    public function index(Request $request)
     {
-        $data = Pocket::where("is_active", 1)->with('pocketTransaction')->paginate(3);
+        $request->validate([
+            "sort_by" => "string|required",
+            "sort_type" => "string|required",
+            "archive" => "string|required"
+        ]);
 
-        return response($data);
-    }
-
-    public function allArchive()
-    {
-        $data = Pocket::where("is_active", 0)->with('pocketTransaction')->get();
+        $data = Pocket::where("is_active", $request->archive)
+            ->with('pocketTransaction')
+            ->orderBy($request->sort_type, $request->sort_by)
+            ->paginate(3);
 
         return response($data);
     }
@@ -35,6 +39,7 @@ class PocketController extends Controller
             "user_id" => $userId,
             "name" => $request->name,
             "amount" => $request->amount,
+            "amount_to_pay" => 0,
             "is_active" => true,
             "schedule" => $request->schedule,
             "schedule_date" => $request->schedule_date
@@ -103,5 +108,37 @@ class PocketController extends Controller
         ], 200);
 
         return response()->json($result, 200);
+    }
+
+    public function pay(Request $request)
+    {
+        Pocket::verifyPayPocket($request);
+
+        $pocket = Pocket::findOrFail($request->pocket_id);
+        $wallet = Wallet::findOrFail($request->wallet_id);
+
+        PocketTransaction::create([
+            "pocket_id" => $request->pocket_id,
+            "wallet_id" => $request->wallet_id,
+            "amount" => $pocket->amount_to_pay,
+            "transaction_type" => "expense"
+        ]);
+
+        WalletTransaction::create([
+            "wallet_id" => $request->wallet_id,
+            "amount" => $pocket->amount_to_pay,
+            "transaction_type" => "expense"
+        ]);
+
+        $wallet->update([
+            "amount" => $wallet->amount - $pocket->amount_to_pay
+        ]);
+        $pocket->update([
+            "amount_to_pay" => 0
+        ]);
+
+        return response()->json([
+            "message" => "Paid Successfully"
+        ]);
     }
 }

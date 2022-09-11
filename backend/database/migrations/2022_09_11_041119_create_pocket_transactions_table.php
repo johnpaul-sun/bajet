@@ -13,16 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('pocket_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
+            $table->foreignId('pocket_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('name');
-            $table->string('income_every');
+            $table->foreignId('wallet_id')
+                ->constrained()
+                ->nullable()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->integer('amount');
-            $table->boolean('is_active');
+            $table->string('transaction_type');
             $table->timestamps();
         });
     }
@@ -34,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallets');
+        Schema::dropIfExists('pocket_transactions');
     }
 };

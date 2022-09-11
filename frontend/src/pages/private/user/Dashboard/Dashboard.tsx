@@ -25,7 +25,7 @@ import AddPocket from "src/components/templates/AddPocket/AddPocket";
 import AddWallet from "src/components/templates/AddWallet/AddWallet";
 import EditPocket from "src/components/templates/EditPocket/EditPocket";
 import EditWallet from "src/components/templates/EditWallet/EditWallet";
-import { userAPI, walletAPI } from "src/api/useAPI";
+import { pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 import Cookies from "js-cookie";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -54,6 +54,37 @@ export type WalletDataTypes = {
   }[]
 }
 
+export type PocketDataTypes = {
+  amount: number,
+  amount_to_pay: number,
+  schedule: string,
+  schedule_date: string,
+  name: string,
+  created_at?: string,
+  udpated_at?: string,
+  user_id?: number,
+  id: number,
+  is_active?: number,
+  pocket_transaction: {
+    amount: number,
+    transaction_type: string,
+    id?: number,
+    pocket_id?: number
+    created_at?: string,
+    udpated_at?: string,
+    wallet: {
+      id: number,
+      user_id: number,
+      name: string,
+      income_every: string,
+      amount: number,
+      is_active: number,
+      created_at: string,
+      updated_at: string
+    }
+  }[]
+}
+
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -65,13 +96,19 @@ function Dashboard() {
         getWallet,
       },
       page: [walletPage],
-      data: [walletData, setWalletData],
+      data: [walletData],
       add: [addWalletModal, setAddWalletModal],
-      sort: [sortBy]
+      sort: [sortByWallet]
     },
     pocket: {
+      api: {
+        getPocket,
+      },
       add: [addPocketModal, setAddPocketModal],
-      edit: [editPocketModal, setEditPocketModal]
+      page: [pocketPage],
+      data: [pocketData],
+      edit: [editPocketModal, setEditPocketModal],
+      sort: [sortByPocket]
     }
   } = useContext(MainContext) as MainContextTypes;
 
@@ -124,15 +161,16 @@ function Dashboard() {
 
   useEffect(() => {
     getWallet();
-  }, [walletAPI, walletPage, refresher, sortBy])
+  }, [walletAPI, walletPage, refresher, sortByWallet])
+
+  useEffect(() => {
+    getPocket();
+  }, [pocketAPI, pocketPage, refresher, sortByPocket])
 
   return (
     <>
       {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} />}
       {addPocketModal && <AddPocket onClickHeader={() => setAddPocketModal(!addPocketModal)} />}
-      {/* 
-      {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} />}
-      {editPocketModal && <EditPocket onClickHeader={() => setEditPocketModal(!editPocketModal)} />} */}
 
       <div className={`${style.body.default} flex flex-col gap-6`}>
         <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
@@ -169,23 +207,31 @@ function Dashboard() {
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Wallet account' headerRight={addWallet} hr={true}>
-          <DropDown options={options.wallet} />
+          <DropDown options={options.wallet} type="wallet" />
           <div className="dropDown flex flex-col mt-px-30">
-            {walletData.data?.map((data: WalletDataTypes, index: number) => {
-              return <WalletDropDown walletData={data} onClickHistory={walletHistory} key={index} />
-            })}
+            {
+              walletData.data?.length > 0
+                ? walletData.data?.map((data: WalletDataTypes, index: number) => {
+                  return <WalletDropDown walletData={data} onClickHistory={walletHistory} key={index} />
+                })
+                : <h1 className="text-error-100 text-center mb-px-15">No Archive Wallet</h1>
+            }
           </div>
-          <Paginate data={walletData} />
+          <Paginate data={walletData} type="setWalletPage" />
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Pockets' headerRight={addPocket} hr={true}>
-          <DropDown options={options.pocket} />
+          <DropDown options={options.pocket} type="pocket" />
           <div className="dropDown flex flex-col mt-px-30">
-            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
-            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
-            <PocketDropDown pocketData={pocketData} onClickEdit={editPocket} onClickHistory={pocketHistory} onClickPay={onClickPay} />
+            {
+              pocketData.data?.length > 0
+                ? pocketData.data?.map((data: PocketDataTypes, index: number) => {
+                  return <PocketDropDown pocketData={data} onClickHistory={pocketHistory} key={index} />
+                })
+                : <h1 className="text-error-100 text-center mb-px-15">No Archive Pocket</h1>
+            }
           </div>
-          <Paginate data={paginateDataTest} />
+          <Paginate data={pocketData} type="setPocketPage" />
         </CardContainer >
 
         <CardContainer header={true} headerLeft='Transaction History' hr={true} headerClass="mb-px-15">

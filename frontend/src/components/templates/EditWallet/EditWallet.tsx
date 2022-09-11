@@ -28,6 +28,7 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
   const [walletData, setWalletData] = useState<WalletDataTypes>({
     name: "",
     amount: 0,
+    income: 0,
     income_every: "15 Days",
   });
   const [errors, setErrors] = useState({
@@ -49,6 +50,7 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
         setWalletData({
           name: data.name,
           amount: data.amount,
+          income: data.income,
           income_every: data.income_every,
         });
         setArcive(data.is_active);
@@ -68,9 +70,9 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
   const onSubmit = (): void => {
     walletAPI.updateSpecificWallet(walletId, walletData)
       .then(res => {
-        notification('Wallet Created Successfully!');
+        notification('Wallet Updated Successfully!');
         setRefresher(!refresher);
-        setAddWalletModal(!addWalletModal);
+        setEditWalletModal(!editWalletModal);
         setErrors({
           name: "",
           amount: ""
@@ -137,6 +139,11 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
             <img src={DropDownIcon} alt="dropdown" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
           </div>
           {dropDownState && moreData}
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="amount" className="text-13 font-medium">Income Amount</label>
+          <input name="income" value={walletData.income} onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <span className={style.inputError}>{amountError}</span>
         </div>
         <div className="flex flex-col">
           <label htmlFor="amount" className="text-13 font-medium">Amount</label>

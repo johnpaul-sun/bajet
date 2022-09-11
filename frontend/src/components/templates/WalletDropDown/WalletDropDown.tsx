@@ -64,7 +64,12 @@ function WalletDropDown({
           return index < 3 && (
             <div className="flex flex-row justify-between items-star mt-px-18" key={index}>
               <div className="flex flex-col gap-1">
-                <h1 className="text-light-100 text-15">{name}</h1>
+                <div className="flex gap-2 items-center">
+                  <div className="p-px-2 bg-primary-100 rounded-px-3 w-px-15">
+                    <img src={Wallet} alt="pocket" className="w-px-15" />
+                  </div>
+                  <h1 className="text-light-100 text-15">{name}</h1>
+                </div>
                 {/* <span className="text-light-60 text-12 overflow-hidden truncate w-40">{transaction_type}</span> */}
                 <span className="text-inactive text-12"><Moment format="YYYY/MM/DD - hh:mm A">{transaction.created_at}</Moment></span>
               </div>
@@ -92,7 +97,7 @@ function WalletDropDown({
             </div>
             <div>
               <h1 className="text-15 text-light-100">{name}</h1>
-              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>{walletState && '- '}₱ {formatNumber(amount)}</span>
+              <span className={`text-15 ${walletState ? 'text-error-100' : 'text-success-100'}`}>₱ {formatNumber(amount)}</span>
             </div>
           </div>
           <img src={DropDownIcon} alt="logo" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
