@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\History\HistoryController;
 use App\Http\Controllers\Pocket\PocketController;
 use App\Http\Controllers\Pocket\PocketTransactionController;
 use Illuminate\Support\Facades\Route;
@@ -63,4 +64,7 @@ Route::group([
     Route::post('/wallets/archive/{wallet_id}', [WalletController::class, 'archive']);
     Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);
     Route::post('/wallets/transaction', [WalletTransactionController::class, 'makeTransaction']);
+
+    // History Routes.
+    Route::resource('/history', HistoryController::class);
 });

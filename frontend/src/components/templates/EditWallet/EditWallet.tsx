@@ -35,10 +35,10 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
     name: "",
     amount: ""
   });
-  const { name: nameError, amount: amountError } = errors;
+  const { name: nameError, amount: amountError } = errors || {};
 
   const options: string[] = [
-    'Day',
+    '1 Day',
     '15 Days',
     '30 Days'
   ];
@@ -115,10 +115,11 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
     return (
       <div
         key={index}
-        className={`selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15  cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
+        className={`hover:bg-background-dropdown-active selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15  cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
         onClick={() => {
           setActiveDropDown(index);
           setDropDownState(!dropDownState);
+          setWalletData(prev => ({ ...prev, income_every: option }));
         }} >
         <span className="text-light-100">{option}</span>
       </div>
@@ -146,7 +147,7 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
           <span className={style.inputError}>{amountError}</span>
         </div>
         <div className="flex flex-col">
-          <label htmlFor="amount" className="text-13 font-medium">Amount</label>
+          <label htmlFor="amount" className="text-13 font-medium">Starting Amount</label>
           <input name="amount" value={walletData.amount} onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>

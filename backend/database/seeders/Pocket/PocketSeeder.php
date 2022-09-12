@@ -17,13 +17,14 @@ class PocketSeeder extends Seeder
     public function run()
     {
         foreach (User::all() as $user) {
+            $random = rand(999, 9999);
             Pocket::create([
                 'user_id' => $user->id,
                 'name' => $user->first_name . ' Pocket',
                 'schedule' => "monthly",
                 'schedule_date' => "2022-09-03",
-                'amount' => rand(999, 9999),
-                'amount_to_pay' => 100,
+                'amount' => $random,
+                'amount_to_pay' => $random,
                 'is_active' => true
             ]);
         }

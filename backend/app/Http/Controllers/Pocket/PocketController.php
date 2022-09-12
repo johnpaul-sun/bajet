@@ -57,6 +57,8 @@ class PocketController extends Controller
 
     public function update(Request $request, $pocket_id)
     {
+        $user_id = User::id();
+
         Pocket::verifyUpdatePocket($request);
         $pocket = Pocket::findOrFail($pocket_id);
 
@@ -65,6 +67,17 @@ class PocketController extends Controller
             "amount" => $request->amount ? $request->amount : $pocket->amount,
             "schedule" => $request->schedule ? $request->schedule : $pocket->schedule,
             "schedule_date" => $request->schedule_date ? $request->schedule_date : $pocket->schedule_date
+        ]);
+
+        $wallet_id = PocketTransaction::findOrFail($pocket_id)->wallet_id;
+
+        PocketTransaction::create([
+            "pocket_id" => $pocket_id,
+            "wallet_id" => $wallet_id,
+            "amount" => $request->amount ? $request->amount : $pocket->amount,
+            "transaction_type" => "update"
+        ])->histories()->create([
+            'user_id' => $user_id
         ]);
 
         return response()->json([
@@ -112,6 +125,7 @@ class PocketController extends Controller
 
     public function pay(Request $request)
     {
+        $user_id = User::id();
         Pocket::verifyPayPocket($request);
 
         $pocket = Pocket::findOrFail($request->pocket_id);
@@ -122,12 +136,17 @@ class PocketController extends Controller
             "wallet_id" => $request->wallet_id,
             "amount" => $pocket->amount_to_pay,
             "transaction_type" => "expense"
+        ])->histories()->create([
+            'user_id' => $user_id
         ]);
 
         WalletTransaction::create([
             "wallet_id" => $request->wallet_id,
+            "name" => $pocket->name,
             "amount" => $pocket->amount_to_pay,
             "transaction_type" => "expense"
+        ])->histories()->create([
+            'user_id' => $user_id
         ]);
 
         $wallet->update([

@@ -18,13 +18,15 @@ class PocketTransactionSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 1; $i++) {
             foreach (Pocket::all() as $pocket) {
                 PocketTransaction::create([
                     'pocket_id' => $pocket->id,
                     'wallet_id' => $pocket->id,
-                    'amount' => 999,
-                    'transaction_type' => "expense",
+                    'amount' => $pocket->amount,
+                    'transaction_type' => "update",
+                ])->histories()->create([
+                    'user_id' => $pocket->user_id
                 ]);
             }
         }

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\WalletTransaction;
-use App\Models\PocketTransaction;
 use App\Models\User;
+use App\Models\History;
+use App\Models\PocketTransaction;
+use App\Models\WalletTransaction;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Wallet extends Model
 {
@@ -45,5 +46,10 @@ class Wallet extends Model
             'amount' => 'nullable|numeric',
             'income_every' => 'required|string',
         ]);
+    }
+
+    public function histories()
+    {
+        return $this->morphMany(History::class, 'historiable');
     }
 }

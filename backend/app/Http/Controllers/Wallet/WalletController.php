@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Wallet;
 use App\Models\User;
+use App\Models\Wallet;
+use Illuminate\Http\Request;
+use App\Models\WalletTransaction;
+use App\Http\Controllers\Controller;
 
 class WalletController extends Controller
 {
@@ -60,6 +61,8 @@ class WalletController extends Controller
 
     public function update(Request $request, $wallet_id)
     {
+        $user_id = User::id();
+
         Wallet::verifyUpdateWallet($request);
         $wallet = Wallet::findOrFail($wallet_id);
 
@@ -68,6 +71,15 @@ class WalletController extends Controller
             "income" => $request->income ? $request->income : $wallet->income,
             "amount" => $request->amount ? $request->amount : $wallet->amount,
             "income_every" => $request->income_every ? $request->income_every : $wallet->income_every,
+        ]);
+
+        WalletTransaction::create([
+            "wallet_id" => $wallet->id,
+            "name" => $request->name,
+            "amount" => $request->amount ? $request->amount : $wallet->amount,
+            "transaction_type" => "update"
+        ])->histories()->create([
+            'user_id' => $user_id
         ]);
 
         return response()->json([

@@ -91,6 +91,7 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
   }
 
   const selectedDate = (date: string): void => {
+    setPocketData(prev => ({ ...prev, schedule_date: date }));
     setDateSelected(date);
     closeCalendar();
   }

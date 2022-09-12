@@ -19,6 +19,7 @@ export type WalletDropDownTypes = {
     is_active?: number,
     wallet_transaction: {
       amount: number,
+      name: string,
       transaction_type: string,
       id?: number,
       wallet_id?: number
@@ -58,8 +59,11 @@ function WalletDropDown({
       <span className="text-light-100 text-15 grid text-center">Latest Transactions</span>
       {walletData.wallet_transaction?.length === 0
         ? <span className="text-error-100 opacity-80 text-12 grid text-center mt-px-12">No transactions</span>
-        : walletData.wallet_transaction?.map((transaction, index: number) => {
-          const transactionType = transaction.transaction_type === 'income';
+        : walletData.wallet_transaction?.slice(0).reverse().map((transaction, index: number) => {
+
+          const transactionType = transaction.transaction_type;
+          const transactionText = transactionType === 'income' ? 'text-success-100' : transactionType === 'expense' ? 'text-error-100' : 'text-fail-100';
+          const transactionSubText = transactionType === 'income' ? 'text-success-60' : transactionType === 'expense' ? 'text-error-60' : 'text-fail-60';
 
           return index < 3 && (
             <div className="flex flex-row justify-between items-star mt-px-18" key={index}>
@@ -68,14 +72,14 @@ function WalletDropDown({
                   <div className="p-px-2 bg-primary-100 rounded-px-3 w-px-15">
                     <img src={Wallet} alt="pocket" className="w-px-15" />
                   </div>
-                  <h1 className="text-light-100 text-15">{name}</h1>
+                  <h1 className="text-light-100 text-15">{transaction.name}</h1>
                 </div>
                 {/* <span className="text-light-60 text-12 overflow-hidden truncate w-40">{transaction_type}</span> */}
                 <span className="text-inactive text-12"><Moment format="YYYY/MM/DD - hh:mm A">{transaction.created_at}</Moment></span>
               </div>
               <div className="flex flex-col justify-start items-end">
-                <span className={`text-15 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>{transactionType || '-'} ₱ {formatNumber(transaction.amount)}</span>
-                <span className={`text-12 ${transactionType ? 'text-success-60' : 'text-error-60'}`}>{!transactionType ? 'Expense' : 'Icome'}</span>
+                <span className={`text-15 ${transactionText}`}>{transactionType === 'expense' && '-'} ₱ {formatNumber(transaction.amount)}</span>
+                <span className={`text-12 ${transactionSubText}`}>{transactionType === 'income' ? 'Icome' : transactionType === 'expense' ? 'Expense' : 'Update'}</span>
               </div>
             </div>)
         })}
@@ -89,7 +93,7 @@ function WalletDropDown({
   return (
     <>
       {editWalletModal && <EditWallet onClickHeader={() => setEditWalletModal(!editWalletModal)} />}
-      <div className={`wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
+      <div className={`cursor-pointer wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
             <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">

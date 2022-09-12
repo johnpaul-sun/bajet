@@ -120,8 +120,11 @@ function PocketDropDown({
           <h1 className="text-light-100 text-12 mb-px-12">Latest transactions</h1>
           {pocketData.pocket_transaction?.length === 0
             ? <span className="text-error-100 opacity-80 text-12 grid text-center mt-px-12">No transactions</span>
-            : pocketData.pocket_transaction?.map((transaction, index: number) => {
-              const transactionType = transaction.transaction_type === 'income';
+            : pocketData.pocket_transaction?.slice(0).reverse().map((transaction, index: number) => {
+
+              const transactionType = transaction.transaction_type;
+              const transactionText = transactionType === 'income' ? 'text-success-100' : transactionType === 'expense' ? 'text-error-100' : 'text-fail-100';
+              const transactionSubText = transactionType === 'income' ? 'text-success-60' : transactionType === 'expense' ? 'text-error-60' : 'text-fail-60';
 
               return index < 3 && (
                 <div className="flex flex-row justify-between items-end" key={index}>
@@ -132,13 +135,13 @@ function PocketDropDown({
                       </div>
                     </div>
                     <div className="flex flex-col items-start justify-center">
-                      <h1 className="text-light-100 text-14">{transaction.wallet.name}</h1>
-                      <span className="text-error-60 text-10">{transaction.transaction_type}</span>
+                      <h1 className="text-light-100 text-14">{transaction.wallet?.name}</h1>
+                      <span className={`text-10 ${transactionSubText}`}>{transaction.transaction_type.charAt(0).toUpperCase() + transaction.transaction_type.slice(1)}</span>
                     </div>
                   </div>
                   <div className="flex flex-col justify-end items-end">
-                    <h1 className={`text-13 ${transactionType ? 'text-success-100' : 'text-error-100'}`}>₱ {formatNumber(transaction.amount)}</h1>
-                    <span className="text-inactive text-10"><Moment format="YYYY/MM/DD - hh:mm A">{transaction.wallet.created_at}</Moment></span>
+                    <h1 className={`text-13 ${transactionText}`}>{transactionType === "expense" && '- '}₱ {formatNumber(transaction.amount)}</h1>
+                    <span className="text-inactive text-10"><Moment format="YYYY/MM/DD - hh:mm A">{transaction?.wallet?.created_at}</Moment></span>
                   </div>
                 </div>)
             })}

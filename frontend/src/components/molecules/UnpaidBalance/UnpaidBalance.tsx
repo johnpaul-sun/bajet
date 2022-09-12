@@ -33,8 +33,10 @@ type PeyeeTypes = {
 
 function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: UnpaidBalanceTypes) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
-  const [activeDropDown, setActiveDropDown] = useState<number>(1);
+  const [activeDropDown, setActiveDropDown] = useState<number>(0);
   const [walletData, setWalletData] = useState<WalletDataTypes>([]);
+  const [buttonState, setButtonState] = useState<boolean>(false);
+
   const [payee, setPayee] = useState<PeyeeTypes>({
     pocket_id: pocketId,
     wallet_id: 1
@@ -72,6 +74,10 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
       })
   }, [])
 
+  useEffect(() => {
+    walletData[activeDropDown]?.amount < unpaid ? setButtonState(true) : setButtonState(false);
+  });
+
   const selectPayee = (index: number, id: number): void => {
     setActiveDropDown(index);
     setDropDownState(!dropDownState);
@@ -94,7 +100,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
     return (
       <div
         key={index}
-        className={`selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15  cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
+        className={`hover:bg-background-dropdown-active selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15 cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
         onClick={() => selectPayee(index, data.id)} >
         <div className="flex flex-row gap-3">
           <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
@@ -102,7 +108,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-light-100">{data.name}</p>
-            <p className="text-success-100">₱ {formatNumber(data.amount)}</p>
+            <p className={data?.amount < unpaid ? "text-error-100" : "text-success-100"}>₱ {formatNumber(data.amount)}</p>
           </div>
         </div>
       </div>
@@ -115,7 +121,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
           <p className="text-13 font-medium">Outstanding balance</p>
           <p className="text-error-100 text-18 font-medium">₱ {formatNumber(unpaid)}</p>
         </div>
-        <div className="flex flex-col mt-px-15">
+        <div className="flex flex-col mt-px-15 cursor-pointer">
           <p className="text-13 font-medium">Pay from</p>
           <div onClick={() => setDropDownState(!dropDownState)} className={`bg-background-dropdown-selected rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} text-light-100 text-13 flex flex-row justify-between items-center p-px-12`}>
             <div className="flex flex-row gap-3">
@@ -132,7 +138,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
           {dropDownState && moreData}
         </div>
       </div>
-      <Button type="secondary" text="Pay now" className="mt-px-50" onClick={onSubmit} />
+      <Button type="secondary" disabled={buttonState} text="Pay now" className="mt-px-50" onClick={onSubmit} />
     </Card>
   );
 }

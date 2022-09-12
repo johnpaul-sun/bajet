@@ -46,6 +46,7 @@ export type WalletDataTypes = {
   is_active?: number,
   wallet_transaction: {
     amount: number,
+    name: string,
     transaction_type: string,
     id?: number,
     wallet_id?: number
@@ -206,7 +207,7 @@ function Dashboard() {
           </div>
         </CardContainer>
 
-        <CardContainer header={true} headerLeft='Wallet account' headerRight={addWallet} hr={true}>
+        <CardContainer header={true} headerLeft='Wallet accounts' headerRight={addWallet} hr={true}>
           <DropDown options={options.wallet} type="wallet" />
           <div className="dropDown flex flex-col mt-px-30">
             {

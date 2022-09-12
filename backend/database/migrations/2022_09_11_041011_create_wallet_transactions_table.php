@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->integer('amount');
+            $table->string('name');
             $table->string('transaction_type');
             $table->timestamps();
         });

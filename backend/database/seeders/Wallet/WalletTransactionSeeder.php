@@ -16,12 +16,15 @@ class WalletTransactionSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             foreach (Wallet::all() as $wallet) {
                 WalletTransaction::create([
                     'wallet_id' => $wallet->id,
-                    'amount' => 999,
+                    'name' => $wallet->name,
+                    'amount' => $wallet->income / 2,
                     'transaction_type' => "income",
+                ])->histories()->create([
+                    'user_id' => $wallet->user_id
                 ]);
             }
         }

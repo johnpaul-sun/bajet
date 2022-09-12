@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Pocket;
 use App\Models\Wallet;
+use App\Models\History;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,5 +31,10 @@ class PocketTransaction extends Model
     public static function getPocket($pocket_id)
     {
         return PocketTransaction::where("pocket_id", $pocket_id)->get();
+    }
+
+    public function histories()
+    {
+        return $this->morphMany(History::class, 'historiable');
     }
 }
