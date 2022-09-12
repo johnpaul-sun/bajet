@@ -65,6 +65,8 @@ Route::group([
     Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);
     Route::post('/wallets/transaction', [WalletTransactionController::class, 'makeTransaction']);
 
-    // History Routes.
-    Route::resource('/history', HistoryController::class);
+    // History Routes. 
+    Route::get('/history/all', [HistoryController::class, 'all']);
+    Route::get('/history/wallet', [HistoryController::class, 'wallet']);
+    Route::get('/history/pocket', [HistoryController::class, 'pocket']);
 });
