@@ -79,7 +79,7 @@ function WalletDropDown({
               </div>
               <div className="flex flex-col justify-start items-end">
                 <span className={`text-15 ${getTransactionTypeStyle(transactionType)}`}>{transactionType === 'expense' && '-'} ₱ {formatNumber(transaction.amount)}</span>
-                <span className={`text-12 ${getTransactionTypeStyle(transactionType, '60')}`}>{transactionType === 'income' ? 'Icome' : transactionType === 'expense' ? 'Expense' : 'Update'}</span>
+                <span className={`text-12 ${getTransactionTypeStyle(transactionType, '60')}`}>{transactionType.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
               </div>
             </div>)
         })}

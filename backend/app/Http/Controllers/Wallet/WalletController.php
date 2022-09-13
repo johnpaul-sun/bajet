@@ -139,7 +139,7 @@ class WalletController extends Controller
         WalletTransaction::create([
             "wallet_id" => $request->to_wallet,
             "name" => $to_wallet->name,
-            "amount" => $to_wallet->amount,
+            "amount" => $request->amount,
             "transaction_type" => "transfer"
         ])->histories()->create([
             'user_id' => $user_id
@@ -148,7 +148,7 @@ class WalletController extends Controller
         WalletTransaction::create([
             "wallet_id" => $request->from_wallet,
             "name" => $from_wallet->name,
-            "amount" => $from_wallet->amount,
+            "amount" => $request->amount,
             "transaction_type" => "transfer"
         ])->histories()->create([
             'user_id' => $user_id
