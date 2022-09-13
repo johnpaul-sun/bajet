@@ -43,6 +43,7 @@ Route::group([
     'prefix' => '/v1'
 ], function () {
     // User Routes.
+    Route::get('/users/net-worth', [UserController::class, 'netWorth']);
     Route::resource('/users', UserController::class)
         ->only(['index', 'show']);
     Route::put('/users', [UserController::class, 'update']);

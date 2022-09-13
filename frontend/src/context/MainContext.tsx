@@ -1,11 +1,19 @@
-import React, { useState, createContext, ReactElement } from "react";
+import React, { useState, createContext, ReactElement, useEffect } from "react";
 import { PocketDataTypes, WalletDataTypes } from "src/pages/private/user/Dashboard/Dashboard";
 import { toast, ToastContainer } from 'react-toastify';
-import { historyAPI, pocketAPI, walletAPI } from "src/api/useAPI";
+import { historyAPI, pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 
 export type MainContextTypes = {
   toast: (value: string) => void,
   refresher: [boolean, (value: boolean) => void],
+  user: {
+    api: {
+      getNetWorth: () => void
+    },
+    income: [number, (value: number) => void],
+    expense: [number, (value: number) => void],
+    netWorth: [number, (value: number) => void],
+  },
   wallet: {
     api: {
       getWallet: () => void,
@@ -39,7 +47,7 @@ export type MainContextTypes = {
   }
 }
 
-export const MainContext = createContext<any>(null);
+export const MainContext = createContext<MainContextTypes | null>(null);
 
 export const ContextProvider = ({ children }: { children: ReactElement }) => {
   // Wallet States
@@ -74,6 +82,9 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
 
   // Other States
   const [refresher, setRefresher] = useState<boolean>(false);
+  const [income, setIncome] = useState<number>(0);
+  const [expense, setExpense] = useState<number>(0);
+  const [netWorth, setNetWorth] = useState<number>(0);
 
   // Method List
   const notification = (message: string) => {
@@ -86,6 +97,18 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       draggable: true,
       progress: undefined,
     });
+  }
+
+  const getNetWorth = (): void => {
+    userAPI.netWorth()
+      .then(res => {
+        const income = res.data.income;
+        const expense = res.data.expense;
+
+        setIncome(income);
+        setExpense(expense);
+        setNetWorth(income - expense);
+      })
   }
 
   const getWallet = (): void => {
@@ -149,6 +172,14 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
     <MainContext.Provider value={{
       toast: notification,
       refresher: [refresher, setRefresher],
+      user: {
+        api: {
+          getNetWorth
+        },
+        income: [income, setIncome],
+        expense: [expense, setExpense],
+        netWorth: [netWorth, setNetWorth],
+      },
       wallet: {
         api: {
           getWallet,

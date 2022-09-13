@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -109,5 +111,24 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Logged out',
         ], 201);
+    }
+
+    public function netWorth()
+    {
+        $expense = WalletTransaction::where("transaction_type", "expense")->get();
+        $expense_amount = [];
+        foreach ($expense as $data) {
+            array_push($expense_amount, $data->amount);
+        }
+        $total_expense = WalletTransaction::total($expense_amount);
+
+        $income = Wallet::all();
+        $income_amount = [];
+        foreach ($income as $data) {
+            array_push($income_amount, $data->amount);
+        }
+        $total_income = WalletTransaction::total($income_amount);
+
+        return response()->json(["expense" => $total_expense, "income" => $total_income]);
     }
 }

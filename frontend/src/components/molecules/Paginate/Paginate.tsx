@@ -10,7 +10,8 @@ type PaginateTypes = {
 function Paginate({ data, type }: PaginateTypes) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [itemOffset, setItemOffset] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+
   const {
     wallet: {
       page: [, setWalletPage]
@@ -28,7 +29,19 @@ function Paginate({ data, type }: PaginateTypes) {
   const handlePageClick = (e: any) => {
     const page = e.selected + 1;
 
-    type === 'setWalletPage' ? setWalletPage(page) : setPocketPage(page)
+    switch (type) {
+      case 'wallet': {
+        setWalletPage(page)
+        break;
+      }
+      case 'pocket': {
+        setPocketPage(page)
+        break;
+      }
+      default:
+        break;
+    }
+
     setCurrentPage(page);
   };
 

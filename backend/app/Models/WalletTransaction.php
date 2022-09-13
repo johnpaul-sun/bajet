@@ -27,4 +27,9 @@ class WalletTransaction extends Model
     {
         return $this->morphMany(History::class, 'historiable');
     }
+
+    public static function total($amount)
+    {
+        return array_reduce($amount, fn ($prev, $current) => $prev + $current, 0);
+    }
 }

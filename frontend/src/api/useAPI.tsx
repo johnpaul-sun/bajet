@@ -2,6 +2,9 @@ import { userApiCall, adminApiCall } from '.';
 
 // Update Type in integration 
 export const userAPI = {
+  netWorth: () => {
+    return userApiCall.get('/users/net-worth');
+  },
   register: (data: any) => {
     return userApiCall.post('/users', data);
   },

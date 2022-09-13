@@ -85,6 +85,14 @@ function Dashboard() {
   const dispatch = useDispatch();
   const {
     refresher: [refresher],
+    user: {
+      api: {
+        getNetWorth
+      },
+      income: [income],
+      expense: [expense],
+      netWorth: [netWorth],
+    },
     wallet: {
       api: {
         getWallet,
@@ -102,12 +110,14 @@ function Dashboard() {
       page: [pocketPage],
       data: [pocketData],
       sort: [sortByPocket]
+    },
+    history: {
+      api: {
+        getHistory,
+      },
+      data: [historyData]
     }
   } = useContext(MainContext) as MainContextTypes;
-
-  const income: number = 1_500_000;
-  const expense: number = 500_000;
-  const netWorth: string = formatNumber(income - expense);
 
   const logout = (): void => {
     Cookies.remove('user_token');
@@ -156,6 +166,11 @@ function Dashboard() {
     getPocket();
   }, [pocketAPI, pocketPage, refresher, sortByPocket])
 
+  useEffect(() => {
+    getHistory();
+    getNetWorth();
+  }, [refresher])
+
   return (
     <>
       {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} />}
@@ -179,7 +194,7 @@ function Dashboard() {
 
         <CardContainer header={true} headerLeft='Cash Flow' headerRight={headerDate} isDark={true} hr={true}>
           <h3 className="text-12 opacity-75 mb-px-9">Net Worth</h3>
-          <h1 className="text-18 mb-px-18">₱ {netWorth}</h1>
+          <h1 className={`text-18 mb-px-18 ${netWorth < 0 && "text-error-100"}`}>₱ {formatNumber(netWorth)}</h1>
           <div>
             <div className="text-12 flex flex-row justify-between text-success-100">
               <span>Income</span>
@@ -206,7 +221,7 @@ function Dashboard() {
                 : <h1 className="text-error-100 text-center mb-px-15">No Archive Wallet</h1>
             }
           </div>
-          <Paginate data={walletData} type="setWalletPage" />
+          <Paginate data={walletData} type="wallet" />
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Pockets' headerRight={addPocket} hr={true}>
@@ -220,13 +235,15 @@ function Dashboard() {
                 : <h1 className="text-error-100 text-center mb-px-15">No Archive Pocket</h1>
             }
           </div>
-          <Paginate data={pocketData} type="setPocketPage" />
+          <Paginate data={pocketData} type="pocket" />
         </CardContainer >
 
         <CardContainer header={true} headerLeft='Transaction History' hr={true} headerClass="mb-px-15">
-          <HistoryBox historyData={pocketData} />
-          <HistoryBox historyData={walletData} />
-          <HistoryBox historyData={pocketData} />
+          {historyData?.length === 0
+            ? <span className="text-error-100 opacity-80 text-18 grid text-center mt-px-12">No transactions</span>
+            : historyData.slice(0).reverse().map((data: any, index: number) => {
+              return index < 5 && <HistoryBox historyData={data} key={index} />;
+            })}
           <div className="flex flex-col justify-center items-center">
             <div className="border-b mt-px-18 border-inactive w-px-72 ">
               <div className="border-b mb-px-3 border-inactive ">
@@ -244,3 +261,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
