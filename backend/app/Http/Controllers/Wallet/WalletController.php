@@ -136,6 +136,23 @@ class WalletController extends Controller
         $to_wallet = Wallet::findOrFail($request->to_wallet);
         $to_wallet->update(["amount" => $to_wallet->amount + $request->amount]);
 
+        WalletTransaction::create([
+            "wallet_id" => $request->to_wallet,
+            "name" => $to_wallet->name,
+            "amount" => $to_wallet->amount,
+            "transaction_type" => "transfer"
+        ])->histories()->create([
+            'user_id' => $user_id
+        ]);
+
+        WalletTransaction::create([
+            "wallet_id" => $request->from_wallet,
+            "name" => $from_wallet->name,
+            "amount" => $from_wallet->amount,
+            "transaction_type" => "transfer"
+        ])->histories()->create([
+            'user_id' => $user_id
+        ]);
 
         return response($user_id);
     }
