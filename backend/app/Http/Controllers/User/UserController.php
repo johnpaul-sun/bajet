@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Pocket;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use Illuminate\Support\Facades\Hash;
@@ -115,10 +116,10 @@ class UserController extends Controller
 
     public function netWorth()
     {
-        $expense = WalletTransaction::where("transaction_type", "expense")->get();
+        $expense = Pocket::all();
         $expense_amount = [];
         foreach ($expense as $data) {
-            array_push($expense_amount, $data->amount);
+            array_push($expense_amount, $data->amount_to_pay);
         }
         $total_expense = WalletTransaction::total($expense_amount);
 

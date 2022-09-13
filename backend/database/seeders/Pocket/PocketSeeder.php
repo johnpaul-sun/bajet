@@ -29,15 +29,21 @@ class PocketSeeder extends Seeder
 
         foreach (User::all() as $key => $user) {
             $random = rand(999, 9999);
-            $day = rand(01, 31);
+            $today = intval(date('d'));
+            $day = "2022-09-" . rand($today === 31 ? 01 : $today, 31);
+
+            $schedule_day = intval(explode("-", $day)[2]);
+            $today = intval(date('d'));
+
+            $is_scheduled = $schedule_day === $today;
 
             Pocket::create([
                 'user_id' => $user->id,
                 'name' => $pocket_name[$key],
                 'schedule' => "monthly",
-                'schedule_date' => "2022-09-$day",
+                'schedule_date' => $day,
                 'amount' => $pocket_expense[$key],
-                'amount_to_pay' => $pocket_expense[$key],
+                'amount_to_pay' => $is_scheduled ? $pocket_expense[$key] : 0,
                 'is_active' => true
             ]);
         }

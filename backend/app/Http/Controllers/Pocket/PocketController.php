@@ -40,20 +40,34 @@ class PocketController extends Controller
     {
         Pocket::verifyPocket($request);
 
-        $userId = User::id();
+        $schedule_day = intval(explode("-", $request->schedule_date)[2]);
+        $today = intval(date('d'));
+
+        $is_scheduled = $schedule_day === $today;
+
+        $user_id = User::id();
 
         Pocket::create([
-            "user_id" => $userId,
+            "user_id" => $user_id,
             "name" => $request->name,
             "amount" => $request->amount,
-            "amount_to_pay" => 0,
+            "amount_to_pay" => $is_scheduled ? $request->amount : 0,
             "is_active" => true,
             "schedule" => $request->schedule,
             "schedule_date" => $request->schedule_date
         ]);
 
+        PocketTransaction::create([
+            "pocket_id" => count(Pocket::get()),
+            "wallet_id" => 3,
+            "amount" => $request->amount,
+            "transaction_type" => "update"
+        ])->histories()->create([
+            'user_id' => $user_id
+        ]);
+
         return response()->json([
-            "message" => "Pocket created successfully"
+            "message" => "Pocket created successfully!"
         ]);
     }
 
