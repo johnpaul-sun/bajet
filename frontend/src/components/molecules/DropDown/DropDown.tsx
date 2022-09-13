@@ -21,7 +21,7 @@ type OptionTypes = {
   }
 }
 
-function DropDown({ options, type }: any) {
+function DropDown({ options, type, sortText = 'Sort by:' }: any) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(0);
   const {
@@ -66,7 +66,7 @@ function DropDown({ options, type }: any) {
   })
   return (
     <div className="flex flex-row justify-between items-start gap-6">
-      <span className="text-15 font-medium w-px-100 mt-px-6">Sort by:</span>
+      <span className="text-15 font-medium w-px-160 mt-px-6">{sortText}</span>
       <div className="w-full">
         <div className={`selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15 bg-background-dropdown-selected rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} cursor-pointer	`} onClick={handleDropDown} >
           <span className="text-light-100">{options[activeDropDown].state}</span>

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
-import Pocket from 'src/assets/images/pocket.png'
+import PocketIcon from 'src/assets/images/pocket.png'
+import WalletIcon from 'src/assets/images/wallet.png'
 import Calendar from 'src/assets/images/calendar-light.png'
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
@@ -130,12 +131,12 @@ function PocketDropDown({
                 <div className="flex flex-row justify-between items-end" key={index}>
                   <div className="flex flex-row gap-3">
                     <div>
-                      <div className="p-px-2 bg-primary-100 rounded-px-3">
-                        <img src={Pocket} alt="pocket" className="w-px-15" />
+                      <div className={`${transactionType === 'expense' ? 'bg-primary-100' : 'bg-secondary-100'} p-px-2 rounded-px-3`}>
+                        <img src={transactionType === 'expense' ? WalletIcon : PocketIcon} alt="pocket" className="w-px-15" />
                       </div>
                     </div>
                     <div className="flex flex-col items-start justify-center">
-                      <h1 className="text-light-100 text-14">{transaction.wallet?.name}</h1>
+                      <h1 className="text-light-100 text-14">{transactionType === 'update' ? pocketData.name : transaction.wallet?.name}</h1>
                       <span className={`text-10 ${transactionSubText}`}>{transaction.transaction_type.charAt(0).toUpperCase() + transaction.transaction_type.slice(1)}</span>
                     </div>
                   </div>
@@ -170,8 +171,8 @@ function PocketDropDown({
       <div className={`cursor-pointer wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'}`} onClick={() => setDropDownState(!dropDownState)}>
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
-            <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
-              <img src={Pocket} alt="logo" className="h-px-30 opacity-60" />
+            <div className="bg-secondary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
+              <img src={PocketIcon} alt="logo" className="h-px-30 opacity-60" />
             </div>
             <div>
               <h1 className="text-15 text-light-100">{name}</h1>

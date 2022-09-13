@@ -13,6 +13,7 @@ import Dashborad from "../pages/private/admin/Dashboard/Dashborad";
 import Dashboard from "../pages/private/user/Dashboard/Dashboard";
 import VerifyEmail from "src/pages/private/user/VerifyEmail/VerifyEmail";
 import ForgotPassword from "src/pages/public/user/ForgotPassword/ForgotPassword";
+import History from "src/pages/private/user/History/History";
 
 export const roles: {
   admin: string,
@@ -43,6 +44,7 @@ function Router() {
         <Route element={<AuthChecker userRoles={roles.user} />}>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/history" element={<History />} />
         </Route>
 
         {/*--------------- Admin Private Routes ---------------*/}

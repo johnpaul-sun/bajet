@@ -10,21 +10,32 @@ use Illuminate\Http\Request;
 
 class HistoryController extends Controller
 {
-    // This are intentional methods to practice my self on accessing polymorphic relationships and using react paginate in FE.
+    /* 
+        These are intentional methods to practice my self on accessing polymorphic relationships; 
+        and to create my methods on converting the class to data; 
+        and also I would like to use react paginate in FE.
+    */
     public function all()
     {
         $history = History::all();
 
         $history_data = [];
+
         foreach ($history as $data) {
             if ($data->historiable_type === "WalletTransaction") {
                 $wallet_data = WalletTransaction::findOrFail($data->historiable_id);
 
-                array_push($history_data, $wallet_data);
+                array_push($history_data, [
+                    "account_type" => "wallet",
+                    "data" => $wallet_data
+                ]);
             } else {
                 $pocket_data = PocketTransaction::findOrFail($data->historiable_id);
 
-                array_push($history_data, $pocket_data);
+                array_push($history_data, [
+                    "account_type" => "pocket",
+                    "data" => $pocket_data
+                ]);
             };
         };
 

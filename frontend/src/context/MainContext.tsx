@@ -33,20 +33,22 @@ export type MainContextTypes = {
 export const MainContext = createContext<any>(null);
 
 export const ContextProvider = ({ children }: { children: ReactElement }) => {
-  const [refresher, setRefresher] = useState<boolean>(false);
-
+  // Wallet States
   const [editWalletModal, setEditWalletModal] = useState<boolean>(false);
   const [addWalletModal, setAddWalletModal] = useState<boolean>(false);
   const [walletPage, setWalletPage] = useState<number>(1);
   const [walletData, setWalletData] = useState<any>([]);
   const [walletId, setWalletId] = useState<number>(0);
 
+  // Pocket States
   const [editPocketModal, setEditPocketModal] = useState<boolean>(false);
   const [addPocketModal, setAddPocketModal] = useState<boolean>(false);
   const [pocketPage, setPocketPage] = useState<number>(1);
   const [pocketData, setPocketData] = useState<any>([]);
   const [pocketId, setPocketId] = useState<number>(0);
 
+  // Other States
+  const [refresher, setRefresher] = useState<boolean>(false);
   const [sortByWallet, setSortByWallet] = useState<any>({
     sort_by: "asc",
     sort_type: "created_at",
@@ -58,6 +60,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
     archive: 1
   });
 
+  // Method List
   const notification = (message: string) => {
     toast.success(message, {
       position: "top-right",

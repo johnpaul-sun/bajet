@@ -62,7 +62,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
       name: 'Work3',
       balance: 1500000
     }
-  ]
+  ];
 
   useEffect(() => {
     walletAPI.getAllActiveWallet()

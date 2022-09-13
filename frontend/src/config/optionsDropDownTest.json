@@ -2,13 +2,13 @@
   "wallet": [
     {
       "state": "latest - oldest",
-      "sort_by": "asc",
+      "sort_by": "desc",
       "sort_type": "created_at",
       "archive": 1
     },
     {
       "state": "oldest - latest",
-      "sort_by": "desc",
+      "sort_by": "asc",
       "sort_type": "created_at",
       "archive": 1
     },
@@ -27,13 +27,13 @@
     {
       "state": "highest - lowest",
       "sort_by": "desc",
-      "sort_type": "name",
+      "sort_type": "amount",
       "archive": 1
     },
     {
       "state": "lowest - highest",
       "sort_by": "asc",
-      "sort_type": "name",
+      "sort_type": "amount",
       "archive": 1
     },
     {
@@ -46,19 +46,19 @@
   "pocket": [
     {
       "state": "upcoming",
-      "sort_by": "asc",
-      "sort_type": "created_at",
+      "sort_by": "desc",
+      "sort_type": "schedule_date",
       "archive": 1
     },
     {
       "state": "latest - oldest",
-      "sort_by": "asc",
+      "sort_by": "desc",
       "sort_type": "created_at",
       "archive": 1
     },
     {
       "state": "oldest - latest",
-      "sort_by": "desc",
+      "sort_by": "asc",
       "sort_type": "created_at",
       "archive": 1
     },
@@ -77,13 +77,13 @@
     {
       "state": "highest - lowest",
       "sort_by": "desc",
-      "sort_type": "name",
+      "sort_type": "amount",
       "archive": 1
     },
     {
       "state": "lowest - highest",
       "sort_by": "asc",
-      "sort_type": "name",
+      "sort_type": "amount",
       "archive": 1
     },
     {

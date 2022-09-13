@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 type CardTypes = {
   children: any,
   className?: string,
+  textCenter?: string,
   headerClass?: string,
   header?: boolean,
   headerLeft?: ReactNode,
@@ -15,6 +16,7 @@ function Card({
   children,
   className = '',
   headerClass = '',
+  textCenter = '',
   header = false,
   headerLeft = <></>,
   headerRight = <></>,
@@ -29,8 +31,9 @@ function Card({
       {header &&
         <div className={`px-px-21 rounded-t-px-18 ${theme} border-none pt-px-10 ${headerClass}`}>
           <div className={`py-px-9 flex flex-row justify-between items-center ${hr && `border-b ${isDark ? 'border-inactive' : 'border-black'}`}`}>
-            <div className={`text-18 font-medium ${theme}`}>{headerLeft}</div>
-            <div className={`${theme} cursor-pointer`}>{headerRight}</div>
+            {headerLeft && <div className={`text-18 font-medium ${theme} `}>{headerLeft}</div>}
+            {textCenter && <h1 className="text-light-60 text-18">{textCenter}</h1>}
+            {headerRight && <div className={`${theme} cursor-pointer`}>{headerRight}</div>}
           </div>
         </div>}
       <div className={`${!header ? 'rounded-px-18' : 'rounded-b-px-18'} pt-px-12 pb-px-24 px-px-21 ${theme} ${className}`}>

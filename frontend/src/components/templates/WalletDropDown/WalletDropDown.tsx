@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import Wallet from 'src/assets/images/wallet.png'
+import WalletIcon from 'src/assets/images/wallet.png'
+import PocketIcon from 'src/assets/images/pocket.png'
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
 import formatNumber from "src/utils/formatNumber";
@@ -69,8 +70,8 @@ function WalletDropDown({
             <div className="flex flex-row justify-between items-star mt-px-18" key={index}>
               <div className="flex flex-col gap-1">
                 <div className="flex gap-2 items-center">
-                  <div className="p-px-2 bg-primary-100 rounded-px-3 w-px-15">
-                    <img src={Wallet} alt="pocket" className="w-px-15" />
+                  <div className={`${transactionType === 'expense' ? 'bg-secondary-100' : 'bg-primary-100'} p-px-2 rounded-px-3 w-px-15`}>
+                    <img src={transactionType === 'expense' ? PocketIcon : WalletIcon} alt="pocket" className="w-px-15" />
                   </div>
                   <h1 className="text-light-100 text-15">{transaction.name}</h1>
                 </div>
@@ -97,7 +98,7 @@ function WalletDropDown({
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3">
             <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">
-              <img src={Wallet} alt="logo" className="h-px-30 opacity-60" />
+              <img src={WalletIcon} alt="logo" className="h-px-30 opacity-60" />
             </div>
             <div>
               <h1 className="text-15 text-light-100">{name}</h1>

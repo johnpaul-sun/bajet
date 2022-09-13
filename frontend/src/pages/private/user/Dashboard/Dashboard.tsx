@@ -12,8 +12,6 @@ import DropDown from "src/components/molecules/DropDown/DropDown";
 import WalletDropDown from "src/components/templates/WalletDropDown/WalletDropDown";
 import PocketDropDown from "src/components/templates/PocketDropDown/PocketDropDown";
 import options from "src/config/optionsDropDownTest.json";
-import pocketData from "src/config/pocketDataTest.json";
-import paginateDataTest from "src/config/paginateDataTest.json";
 import HistoryBox from "src/components/templates/HistoryBox/HistoryBox";
 import Footer from "src/components/molecules/Footer/Footer";
 import { Link } from "react-router-dom";
@@ -23,17 +21,13 @@ import useScrollOnTop from "src/hooks/useScrollOnTop";
 import Paginate from "src/components/molecules/Paginate/Paginate";
 import AddPocket from "src/components/templates/AddPocket/AddPocket";
 import AddWallet from "src/components/templates/AddWallet/AddWallet";
-import EditPocket from "src/components/templates/EditPocket/EditPocket";
-import EditWallet from "src/components/templates/EditWallet/EditWallet";
 import { pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 import Cookies from "js-cookie";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 
 export type WalletDataTypes = {
   amount: number,
@@ -90,7 +84,6 @@ function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
-    toast: notification,
     refresher: [refresher],
     wallet: {
       api: {
@@ -108,7 +101,6 @@ function Dashboard() {
       add: [addPocketModal, setAddPocketModal],
       page: [pocketPage],
       data: [pocketData],
-      edit: [editPocketModal, setEditPocketModal],
       sort: [sortByPocket]
     }
   } = useContext(MainContext) as MainContextTypes;
@@ -127,9 +119,11 @@ function Dashboard() {
   const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddWalletModal(!addWalletModal)} />;
   const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddPocketModal(!addPocketModal)} />;
   const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-90">{getDate('today')}</span>;
-  const headerSettings: ReactElement<HTMLImageElement> = <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => {
-    userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
-  }} />;
+  const headerSettings: ReactElement<HTMLImageElement> = (
+    <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => {
+      userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
+    }} />
+  );
   const headerMenu: ReactElement<HTMLDivElement> = (
     <div className="flex w-fill gap-3 justify-center items-center">
       <img src={Logo} alt="logo" className="h-px-50" />
@@ -137,21 +131,15 @@ function Dashboard() {
     </div>
   );
 
+  const { backToTop } = useScrollOnTop(300);
+
   const pocketHistory = (): void => {
     console.log('pocket history');
-  }
-  const editPocket = (): void => {
-    setEditPocketModal(!editPocketModal);
-  }
-  const onClickPay = (): void => {
-    console.log('Pay');
   }
 
   const walletHistory = (): void => {
     console.log('wallet history');
   }
-
-  const { backToTop } = useScrollOnTop(300);
 
   useEffect(() => {
     console.clear();
