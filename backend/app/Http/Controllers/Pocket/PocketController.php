@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 class PocketController extends Controller
 {
     // Display all listing of active the Pocket.
+    public function all()
+    {
+        $data = Pocket::with('pocketTransaction')->where("is_active", 1)->get();
+
+        return response($data);
+    }
+
     public function index(Request $request)
     {
         $request->validate([
@@ -135,7 +142,7 @@ class PocketController extends Controller
             "pocket_id" => $request->pocket_id,
             "wallet_id" => $request->wallet_id,
             "amount" => $pocket->amount_to_pay,
-            "transaction_type" => "expense"
+            "transaction_type" => "payment"
         ])->histories()->create([
             'user_id' => $user_id
         ]);

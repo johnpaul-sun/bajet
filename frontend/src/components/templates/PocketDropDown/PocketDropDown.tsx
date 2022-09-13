@@ -12,6 +12,7 @@ import moment from "moment";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import EditPocket from "../EditPocket/EditPocket";
 import UnpaidBalance from "src/components/molecules/UnpaidBalance/UnpaidBalance";
+import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
 
 type PocketDropDownTypes = {
   pocketData: {
@@ -124,24 +125,23 @@ function PocketDropDown({
             : pocketData.pocket_transaction?.slice(0).reverse().map((transaction, index: number) => {
 
               const transactionType = transaction.transaction_type;
-              const transactionText = transactionType === 'income' ? 'text-success-100' : transactionType === 'expense' ? 'text-error-100' : 'text-fail-100';
-              const transactionSubText = transactionType === 'income' ? 'text-success-60' : transactionType === 'expense' ? 'text-error-60' : 'text-fail-60';
+              const isWallet = transactionType === 'expense' || transactionType === 'payment';
 
               return index < 3 && (
                 <div className="flex flex-row justify-between items-end" key={index}>
                   <div className="flex flex-row gap-3">
                     <div>
-                      <div className={`${transactionType === 'expense' ? 'bg-primary-100' : 'bg-secondary-100'} p-px-2 rounded-px-3`}>
-                        <img src={transactionType === 'expense' ? WalletIcon : PocketIcon} alt="pocket" className="w-px-15" />
+                      <div className={`${isWallet ? 'bg-primary-100' : 'bg-secondary-100'} p-px-2 rounded-px-3`}>
+                        <img src={isWallet ? WalletIcon : PocketIcon} alt="pocket" className="w-px-15" />
                       </div>
                     </div>
                     <div className="flex flex-col items-start justify-center">
                       <h1 className="text-light-100 text-14">{transactionType === 'update' ? pocketData.name : transaction.wallet?.name}</h1>
-                      <span className={`text-10 ${transactionSubText}`}>{transaction.transaction_type.charAt(0).toUpperCase() + transaction.transaction_type.slice(1)}</span>
+                      <span className={`text-10 ${getTransactionTypeStyle(transactionType, '60')}`}>{transaction.transaction_type.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
                     </div>
                   </div>
                   <div className="flex flex-col justify-end items-end">
-                    <h1 className={`text-13 ${transactionText}`}>{transactionType === "expense" && '- '}₱ {formatNumber(transaction.amount)}</h1>
+                    <h1 className={`text-13 ${getTransactionTypeStyle(transactionType)}`}>{transactionType === "expense" && '- '}₱ {formatNumber(transaction.amount)}</h1>
                     <span className="text-inactive text-10"><Moment format="YYYY/MM/DD - hh:mm A">{transaction?.wallet?.created_at}</Moment></span>
                   </div>
                 </div>)

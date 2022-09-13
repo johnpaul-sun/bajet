@@ -52,6 +52,7 @@ Route::group([
     // Pocket Routes.
     Route::resource('/pockets', PocketController::class);
     Route::post('/pockets/pay', [PocketController::class, 'pay']);
+    Route::get('/pockets/get/all', [PocketController::class, 'all']);
     Route::get('/pockets/search/{pocket_name}', [PocketController::class, 'search']);
     Route::post('/pockets/archive/{pocket_id}', [PocketController::class, 'archive']);
     Route::post('/pockets/unarchive/{pocket_id}', [PocketController::class, 'unarchive']);

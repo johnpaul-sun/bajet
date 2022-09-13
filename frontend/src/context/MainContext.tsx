@@ -1,7 +1,7 @@
 import React, { useState, createContext, ReactElement } from "react";
-import { WalletDataTypes } from "src/pages/private/user/Dashboard/Dashboard";
+import { PocketDataTypes, WalletDataTypes } from "src/pages/private/user/Dashboard/Dashboard";
 import { toast, ToastContainer } from 'react-toastify';
-import { pocketAPI, walletAPI } from "src/api/useAPI";
+import { historyAPI, pocketAPI, walletAPI } from "src/api/useAPI";
 
 export type MainContextTypes = {
   toast: (value: string) => void,
@@ -22,11 +22,20 @@ export type MainContextTypes = {
       getPocket: () => void,
     },
     page: [number, (value: number) => void],
-    data: [any, (value: WalletDataTypes) => void],
+    data: [any, (value: PocketDataTypes) => void],
     add: [boolean, (value: boolean) => void],
     edit: [boolean, (value: boolean) => void],
     id: [number, (value: number) => void],
     sort: [any, (value: any) => void]
+  },
+  history: {
+    api: {
+      getHistory: () => void,
+      getAllActiveAccounts: (value: string) => void,
+    },
+    data: [any, (value: any) => void],
+    logs: [any, (value: any) => void],
+    pageCount: [number, (value: number) => void]
   }
 }
 
@@ -39,6 +48,11 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
   const [walletPage, setWalletPage] = useState<number>(1);
   const [walletData, setWalletData] = useState<any>([]);
   const [walletId, setWalletId] = useState<number>(0);
+  const [sortByWallet, setSortByWallet] = useState<any>({
+    sort_by: "desc",
+    sort_type: "created_at",
+    archive: 1
+  });
 
   // Pocket States
   const [editPocketModal, setEditPocketModal] = useState<boolean>(false);
@@ -46,19 +60,20 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
   const [pocketPage, setPocketPage] = useState<number>(1);
   const [pocketData, setPocketData] = useState<any>([]);
   const [pocketId, setPocketId] = useState<number>(0);
+  const [sortByPocket, setSortByPocket] = useState<any>({
+    sort_by: "asc",
+    sort_type: "schedule_date",
+    archive: 1
+  });
+
+  // History States
+  const [historyData, setHistoryData] = useState<any>([]);
+  const [historyLogs, setHistoryLogs] = useState<any>([]);
+  const [sortByPageCount, setSortByPageCount] = useState<number>(0);
+
 
   // Other States
   const [refresher, setRefresher] = useState<boolean>(false);
-  const [sortByWallet, setSortByWallet] = useState<any>({
-    sort_by: "asc",
-    sort_type: "created_at",
-    archive: 1
-  });
-  const [sortByPocket, setSortByPocket] = useState<any>({
-    sort_by: "asc",
-    sort_type: "created_at",
-    archive: 1
-  });
 
   // Method List
   const notification = (message: string) => {
@@ -83,10 +98,47 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       });
   }
 
+  const getAllActiveAccounts = (account: string): void => {
+    switch (account) {
+      case 'wallet': {
+        walletAPI.getAllActiveWallet()
+          .then(res => {
+            setHistoryLogs(res.data);
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+        break;
+      }
+      case 'pocket': {
+        pocketAPI.getAllActivePocket()
+          .then(res => {
+            setHistoryLogs(res.data);
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   const getPocket = (): void => {
     pocketAPI.getAllPocket(pocketPage, sortByPocket)
       .then(res => {
         setPocketData(res.data);
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
+  }
+
+  const getHistory = (): void => {
+    historyAPI.getAllHistory()
+      .then(res => {
+        setHistoryData(res.data)
       })
       .catch(err => {
         console.log(err.response.data);
@@ -118,6 +170,15 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         edit: [editPocketModal, setEditPocketModal],
         id: [pocketId, setPocketId],
         sort: [sortByPocket, setSortByPocket]
+      },
+      history: {
+        api: {
+          getHistory,
+          getAllActiveAccounts,
+        },
+        data: [historyData, setHistoryData],
+        logs: [historyLogs, setHistoryLogs],
+        pageCount: [sortByPageCount, setSortByPageCount]
       }
     }}>
       {children}

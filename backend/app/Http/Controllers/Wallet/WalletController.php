@@ -13,7 +13,7 @@ class WalletController extends Controller
     // Display all listing of active the Wallet.
     public function all()
     {
-        $data = Wallet::where("is_active", 1)->get();
+        $data = Wallet::with('walletTransaction')->where("is_active", 1)->get();
 
         return response($data);
     }

@@ -69,6 +69,9 @@ export const walletAPI = {
 }
 
 export const pocketAPI = {
+  getAllActivePocket: () => {
+    return userApiCall.get('/pockets/get/all');
+  },
   getAllPocket: (page: number, data: any) => {
     return userApiCall.get(`/pockets?
     page=${page}&
@@ -96,5 +99,11 @@ export const pocketAPI = {
   },
   payBalance: (data: any) => {
     return userApiCall.post('/pockets/pay', data);
+  }
+}
+
+export const historyAPI = {
+  getAllHistory: () => {
+    return userApiCall.get('/history/all');
   }
 }

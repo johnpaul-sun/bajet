@@ -7,6 +7,7 @@ import formatNumber from "src/utils/formatNumber";
 import Moment from 'react-moment';
 import EditWallet from "../EditWallet/EditWallet";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
+import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
 
 export type WalletDropDownTypes = {
   walletData: {
@@ -63,8 +64,6 @@ function WalletDropDown({
         : walletData.wallet_transaction?.slice(0).reverse().map((transaction, index: number) => {
 
           const transactionType = transaction.transaction_type;
-          const transactionText = transactionType === 'income' ? 'text-success-100' : transactionType === 'expense' ? 'text-error-100' : 'text-fail-100';
-          const transactionSubText = transactionType === 'income' ? 'text-success-60' : transactionType === 'expense' ? 'text-error-60' : 'text-fail-60';
 
           return index < 3 && (
             <div className="flex flex-row justify-between items-star mt-px-18" key={index}>
@@ -79,8 +78,8 @@ function WalletDropDown({
                 <span className="text-inactive text-12"><Moment format="YYYY/MM/DD - hh:mm A">{transaction.created_at}</Moment></span>
               </div>
               <div className="flex flex-col justify-start items-end">
-                <span className={`text-15 ${transactionText}`}>{transactionType === 'expense' && '-'} ₱ {formatNumber(transaction.amount)}</span>
-                <span className={`text-12 ${transactionSubText}`}>{transactionType === 'income' ? 'Icome' : transactionType === 'expense' ? 'Expense' : 'Update'}</span>
+                <span className={`text-15 ${getTransactionTypeStyle(transactionType)}`}>{transactionType === 'expense' && '-'} ₱ {formatNumber(transaction.amount)}</span>
+                <span className={`text-12 ${getTransactionTypeStyle(transactionType, '60')}`}>{transactionType === 'income' ? 'Icome' : transactionType === 'expense' ? 'Expense' : 'Update'}</span>
               </div>
             </div>)
         })}

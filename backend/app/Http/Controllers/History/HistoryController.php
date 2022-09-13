@@ -30,7 +30,7 @@ class HistoryController extends Controller
                     "data" => $wallet_data
                 ]);
             } else {
-                $pocket_data = PocketTransaction::findOrFail($data->historiable_id);
+                $pocket_data = PocketTransaction::with('wallet')->with('pocket')->findOrFail($data->historiable_id);
 
                 array_push($history_data, [
                     "account_type" => "pocket",

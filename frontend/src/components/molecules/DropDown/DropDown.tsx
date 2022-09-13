@@ -30,6 +30,9 @@ function DropDown({ options, type, sortText = 'Sort by:' }: any) {
     },
     pocket: {
       sort: [, setSortByPocket]
+    },
+    history: {
+      pageCount: [, setSortByPageCount]
     }
   } = useContext(MainContext) as MainContextTypes;
   // Inject context here for active state
@@ -41,17 +44,30 @@ function DropDown({ options, type, sortText = 'Sort by:' }: any) {
   const setActive = (index: number): void => {
     setActiveDropDown(index);
     setDropDownState(!dropDownState);
-    type === 'wallet'
-      ? setSortByWallet({
-        sort_by: options[index].sort_by,
-        sort_type: options[index].sort_type,
-        archive: options[index].archive
-      })
-      : setSortByPocket({
-        sort_by: options[index].sort_by,
-        sort_type: options[index].sort_type,
-        archive: options[index].archive
-      })
+    switch (type) {
+      case 'wallet': {
+        setSortByWallet({
+          sort_by: options[index].sort_by,
+          sort_type: options[index].sort_type,
+          archive: options[index].archive
+        })
+        break;
+      }
+      case 'pocket': {
+        setSortByPocket({
+          sort_by: options[index].sort_by,
+          sort_type: options[index].sort_type,
+          archive: options[index].archive
+        })
+        break;
+      }
+      case 'page_count': {
+        setSortByPageCount(index);
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   const dropDownMenu = options.map((option: any, index: number) => {
