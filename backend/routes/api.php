@@ -62,6 +62,7 @@ Route::group([
     // Wallet Routes.
     Route::resource('/wallets', WalletController::class);
     Route::get('/wallets/get/all', [WalletController::class, 'all']);
+    Route::post('/wallets/transfer', [WalletController::class, 'transfer']);
     Route::get('/wallets/search/{wallet_name}', [WalletController::class, 'search']);
     Route::post('/wallets/archive/{wallet_id}', [WalletController::class, 'archive']);
     Route::post('/wallets/unarchive/{wallet_id}', [WalletController::class, 'unarchive']);

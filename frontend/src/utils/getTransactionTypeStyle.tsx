@@ -10,6 +10,9 @@ const getTransactionTypeStyle = (input: string, opacity: string = "100") => {
     case 'update': {
       return `text-fail-${opacity}`;
     }
+    case 'transfer': {
+      return `text-secondary-${opacity}`;
+    }
     default:
       return `text-success-${opacity}`;
   }

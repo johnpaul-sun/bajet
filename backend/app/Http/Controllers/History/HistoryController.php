@@ -23,7 +23,7 @@ class HistoryController extends Controller
 
         foreach ($history as $data) {
             if ($data->historiable_type === "WalletTransaction") {
-                $wallet_data = WalletTransaction::findOrFail($data->historiable_id);
+                $wallet_data = WalletTransaction::with('wallet')->findOrFail($data->historiable_id);
 
                 array_push($history_data, [
                     "account_type" => "wallet",

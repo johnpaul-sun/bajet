@@ -125,7 +125,18 @@ class WalletController extends Controller
         return response()->json($result, 200);
     }
 
-    public function transfer()
+    public function transfer(Request $request)
     {
+        Wallet::verifyTransfer($request);
+        $user_id = User::id();
+
+        $from_wallet = Wallet::findOrFail($request->from_wallet);
+        $from_wallet->update(["amount" => $from_wallet->amount - $request->amount]);
+
+        $to_wallet = Wallet::findOrFail($request->to_wallet);
+        $to_wallet->update(["amount" => $to_wallet->amount + $request->amount]);
+
+
+        return response($user_id);
     }
 }

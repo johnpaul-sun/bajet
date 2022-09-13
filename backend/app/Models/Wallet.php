@@ -52,4 +52,13 @@ class Wallet extends Model
     {
         return $this->morphMany(History::class, 'historiable');
     }
+
+    public static function verifyTransfer($request)
+    {
+        $request->validate([
+            'from_wallet' => 'required|numeric',
+            'to_wallet' => 'required|numeric',
+            'amount' => 'required|numeric',
+        ]);
+    }
 }

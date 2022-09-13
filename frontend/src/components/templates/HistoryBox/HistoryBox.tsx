@@ -19,8 +19,9 @@ type HistoryBoxTypes = {
 }
 
 function HistoryBox({ historyData }: any) {
-  const { amount, name, transaction_type, created_at } = historyData.data;
+  const { amount, transaction_type, created_at } = historyData.data;
   const accountType = historyData.account_type;
+  const walletName = accountType === "wallet" && historyData.data.wallet.name;
   const pocketName = accountType === "pocket" && historyData.data.pocket.name;
 
   return (
@@ -31,7 +32,7 @@ function HistoryBox({ historyData }: any) {
             <img src={accountType === 'wallet' ? Wallet : Pocket} alt="logo" className="h-px-30 opacity-60" />
           </div>
           <div className="flex flex-col gap-1">
-            <h1 className="text-15 text-light-100">{name || pocketName}</h1>
+            <h1 className="text-15 text-light-100">{walletName || pocketName}</h1>
             {/* <p className="text-light-60 text-12 overflow-hidden truncate w-36">{details}</p> */}
             <span className="text-inactive text-12"><Moment format="YYYY/MM/DD - hh:mm A">{created_at}</Moment></span>
           </div>
