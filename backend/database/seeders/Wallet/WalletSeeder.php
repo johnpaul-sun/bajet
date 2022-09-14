@@ -17,9 +17,9 @@ class WalletSeeder extends Seeder
     public function run()
     {
         $wallet_name = [
-            "Income X Seeder",
-            "Income Y Seeder",
-            "Income Z Seeder"
+            "Gcash Seeder",
+            "MetroBank Seeder",
+            "Crypto Seeder"
         ];
 
         foreach (User::all() as $user) {

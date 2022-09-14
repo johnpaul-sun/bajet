@@ -16,6 +16,7 @@ class PocketSeeder extends Seeder
      */
     public function run()
     {
+        date_default_timezone_set('Asia/Manila');
         $pocket_name = [
             "House Rent",
             "Internet Bill",

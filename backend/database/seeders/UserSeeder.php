@@ -15,7 +15,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        date_default_timezone_set('Asia/Manila');
         User::create([
             'first_name' => 'Super',
             'last_name' => 'Admin',

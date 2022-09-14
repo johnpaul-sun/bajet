@@ -4,7 +4,6 @@ import CardContainer from "src/components/organisms/CardContainer/CardContainer"
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
 import Add from 'src/assets/images/add.png'
-import Profile from 'src/assets/images/profile.png'
 import Settings from 'src/assets/images/settings.png'
 import getDate from 'src/utils/getDate';
 import formatNumber from "src/utils/formatNumber";
@@ -130,7 +129,7 @@ function Dashboard() {
 
   const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddWalletModal(!addWalletModal)} />;
   const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddPocketModal(!addPocketModal)} />;
-  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-90">{getDate('today')}</span>;
+  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-100">{getDate('today')}</span>;
   const headerSettings: ReactElement<HTMLImageElement> = (
     <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => {
       userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
@@ -195,18 +194,26 @@ function Dashboard() {
         </CardContainer>
 
         <CardContainer header={true} headerLeft='Cash Flow' headerRight={headerDate} isDark={true} hr={true}>
-          <h3 className="text-12 opacity-75 mb-px-9">Net Worth</h3>
-          <h1 className={`text-18 mb-px-18 ${netWorth < 0 && "text-error-100"}`}>₱ {formatNumber(netWorth)}</h1>
+          <div className="flex flex-row justify-between items-start mb-px-30">
+            <div>
+              <h3 className="text-12 opacity-75 mb-px-9">Net Worth</h3>
+              <h1 className={`text-18 ${netWorth < 0 && "text-error-100"}`}>₱ {formatNumber(netWorth)}</h1>
+            </div>
+            <div className="flex flex-col justify-center items-end">
+              <h3 className="text-12 opacity-75 mb-px-9">Account Status</h3>
+              <h1 className={`text-15 ${netWorth < 0 ? "text-error-100" : netWorth < income / 2 ? "text-secondary-100" : "text-success-100"}`}>{netWorth < 0 ? "Broke" : netWorth < (income / 2) ? "Need Attention" : "Healthy"}</h1>
+            </div>
+          </div>
           <div>
             <div className="text-12 flex flex-row justify-between text-success-100">
-              <span>Income</span>
+              <span>Total Wallet Balance</span>
               <span>₱ {formatNumber(income)}</span>
             </div>
             <div className="income h-px-27 bg-success-100 my-px-9 flex justify-end items-end">
               <div className="expense h-px-27 bg-error-100" style={{ width: `${(expense / income) * 100}%` }}></div>
             </div>
             <div className="text-12 flex flex-row-reverse justify-between text-error-100">
-              <span>Expense</span>
+              <span>Total Expenses</span>
               <span>- ₱ {formatNumber(expense)}</span>
             </div>
           </div>

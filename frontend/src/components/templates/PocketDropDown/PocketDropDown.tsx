@@ -9,6 +9,7 @@ import Moment from 'react-moment';
 import getMonthWord from "src/utils/getMonthWord";
 import getOrdinalNumber from "src/utils/getOrdinalNumber";
 import moment from "moment";
+import 'moment-timezone';
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import EditPocket from "../EditPocket/EditPocket";
 import UnpaidBalance from "src/components/molecules/UnpaidBalance/UnpaidBalance";
@@ -57,6 +58,7 @@ function PocketDropDown({
   onClickPay = () => { }
 }: PocketDropDownTypes) {
   const { amount, name, amount_to_pay, schedule_date, schedule, id } = pocketData;
+
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
   const dayToday = moment().format("YYYY/MM/DD").split('/')[2];
@@ -142,7 +144,7 @@ function PocketDropDown({
                   </div>
                   <div className="flex flex-col justify-end items-end">
                     <h1 className={`text-13 ${getTransactionTypeStyle(transactionType)}`}>{transactionType === "expense" && '- '}₱ {formatNumber(transaction.amount)}</h1>
-                    <span className="text-inactive text-10"><Moment format="YYYY/MM/DD - hh:mm A">{transaction?.wallet?.created_at}</Moment></span>
+                    <span className="text-inactive text-10"><Moment format="YYYY/MM/DD - hh:mm A" >{transaction?.created_at}</Moment></span>
                   </div>
                 </div>)
             })}

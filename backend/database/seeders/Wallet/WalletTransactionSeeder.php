@@ -16,6 +16,7 @@ class WalletTransactionSeeder extends Seeder
      */
     public function run()
     {
+        date_default_timezone_set('Asia/Manila');
         foreach (Wallet::all() as $wallet) {
             for ($i = 0; $i < 2; $i++) {
                 WalletTransaction::create([

@@ -28,7 +28,7 @@ type WalletDataTypes = {
 
 type PeyeeTypes = {
   pocket_id: number,
-  wallet_id: number
+  wallet_id: number | undefined
 }
 
 function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: UnpaidBalanceTypes) {
@@ -39,39 +39,23 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
 
   const [payee, setPayee] = useState<PeyeeTypes>({
     pocket_id: pocketId,
-    wallet_id: 1
+    wallet_id: 0
   });
   const {
     toast: notification,
     refresher: [refresher, setRefresher]
   } = useContext(MainContext) as MainContextTypes;
 
-  const options = [
-    {
-      image: WalletIcon,
-      name: 'Work',
-      balance: 1500000
-    },
-    {
-      image: WalletIcon,
-      name: 'Work2',
-      balance: 1500000
-    },
-    {
-      image: WalletIcon,
-      name: 'Work3',
-      balance: 1500000
-    }
-  ];
-
   useEffect(() => {
     walletAPI.getAllActiveWallet()
       .then(res => {
         setWalletData(res.data)
+        setPayee(prev => ({ ...prev, wallet_id: res.data[activeDropDown]?.id }));
       })
       .catch(err => {
         console.log(err.response.data);
       })
+
   }, [])
 
   useEffect(() => {
@@ -100,7 +84,7 @@ function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: Unpaid
     return (
       <div
         key={index}
-        className={`hover:bg-background-dropdown-active selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15 cursor-pointer ${index + 1 === options.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
+        className={`hover:bg-background-dropdown-active selected flex flex-row justify-between items-center gap-6 pl-px-12 pr-px-9 py-px-6 text-15 cursor-pointer ${index + 1 === walletData.length && 'rounded-b-px-3'} ${activeDropDown === index ? 'bg-background-dropdown-active' : 'bg-background-dropdown-inactive'}`}
         onClick={() => selectPayee(index, data.id)} >
         <div className="flex flex-row gap-3">
           <div className="bg-primary-100 h-px-42 w-px-42 flex justify-center items-center rounded-px-3">

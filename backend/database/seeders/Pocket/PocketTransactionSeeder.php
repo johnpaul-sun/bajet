@@ -18,6 +18,7 @@ class PocketTransactionSeeder extends Seeder
      */
     public function run()
     {
+        date_default_timezone_set('Asia/Manila');
         foreach (Pocket::all() as $pocket) {
             PocketTransaction::create([
                 'pocket_id' => $pocket->id,

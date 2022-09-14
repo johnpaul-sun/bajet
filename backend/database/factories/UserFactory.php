@@ -17,7 +17,6 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        date_default_timezone_set('Asia/Manila');
         $fname = str_replace(' ', '', strtolower($this->faker->firstName()));
         static $id = 2;
 

@@ -89,9 +89,15 @@ class PocketController extends Controller
         Pocket::verifyUpdatePocket($request);
         $pocket = Pocket::findOrFail($pocket_id);
 
+        $schedule_day = intval(explode("-", $request->schedule_date)[2]);
+        $today = intval(date('d'));
+
+        $is_scheduled = $schedule_day === $today;
+
         $pocket->update([
             "name" => $request->name ? $request->name : $pocket->name,
             "amount" => $request->amount ? $request->amount : $pocket->amount,
+            "amount_to_pay" => $is_scheduled ? $request->amount : $pocket->amount_to_pay,
             "schedule" => $request->schedule ? $request->schedule : $pocket->schedule,
             "schedule_date" => $request->schedule_date ? $request->schedule_date : $pocket->schedule_date
         ]);
