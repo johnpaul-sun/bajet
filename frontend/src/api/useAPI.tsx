@@ -108,5 +108,11 @@ export const pocketAPI = {
 export const historyAPI = {
   getAllHistory: () => {
     return userApiCall.get('/history/all');
+  },
+  getAllWalletHistory: () => {
+    return userApiCall.get('/history/wallet');
+  },
+  getAllPocketHistory: () => {
+    return userApiCall.get('/history/pocket');
   }
 }

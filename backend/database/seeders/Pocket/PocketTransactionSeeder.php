@@ -21,7 +21,7 @@ class PocketTransactionSeeder extends Seeder
         foreach (Pocket::all() as $pocket) {
             PocketTransaction::create([
                 'pocket_id' => $pocket->id,
-                'wallet_id' => $pocket->id,
+                'wallet_id' => 1,
                 'amount' => $pocket->amount,
                 'transaction_type' => "update",
             ])->histories()->create([

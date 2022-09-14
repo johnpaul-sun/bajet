@@ -16,8 +16,8 @@ class WalletTransactionSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 2; $i++) {
-            foreach (Wallet::all() as $wallet) {
+        foreach (Wallet::all() as $wallet) {
+            for ($i = 0; $i < 2; $i++) {
                 WalletTransaction::create([
                     'wallet_id' => $wallet->id,
                     'name' => $wallet->name,

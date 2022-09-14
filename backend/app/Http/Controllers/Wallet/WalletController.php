@@ -13,7 +13,9 @@ class WalletController extends Controller
     // Display all listing of active the Wallet.
     public function all()
     {
-        $data = Wallet::with('walletTransaction')->where("is_active", 1)->get();
+        $user_id = User::id();
+
+        $data = Wallet::with('walletTransaction')->where(["is_active" => 1, 'user_id' => $user_id])->get();
 
         return response($data);
     }
@@ -26,7 +28,9 @@ class WalletController extends Controller
             "archive" => "string|required"
         ]);
 
-        $data = Wallet::where("is_active", $request->archive)
+        $user_id = User::id();
+
+        $data = Wallet::where(["is_active" => $request->archive, 'user_id' => $user_id])
             ->with('walletTransaction')
             ->orderBy($request->sort_type, $request->sort_by)
             ->paginate(3);
@@ -56,7 +60,9 @@ class WalletController extends Controller
 
     public function show($wallet_id)
     {
-        return response(Wallet::with('walletTransaction')->findOrFail($wallet_id));
+        $user_id = User::id();
+
+        return response(Wallet::with('walletTransaction')->where('user_id', $user_id)->findOrFail($wallet_id));
     }
 
     public function update(Request $request, $wallet_id)
@@ -116,7 +122,9 @@ class WalletController extends Controller
 
     public function search($wallet_name)
     {
-        $result = Wallet::where("name", "like", "%$wallet_name%")->get();
+        $user_id = User::id();
+
+        $result = Wallet::where(["is_active" => 1, 'user_id' => $user_id])->where("name", "like", "%$wallet_name%")->get();
 
         if (count($result) === 0) return response()->json([
             'message' => "Can't find $wallet_name."

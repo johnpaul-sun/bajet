@@ -16,17 +16,15 @@ import useScrollOnTop from "src/hooks/useScrollOnTop";
 import Cookies from "js-cookie";
 import resetOnTop from "src/utils/resetOnTop";
 import style from "src/utils/styles";
-import { useNavigate } from "react-router-dom";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 function History() {
-  const navigate = useNavigate();
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(0);
   const [accountType, setAccountType] = useState<string>('wallet');
   const [allTransactions, setAllTransactions] = useState<boolean>(false);
+  const [transactionText, setTransactionText] = useState<string>('');
   const {
     refresher: [refresher],
     history: {
@@ -43,7 +41,7 @@ function History() {
   const { backToTop } = useScrollOnTop(300);
 
   const selectedDropDown = historyLogs[activeDropDown];
-  const selectedAccount = allTransactions ? historyData : selectedDropDown?.wallet_transaction || selectedDropDown?.pocket_transaction;
+  const selectedAccount = activeDropDown < 0 ? historyData : selectedDropDown?.wallet_transaction || selectedDropDown?.pocket_transaction;
 
   const pageCount = [
     { state: 5 },
@@ -59,26 +57,49 @@ function History() {
   }, [])
 
   useEffect(() => {
-    getHistory();
     getAllActiveAccounts(accountType);
   }, [refresher, accountType])
 
   const headerLeft = (
-    <div onClick={() => navigate('/')} className="flex bg-background-dark text-light-100 items-center cursor-pointer">
+    <div onClick={() => window.location.pathname = "/"} className="flex bg-background-dark text-light-100 items-center cursor-pointer">
       <img src={Back} alt="go-back" className="h-px-25" />
     </div>
   );
 
   const selectDropDown = (index: number): void => {
-    setDropDownState(!dropDownState);
+    setDropDownState(false);
     setAllTransactions(false)
     setActiveDropDown(index);
   }
 
-  const selectAll = (): void => {
-    setDropDownState(!dropDownState);
-    setAllTransactions(true);
+  const selectAll = (type: string): void => {
+    setDropDownState(false);
     setActiveDropDown(-1);
+
+    switch (type) {
+      case 'all': {
+        getHistory('all');
+        setAccountType('all');
+        setTransactionText('All Account Transactions');
+        setAllTransactions(true);
+        break;
+      }
+      case 'wallet': {
+        getHistory('wallet');
+        setAccountType('wallet');
+        setTransactionText('All Wallet Transactions');
+        break;
+      }
+      case 'pocket': {
+        getHistory('pocket');
+        setAccountType('pocket');
+        setTransactionText('All Pocket Transactions');
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   const selectWallet = (): void => {
@@ -112,8 +133,8 @@ function History() {
         {index + 1 === historyLogs.length && (
           <div
             className="hover:bg-background-dropdown-active selected py-px-12 flex flex-row justify-center items-center gap-6 pl-px-12 pr-px-9 text-15 cursor-pointer rounded-b-px-3 bg-background-lightDark"
-            onClick={selectAll} >
-            <h1 className="text-light-100 text-15">All Account</h1>
+            onClick={() => selectAll(data.income_every ? "wallet" : "pocket")} >
+            <h1 className="text-light-100 text-15">{data.income_every ? "All Wallet Transactions" : "All Pocket Transactions"}</h1>
           </div>
         )}
       </Fragment>
@@ -122,12 +143,12 @@ function History() {
 
   const transactionListData = selectedAccount?.length === 0
     ? <span className="text-error-100 opacity-80 text-18 grid text-center mt-px-12">No transactions</span>
-    : selectedAccount?.slice(0).reverse().map((data: any, index: number) => {
+    : selectedAccount?.map((data: any, index: number) => {
 
       const accountType = allTransactions ? data.account_type : data.pocket_id ? "pocket" : "wallet";
       const transactionType = data.data?.transaction_type || data.transaction_type;
       const amount = data.data?.amount || data.amount;
-      const name = allTransactions ? data.data?.name || data?.name || data.data?.pocket?.name || data?.wallet?.name : transactionType === 'expense' ? data.name : selectedDropDown.name;
+      const name = activeDropDown < 0 ? data.data?.name || data?.name || data.data?.pocket?.name || data?.wallet?.name : transactionType === 'expense' ? data.name : selectedDropDown.name;
       const date = data?.data?.created_at || data.created_at;
 
       return (
@@ -164,16 +185,17 @@ function History() {
           <div className="flex flex-row items-center justify-center gap-2">
             <Button type="secondary" className={`${accountType === 'wallet' || 'opacity-50'} ${allTransactions && 'opacity-50'} w-full`} text="Wallet" height="medium" onClick={selectWallet} />
             <Button type="secondary" className={`${accountType === 'pocket' || 'opacity-50'} ${allTransactions && 'opacity-50'} w-full`} text="Pocket" height="medium" onClick={selectPocket} />
+            <Button type="secondary" className={`${allTransactions || 'opacity-50'} w-full`} text="All" height="medium" onClick={() => selectAll('all')} />
           </div>
         </div>
 
         <div className="flex flex-col">
           <p className="text-13 font-medium mb-px-9">Select Account</p>
           <div onClick={() => allTransactions || setDropDownState(!dropDownState)} className={`cursor-pointer bg-background-dropdown-selected rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} text-light-100 text-13 flex flex-row justify-between items-center p-px-12`}>
-            {allTransactions
+            {activeDropDown < 0
               ? <>
                 <div className="h-px-20" ></div>
-                <h1 className="text-light-100 text-15">All Account</h1>
+                <h1 className="text-light-100 text-15">{transactionText}</h1>
                 <div className="h-px-20" ></div>
               </>
               : <>

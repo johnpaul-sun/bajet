@@ -19,7 +19,7 @@ type HistoryBoxTypes = {
 }
 
 function HistoryBox({ historyData }: any) {
-  const { amount, transaction_type, created_at } = historyData.data;
+  const { amount, transaction_type, created_at } = historyData?.data;
   const accountType = historyData.account_type;
   const walletName = accountType === "wallet" && historyData.data.wallet.name;
   const pocketName = accountType === "pocket" && historyData.data.pocket.name;

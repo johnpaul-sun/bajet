@@ -116,14 +116,18 @@ class UserController extends Controller
 
     public function netWorth()
     {
-        $expense = Pocket::all();
+        //Net worth is your assets after expenses
+
+        $user_id = User::id();
+
+        $expense = Pocket::where('user_id', $user_id)->get();
         $expense_amount = [];
         foreach ($expense as $data) {
             array_push($expense_amount, $data->amount_to_pay);
         }
         $total_expense = WalletTransaction::total($expense_amount);
 
-        $income = Wallet::all();
+        $income = Wallet::where('user_id', $user_id)->get();
         $income_amount = [];
         foreach ($income as $data) {
             array_push($income_amount, $data->amount);

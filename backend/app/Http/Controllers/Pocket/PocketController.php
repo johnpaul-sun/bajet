@@ -15,7 +15,9 @@ class PocketController extends Controller
     // Display all listing of active the Pocket.
     public function all()
     {
-        $data = Pocket::with('pocketTransaction')->where("is_active", 1)->get();
+        $user_id = User::id();
+
+        $data = Pocket::with('pocketTransaction')->where(["is_active" => 1, 'user_id' => $user_id])->get();
 
         return response($data);
     }
@@ -28,7 +30,9 @@ class PocketController extends Controller
             "archive" => "string|required"
         ]);
 
-        $data = Pocket::where("is_active", $request->archive)
+        $user_id = User::id();
+
+        $data = Pocket::where(["is_active" => $request->archive, 'user_id' => $user_id])
             ->with('pocketTransaction')
             ->orderBy($request->sort_type, $request->sort_by)
             ->paginate(3);
@@ -38,10 +42,12 @@ class PocketController extends Controller
 
     public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Manila');
+
         Pocket::verifyPocket($request);
 
         $schedule_day = intval(explode("-", $request->schedule_date)[2]);
-        $today = intval(date('d'));
+        $today = intval(date("d"));
 
         $is_scheduled = $schedule_day === $today;
 
@@ -59,7 +65,7 @@ class PocketController extends Controller
 
         PocketTransaction::create([
             "pocket_id" => count(Pocket::get()),
-            "wallet_id" => 3,
+            "wallet_id" => count(Wallet::get()),
             "amount" => $request->amount,
             "transaction_type" => "update"
         ])->histories()->create([
@@ -135,7 +141,9 @@ class PocketController extends Controller
 
     public function search($pocket_name)
     {
-        $result = Pocket::where("name", "like", "%$pocket_name%")->get();
+        $user_id = User::id();
+
+        $result = Pocket::where('user_id', $user_id)->where("name", "like", "%$pocket_name%")->get();
 
         if (count($result) === 0) return response()->json([
             'message' => "Can't find $pocket_name."

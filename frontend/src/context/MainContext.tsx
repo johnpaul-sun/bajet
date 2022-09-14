@@ -10,6 +10,7 @@ export type MainContextTypes = {
     api: {
       getNetWorth: () => void
     },
+    data: [any, (value: any) => void],
     income: [number, (value: number) => void],
     expense: [number, (value: number) => void],
     netWorth: [number, (value: number) => void],
@@ -38,7 +39,7 @@ export type MainContextTypes = {
   },
   history: {
     api: {
-      getHistory: () => void,
+      getHistory: (value: string) => void,
       getAllActiveAccounts: (value: string) => void,
     },
     data: [any, (value: any) => void],
@@ -57,7 +58,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
   const [walletData, setWalletData] = useState<any>([]);
   const [walletId, setWalletId] = useState<number>(0);
   const [sortByWallet, setSortByWallet] = useState<any>({
-    sort_by: "desc",
+    sort_by: "asc",
     sort_type: "created_at",
     archive: 1
   });
@@ -79,12 +80,15 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
   const [historyLogs, setHistoryLogs] = useState<any>([]);
   const [sortByPageCount, setSortByPageCount] = useState<number>(0);
 
-
-  // Other States
-  const [refresher, setRefresher] = useState<boolean>(false);
+  // User States 
   const [income, setIncome] = useState<number>(0);
   const [expense, setExpense] = useState<number>(0);
   const [netWorth, setNetWorth] = useState<number>(0);
+  const [userData, setUserData] = useState<any>([]);
+
+
+  // Other States
+  const [refresher, setRefresher] = useState<boolean>(false);
 
   // Method List
   const notification = (message: string) => {
@@ -158,14 +162,43 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       });
   }
 
-  const getHistory = (): void => {
-    historyAPI.getAllHistory()
-      .then(res => {
-        setHistoryData(res.data)
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
+  const getHistory = (type: string): void => {
+    switch (type) {
+      case 'all': {
+        historyAPI.getAllHistory()
+          .then(res => {
+            setHistoryData(res.data)
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+        break;
+      }
+      case 'wallet': {
+        historyAPI.getAllWalletHistory()
+          .then(res => {
+            console.log(res.data);
+            setHistoryData(res.data)
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+        break;
+      }
+      case 'pocket': {
+        historyAPI.getAllPocketHistory()
+          .then(res => {
+            console.log(res.data);
+            setHistoryData(res.data)
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          });
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   return (
@@ -176,6 +209,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         api: {
           getNetWorth
         },
+        data: [userData, setUserData],
         income: [income, setIncome],
         expense: [expense, setExpense],
         netWorth: [netWorth, setNetWorth],

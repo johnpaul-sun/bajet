@@ -22,16 +22,20 @@ class WalletSeeder extends Seeder
             "Income Z Seeder"
         ];
 
-        foreach (User::all() as $key => $user) {
-            $income = rand(6999, 9999);
-            Wallet::create([
-                'user_id' => $user->id,
-                'name' => $wallet_name[$key],
-                'income_every' => "15 Days",
-                'income' => $income,
-                'amount' => $income,
-                'is_active' => true
-            ]);
+        foreach (User::all() as $user) {
+
+            for ($i = 0; $i < count(User::get()); $i++) {
+                $income = rand(6999, 9999);
+
+                Wallet::create([
+                    'user_id' => $user->id,
+                    'name' => $wallet_name[$i],
+                    'income_every' => "15 Days",
+                    'income' => $income,
+                    'amount' => $income,
+                    'is_active' => true
+                ]);
+            }
         }
     }
 }

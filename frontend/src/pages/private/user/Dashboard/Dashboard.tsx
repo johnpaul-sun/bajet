@@ -23,11 +23,12 @@ import AddPocket from "src/components/templates/AddPocket/AddPocket";
 import AddWallet from "src/components/templates/AddWallet/AddWallet";
 import { pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 import Cookies from "js-cookie";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import 'react-toastify/dist/ReactToastify.css';
+import Moment from "react-moment";
 
 export type WalletDataTypes = {
   amount: number,
@@ -83,6 +84,7 @@ export type PocketDataTypes = {
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { avatar, created_at, first_name, last_name } = useSelector((state: any) => state.user.user);
   const {
     refresher: [refresher],
     user: {
@@ -155,7 +157,7 @@ function Dashboard() {
     console.clear();
     resetOnTop();
 
-    dispatch(setUser(Cookies.get('user')));
+    dispatch(setUser(JSON.parse(Cookies.get('user') || "")));
   }, [])
 
   useEffect(() => {
@@ -167,7 +169,7 @@ function Dashboard() {
   }, [pocketAPI, pocketPage, refresher, sortByPocket])
 
   useEffect(() => {
-    getHistory();
+    getHistory('all');
     getNetWorth();
   }, [refresher])
 
@@ -179,11 +181,11 @@ function Dashboard() {
       <div className={`${style.body.default} flex flex-col gap-6`}>
         <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
           <div className="flex flex-row gap-5">
-            <img src={Profile} alt="profile" className="w-px-112 h-px-112" />
+            <img src={avatar} alt="profile" className="w-px-110 h-px-110 mr-px-30" />
             <div className="flex flex-col justify-between">
               <div>
-                <h1 className={style.font.dark18}>Cooper Dorwart</h1>
-                <span className={`${style.font.dark12} text-inactive`}>Joined 6 months ago</span>
+                <h1 className={style.font.dark18}>{`${first_name} ${last_name}`}</h1>
+                <span className={`${style.font.dark12} text-inactive`}>Joined <Moment fromNow>{created_at}</Moment></span>
               </div>
               <div className="flex relative">
                 <button className={`${style.button.primary} h-px-24 text-12`}>Add record</button>

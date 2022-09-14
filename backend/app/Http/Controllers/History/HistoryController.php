@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\History;
 
-use App\Http\Controllers\Controller;
+use App\Models\Wallet;
 use App\Models\History;
+use Illuminate\Http\Request;
 use App\Models\PocketTransaction;
 use App\Models\WalletTransaction;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class HistoryController extends Controller
 {
@@ -17,7 +19,8 @@ class HistoryController extends Controller
     */
     public function all()
     {
-        $history = History::all();
+        $user_id = User::id();
+        $history = History::where('user_id', $user_id)->get();
 
         $history_data = [];
 
@@ -44,7 +47,9 @@ class HistoryController extends Controller
 
     public function wallet()
     {
-        $wallet_transaction = History::where("historiable_type", "WalletTransaction")->get();
+        $user_id = User::id();
+
+        $wallet_transaction = History::where(["historiable_type" => "WalletTransaction", 'user_id' => $user_id])->get();
 
         $wallet_data = History::getWalletData($wallet_transaction);
 
@@ -53,7 +58,9 @@ class HistoryController extends Controller
 
     public function pocket()
     {
-        $pocket_transaction = History::where("historiable_type", "PocketTransaction")->get();
+        $user_id = User::id();
+
+        $pocket_transaction = History::where(["historiable_type" => "PocketTransaction", 'user_id' => $user_id])->get();
 
         $pocket_data = History::getPocketData($pocket_transaction);
 
