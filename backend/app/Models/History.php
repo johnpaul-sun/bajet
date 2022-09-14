@@ -26,9 +26,9 @@ class History extends Model
     {
         $wallet_data = [];
         foreach ($data as $wallet) {
-            $data = WalletTransaction::findOrFail($wallet->historiable_id);
+            $data = WalletTransaction::with('wallet')->findOrFail($wallet->historiable_id);
 
-            array_push($wallet_data, $data);
+            $data->wallet->is_active && array_push($wallet_data, $data);
         }
         return $wallet_data;
     }
@@ -37,9 +37,9 @@ class History extends Model
     {
         $pocket_data = [];
         foreach ($data as $pocket) {
-            $data = PocketTransaction::with('wallet')->findOrFail($pocket->historiable_id);
+            $data = PocketTransaction::with('wallet')->with('pocket')->findOrFail($pocket->historiable_id);
 
-            array_push($pocket_data, $data);
+            $data->pocket->is_active && array_push($pocket_data, $data);
         }
         return $pocket_data;
     }

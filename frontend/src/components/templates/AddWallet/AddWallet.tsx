@@ -74,9 +74,10 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
   }
 
   const [dropDownState, setDropDownState] = useState<boolean>(false);
-  const [activeDropDown, setActiveDropDown] = useState<number>(1);
+  const [activeDropDown, setActiveDropDown] = useState<number>(2);
 
   const options: string[] = [
+    'N/A',
     '1 Day',
     '15 Days',
     '30 Days'
@@ -102,7 +103,7 @@ function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
           <span className={style.inputError}>{nameError}</span>
         </div>
         <div className="flex flex-col">
-          <p className="text-13 font-medium">Income every</p>
+          <p className="text-13 font-medium">Automated Income every</p>
           <div onClick={() => setDropDownState(!dropDownState)} className={`bg-background-dropdown-selected cursor-pointer h-px-30 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} text-light-100 text-13 flex flex-row justify-between items-center p-px-12`}>
             <p>{options[activeDropDown]}</p>
             <img src={DropDownIcon} alt="dropdown" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />

@@ -191,7 +191,7 @@ function Dashboard() {
                 <span className={`${style.font.dark12} text-inactive`}>Joined <Moment fromNow>{created_at}</Moment></span>
               </div>
               <div className="flex relative">
-                <button onClick={addRecord} className={`${style.button.primary} h-px-24 text-12 hover:bg-secondary-60 ease-in-out duration-300`}>Add record</button>
+                <button onClick={addRecord} className={`${style.button.primary} h-px-30 text-12 hover:bg-secondary-60 ease-in-out duration-300`}>Add record</button>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ function Dashboard() {
                 ? walletData.data?.map((data: WalletDataTypes, index: number) => {
                   return <WalletDropDown walletData={data} onClickHistory={walletHistory} key={index} />
                 })
-                : <h1 className="text-error-100 text-center mb-px-15">No Archive Wallet</h1>
+                : <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>
             }
           </div>
           <Paginate data={walletData} type="wallet" />
@@ -245,7 +245,7 @@ function Dashboard() {
                 ? pocketData.data?.map((data: PocketDataTypes, index: number) => {
                   return <PocketDropDown pocketData={data} onClickHistory={pocketHistory} key={index} />
                 })
-                : <h1 className="text-error-100 text-center mb-px-15">No Archive Pocket</h1>
+                : <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>
             }
           </div>
           <Paginate data={pocketData} type="pocket" />

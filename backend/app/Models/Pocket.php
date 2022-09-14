@@ -58,4 +58,12 @@ class Pocket extends Model
             'pocket_id' => 'numeric',
         ]);
     }
+
+    public static function verifyIncome($request)
+    {
+        $request->validate([
+            'pocket_id' => 'required|numeric',
+            'unpaid_amount' => 'required|numeric',
+        ]);
+    }
 }

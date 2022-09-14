@@ -13,8 +13,6 @@ type EditWalletTypes = {
 }
 
 function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
-  const [dropDownState, setDropDownState] = useState<boolean>(false);
-  const [activeDropDown, setActiveDropDown] = useState<number>(1);
   const [archive, setArcive] = useState<number>(0);
   const {
     toast: notification,
@@ -37,7 +35,11 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
   });
   const { name: nameError, amount: amountError } = errors || {};
 
+  const [dropDownState, setDropDownState] = useState<boolean>(false);
+  const [activeDropDown, setActiveDropDown] = useState<number>(2);
+
   const options: string[] = [
+    'N/A',
     '1 Day',
     '15 Days',
     '30 Days'
@@ -142,7 +144,7 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
           {dropDownState && moreData}
         </div>
         <div className="flex flex-col">
-          <label htmlFor="amount" className="text-13 font-medium">Income Amount</label>
+          <label htmlFor="amount" className="text-13 font-medium">Automated Income Amount</label>
           <input name="income" value={walletData.income} onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>

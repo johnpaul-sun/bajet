@@ -61,4 +61,12 @@ class Wallet extends Model
             'amount' => 'required|numeric',
         ]);
     }
+
+    public static function verifyIncome($request)
+    {
+        $request->validate([
+            'wallet_id' => 'required|numeric',
+            'income_amount' => 'required|numeric',
+        ]);
+    }
 }

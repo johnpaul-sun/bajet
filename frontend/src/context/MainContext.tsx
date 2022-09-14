@@ -177,7 +177,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       case 'wallet': {
         historyAPI.getAllWalletHistory()
           .then(res => {
-            console.log(res.data);
             setHistoryData(res.data)
           })
           .catch(err => {
@@ -188,7 +187,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       case 'pocket': {
         historyAPI.getAllPocketHistory()
           .then(res => {
-            console.log(res.data);
             setHistoryData(res.data)
           })
           .catch(err => {
@@ -247,7 +245,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       }
     }}>
       {children}
-      <ToastContainer />
+      <ToastContainer toastStyle={{ backgroundColor: "#40444B", color: "#E0E7F0" }} />
     </MainContext.Provider>
   );
 };

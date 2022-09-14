@@ -164,4 +164,26 @@ class WalletController extends Controller
 
         return response($user_id);
     }
+
+    public function income(Request $request)
+    {
+        Wallet::verifyIncome($request);
+        $user_id = User::id();
+
+        $wallet = Wallet::findOrFail($request->wallet_id);
+        $wallet->update([
+            "amount" => $wallet->amount + $request->income_amount
+        ]);
+
+        WalletTransaction::create([
+            "wallet_id" => $wallet->id,
+            "name" => $wallet->name,
+            "amount" => $request->income_amount,
+            "transaction_type" => "income"
+        ])->histories()->create([
+            'user_id' => $user_id
+        ]);
+
+        return response()->json(["message" => "Income added to total wallet balance successfully!"]);
+    }
 }

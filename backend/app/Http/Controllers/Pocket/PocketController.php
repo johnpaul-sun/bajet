@@ -195,4 +195,26 @@ class PocketController extends Controller
             "message" => "Paid Successfully"
         ]);
     }
+
+    public function addAmountToPay(Request $request)
+    {
+        Pocket::verifyIncome($request);
+        $user_id = User::id();
+
+        $pocket = Pocket::findOrFail($request->pocket_id);
+        $pocket->update([
+            "amount_to_pay" => $pocket->amount_to_pay + $request->unpaid_amount
+        ]);
+
+        PocketTransaction::create([
+            "pocket_id" => $request->pocket_id,
+            "wallet_id" => $pocket->wallet_id,
+            "amount" => $request->unpaid_amount,
+            "transaction_type" => "update"
+        ])->histories()->create([
+            'user_id' => $user_id
+        ]);
+
+        return response()->json(["message" => "Unpaid amount added to unpaid balance successfully!"]);
+    }
 }
