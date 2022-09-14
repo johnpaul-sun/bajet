@@ -84,8 +84,18 @@ function WalletDropDown({
             </div>)
         })}
       <div className="grid grid-cols-2 gap-3 mt-px-30">
-        <Button text="History" type="primaryInvert" height="medium" onClick={onClickHistory} />
-        <Button text="Edit" type="primary" height="medium" onClick={onEdit} />
+        <Button
+          text="History"
+          type="primaryInvert"
+          height="medium"
+          className="hover:opacity-90"
+          onClick={onClickHistory} />
+        <Button
+          text="Edit"
+          type="primary"
+          height="medium"
+          className="hover:opacity-90"
+          onClick={onEdit} />
       </div>
     </div>
   )

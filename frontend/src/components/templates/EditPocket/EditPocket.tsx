@@ -151,7 +151,7 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
           <div className="flex flex-row gap-2">
             <Button
               type="secondary"
-              className={`w-full ${oneDay || 'bg-primary-60'}`}
+              className={`w-full ${oneDay || 'bg-primary-60'} hover:bg-primary-100`}
               height="medium"
               text="One day"
               onClick={() => {
@@ -160,7 +160,7 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
               }} />
             <Button
               type="secondary"
-              className={`w-full ${oneDay && 'bg-primary-60'}`}
+              className={`w-full ${oneDay && 'bg-primary-60'} hover:bg-primary-100`}
               height="medium"
               text="Monthly"
               onClick={() => {
@@ -171,7 +171,7 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
         </div>
         <div className="flex flex-col gap-2 mt-px-12">
           <p className="text-13 font-medium">Schedule date</p>
-          <Button fontType="dark" type="secondaryInvert" className="w-full" height="medium" text={dateSelected} onClick={() => setCalendar(!calendar)} />
+          <Button fontType="dark" type="secondaryInvert" className="w-full hover:border-primary-60" height="medium" text={dateSelected} onClick={() => setCalendar(!calendar)} />
         </div>
         <div className="flex flex-row gap-2 mt-px-12">
           <img src={CalendarIcon} alt="dropdown" className='h-px-20 w-px-20' />
@@ -180,10 +180,10 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
         <span className={style.inputError}>{schedule_dateError}</span>
       </div>
       <div className="mt-px-40 flex flex-row items-center justify-center gap-2">
-        <Button type="error" className="opacity-50 w-full" text="Delete" height="medium" onClick={deletePocket} />
-        <Button type="success" className="opacity-50 w-full" text={archive ? 'Archive' : "Unarchive"} height="medium" onClick={archive ? archivePocket : unarchivePocket} />
+        <Button type="error" className="opacity-50 w-full hover:opacity-100" text="Delete" height="medium" onClick={deletePocket} />
+        <Button type="success" className="opacity-50 w-full hover:opacity-100" text={archive ? 'Archive' : "Unarchive"} height="medium" onClick={archive ? archivePocket : unarchivePocket} />
       </div>
-      <Button type="secondary" text="Continue" className="mt-px-9" onClick={onSubmit} />
+      <Button type="secondary" text="Continue" className="mt-px-9 hover:opacity-90" onClick={onSubmit} />
     </Card>
   );
 }

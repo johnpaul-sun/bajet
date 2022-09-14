@@ -112,7 +112,7 @@ function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
           <div className="flex flex-row gap-2">
             <Button
               type="secondary"
-              className={`w-full ${!oneDay && 'opacity-50'}`}
+              className={`w-full ${!oneDay && 'opacity-50'} hover:opacity-100`}
               height="medium"
               text="One day"
               onClick={() => {
@@ -121,7 +121,7 @@ function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
               }} />
             <Button
               type="secondary"
-              className={`w-full ${oneDay && 'opacity-50'}`}
+              className={`w-full ${oneDay && 'opacity-50'} hover:opacity-100`}
               height="medium"
               text="Monthly"
               onClick={() => {
@@ -132,7 +132,7 @@ function AddPocket({ onClickHeader, handleSubmit }: AddPocketTypes) {
         </div>
         <div className="flex flex-col gap-2 mt-px-12">
           <p className="text-13 font-medium">Schedule date</p>
-          <Button fontType="dark" type="secondaryInvert" className="w-full" height="medium" text={dateSelected} onClick={() => setCalendar(!calendar)} />
+          <Button fontType="dark" type="secondaryInvert" className="w-full hover:border-primary-60" height="medium" text={dateSelected} onClick={() => setCalendar(!calendar)} />
         </div>
         <div className="flex flex-row gap-2 mt-px-12">
           <img src={CalendarIcon} alt="dropdown" className='h-px-20 w-px-20' />

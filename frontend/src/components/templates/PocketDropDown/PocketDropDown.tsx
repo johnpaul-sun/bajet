@@ -156,10 +156,12 @@ function PocketDropDown({
           text="History"
           type="primaryInvert"
           height="medium"
+          className="hover:opacity-90"
           onClick={onClickHistory} />
         <Button
           text="Edit"
           type="primary"
+          className="hover:opacity-90"
           height="medium"
           onClick={onEdit} />
       </div>

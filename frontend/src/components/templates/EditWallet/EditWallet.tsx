@@ -135,7 +135,7 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
         </div>
         <div className="flex flex-col">
           <p className="text-13 font-medium">Income every</p>
-          <div onClick={() => setDropDownState(!dropDownState)} className={`bg-background-dropdown-selected h-px-30 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} text-light-100 text-13 flex flex-row justify-between items-center p-px-12`}>
+          <div onClick={() => setDropDownState(!dropDownState)} className={`bg-background-dropdown-selected h-px-30 rounded-t-px-3 ${dropDownState || 'rounded-b-px-3'} cursor-pointer text-light-100 text-13 flex flex-row justify-between items-center p-px-12`}>
             <p>{options[activeDropDown]}</p>
             <img src={DropDownIcon} alt="dropdown" className={`h-px-20 ${dropDownState && 'rotate-180'}`} />
           </div>
@@ -153,10 +153,10 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
         </div>
       </div>
       <div className="mt-px-40 flex flex-row items-center justify-center gap-2">
-        <Button type="error" className="opacity-50 w-full" text="Delete" height="medium" onClick={deleteWallet} />
-        <Button type="success" className="opacity-50 w-full" text={archive ? 'Archive' : "Unarchive"} height="medium" onClick={archive ? archiveWallet : unarchiveWallet} />
+        <Button type="error" className="opacity-50 w-full hover:opacity-100" text="Delete" height="medium" onClick={deleteWallet} />
+        <Button type="success" className="opacity-50 w-full hover:opacity-100" text={archive ? 'Archive' : "Unarchive"} height="medium" onClick={archive ? archiveWallet : unarchiveWallet} />
       </div>
-      <Button type="secondary" text="Continue" className="mt-px-15" onClick={onSubmit} />
+      <Button type="secondary" text="Continue" className="mt-px-15 hover:opacity-90" onClick={onSubmit} />
     </Card>
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { ReactElement, useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { ReactElement, useContext, useEffect, } from "react";
 import CardContainer from "src/components/organisms/CardContainer/CardContainer";
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
@@ -127,11 +127,11 @@ function Dashboard() {
     window.location.reload();
   }
 
-  const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddWalletModal(!addWalletModal)} />;
-  const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20" onClick={() => setAddPocketModal(!addPocketModal)} />;
+  const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddWalletModal(!addWalletModal)} />;
+  const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddPocketModal(!addPocketModal)} />;
   const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-100">{getDate('today')}</span>;
   const headerSettings: ReactElement<HTMLImageElement> = (
-    <img src={Settings} alt="settings" className="cursor-pointer h-px-30" onClick={() => {
+    <img src={Settings} alt="settings" className="cursor-pointer h-px-30 hover:h-9 hover:rotate-45 ease-in-out duration-300" onClick={() => {
       userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
     }} />
   );
@@ -150,6 +150,10 @@ function Dashboard() {
 
   const walletHistory = (): void => {
     console.log('wallet history');
+  }
+
+  const addRecord = (): void => {
+    console.log('add record');
   }
 
   useEffect(() => {
@@ -187,7 +191,7 @@ function Dashboard() {
                 <span className={`${style.font.dark12} text-inactive`}>Joined <Moment fromNow>{created_at}</Moment></span>
               </div>
               <div className="flex relative">
-                <button className={`${style.button.primary} h-px-24 text-12`}>Add record</button>
+                <button onClick={addRecord} className={`${style.button.primary} h-px-24 text-12 hover:bg-secondary-60 ease-in-out duration-300`}>Add record</button>
               </div>
             </div>
           </div>
@@ -210,7 +214,7 @@ function Dashboard() {
               <span>₱ {formatNumber(income)}</span>
             </div>
             <div className="income h-px-27 bg-success-100 my-px-9 flex justify-end items-end">
-              <div className="expense h-px-27 bg-error-100" style={{ width: `${(expense / income) * 100}%` }}></div>
+              <div className="expense h-px-27 bg-error-100" style={{ width: `${netWorth < 0 ? "100" : (expense / income) * 100}%` }}></div>
             </div>
             <div className="text-12 flex flex-row-reverse justify-between text-error-100">
               <span>Total Expenses</span>

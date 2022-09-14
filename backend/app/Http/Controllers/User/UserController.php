@@ -120,14 +120,14 @@ class UserController extends Controller
 
         $user_id = User::id();
 
-        $expense = Pocket::where('user_id', $user_id)->get();
+        $expense = Pocket::where(['user_id' => $user_id, 'is_active' => 1])->get();
         $expense_amount = [];
         foreach ($expense as $data) {
             array_push($expense_amount, $data->amount_to_pay);
         }
         $total_expense = WalletTransaction::total($expense_amount);
 
-        $income = Wallet::where('user_id', $user_id)->get();
+        $income = Wallet::where(['user_id' => $user_id, 'is_active' => 1])->get();
         $income_amount = [];
         foreach ($income as $data) {
             array_push($income_amount, $data->amount);
