@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Card from "src/components/organisms/CardPopup/CardPopup";
+import Card from "src/components/organisms/CardModal/CardModal";
 import CalendarIcon from 'src/assets/images/calendar.png'
 import Button from "src/components/molecules/Button/Button";
 import Calendar from "src/components/molecules/Calendar/Calendar";

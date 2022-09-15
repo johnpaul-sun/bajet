@@ -18,8 +18,10 @@ import resetOnTop from "src/utils/resetOnTop";
 import style from "src/utils/styles";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
+import { useNavigate } from "react-router-dom";
 
 function History() {
+  const navigate = useNavigate();
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(0);
   const [accountType, setAccountType] = useState<string>('wallet');
@@ -61,7 +63,7 @@ function History() {
   }, [refresher, accountType])
 
   const headerLeft = (
-    <div onClick={() => window.location.pathname = "/"} className="flex bg-background-dark text-light-100 items-center cursor-pointer">
+    <div onClick={() => navigate("/")} className="flex bg-background-dark text-light-100 items-center cursor-pointer">
       <img src={Back} alt="go-back" className="h-px-25" />
     </div>
   );

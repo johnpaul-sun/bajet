@@ -19,10 +19,10 @@ type HistoryBoxTypes = {
 }
 
 function HistoryBox({ historyData }: any) {
-  const { amount, transaction_type, created_at } = historyData?.data;
-  const accountType = historyData.account_type;
-  const walletName = accountType === "wallet" && historyData.data.wallet.name;
-  const pocketName = accountType === "pocket" && historyData.data.pocket.name;
+  const { amount, transaction_type, created_at } = historyData?.data || {};
+  const accountType = historyData?.account_type;
+  const walletName = accountType === "wallet" && historyData?.data?.wallet?.name;
+  const pocketName = accountType === "pocket" && historyData?.data?.pocket?.name;
 
   return (
     <div className="wallet-dd bg-background-dark mt-px-3 p-px-12 rounded-px-3" >
@@ -39,7 +39,7 @@ function HistoryBox({ historyData }: any) {
         </div>
         <div className="flex flex-col justify-start items-end">
           <span className={`text-15 ${getTransactionTypeStyle(transaction_type)}`}>{transaction_type === 'expense' && '- '}₱ {formatNumber(amount)}</span>
-          <span className={`text-12 ${getTransactionTypeStyle(transaction_type, '60')}`}>{transaction_type.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
+          <span className={`text-12 ${getTransactionTypeStyle(transaction_type, '60')}`}>{transaction_type?.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
         </div>
       </div>
     </div>

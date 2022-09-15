@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Card from "src/components/organisms/CardPopup/CardPopup";
+import Card from "src/components/organisms/CardModal/CardModal";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
 import { MainContext, MainContextTypes } from "src/context/MainContext";

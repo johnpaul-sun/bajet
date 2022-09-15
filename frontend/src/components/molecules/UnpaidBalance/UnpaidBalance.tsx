@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Card from "src/components/organisms/CardPopup/CardPopup";
+import Card from "src/components/organisms/CardModal/CardModal";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import WalletIcon from 'src/assets/images/wallet.png'
 import Button from "../Button/Button";

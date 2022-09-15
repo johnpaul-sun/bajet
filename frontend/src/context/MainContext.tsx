@@ -6,6 +6,7 @@ import { historyAPI, pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 export type MainContextTypes = {
   toast: (value: string) => void,
   refresher: [boolean, (value: boolean) => void],
+  addRecord: [boolean, (value: boolean) => void],
   user: {
     api: {
       getNetWorth: () => void
@@ -89,6 +90,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
 
   // Other States
   const [refresher, setRefresher] = useState<boolean>(false);
+  const [addRecordModal, setAddRecordModal] = useState<boolean>(false);
 
   // Method List
   const notification = (message: string) => {
@@ -203,6 +205,7 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
     <MainContext.Provider value={{
       toast: notification,
       refresher: [refresher, setRefresher],
+      addRecord: [addRecordModal, setAddRecordModal],
       user: {
         api: {
           getNetWorth

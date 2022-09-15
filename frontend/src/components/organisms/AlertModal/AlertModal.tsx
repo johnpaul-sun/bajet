@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "src/components/molecules/Button/Button";
-import Card from "src/components/organisms/CardPopup/CardPopup";
+import Card from "src/components/organisms/CardModal/CardModal";
 import success from "src/assets/images/check.png";
 import error from "src/assets/images/error.png";
 import failed from "src/assets/images/failed.png";

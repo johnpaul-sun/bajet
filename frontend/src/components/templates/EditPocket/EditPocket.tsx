@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Card from "src/components/organisms/CardPopup/CardPopup";
+import Card from "src/components/organisms/CardModal/CardModal";
 import CalendarIcon from 'src/assets/images/calendar.png'
 import Button from "../../molecules/Button/Button";
 import getOrdinalNumber from "src/utils/getOrdinalNumber";

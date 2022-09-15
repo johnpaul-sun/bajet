@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { ReactElement, useContext, useEffect, } from "react";
+import React, { ReactElement, useContext, useEffect } from "react";
 import CardContainer from "src/components/organisms/CardContainer/CardContainer";
 import style from "src/utils/styles";
 import Logo from 'src/assets/images/logo.png'
@@ -28,6 +28,7 @@ import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
 import { MainContext, MainContextTypes } from "src/context/MainContext";
 import 'react-toastify/dist/ReactToastify.css';
 import Moment from "react-moment";
+import AddRecord from "src/components/templates/AddRecord/AddRecord";
 
 export type WalletDataTypes = {
   amount: number,
@@ -83,9 +84,11 @@ export type PocketDataTypes = {
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { backToTop } = useScrollOnTop(300);
   const { avatar, created_at, first_name, last_name } = useSelector((state: any) => state.user.user);
   const {
     refresher: [refresher],
+    addRecord: [addRecordModal, setAddRecordModal],
     user: {
       api: {
         getNetWorth
@@ -120,41 +123,56 @@ function Dashboard() {
     }
   } = useContext(MainContext) as MainContextTypes;
 
-  const logout = (): void => {
-    Cookies.remove('user_token');
-    Cookies.remove('user');
-    navigate('/');
-    window.location.reload();
-  }
+  const elementStore = (key: string) => {
+    switch (key) {
+      case 'addWallet': {
+        return <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddWalletModal(!addWalletModal)} />;
+      }
+      case 'addPocket': {
+        return <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddPocketModal(!addPocketModal)} />;
+      }
+      case 'headerDate': {
+        return <span className="text-12 opacity-100">{getDate('today')}</span>;
+      }
+      case 'headerSettings': {
+        const logout = (): void => {
+          Cookies.remove('user_token');
+          Cookies.remove('user');
+          navigate('/');
+          window.location.reload();
+        }
 
-  const addWallet: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddWalletModal(!addWalletModal)} />;
-  const addPocket: ReactElement<HTMLSpanElement> = <img src={Add} alt="logo" className="h-px-20 w-px-20 hover:rotate-90 hover:h-px-24 hover:w-px-24 ease-in-out duration-300" onClick={() => setAddPocketModal(!addPocketModal)} />;
-  const headerDate: ReactElement<HTMLSpanElement> = <span className="text-12 opacity-100">{getDate('today')}</span>;
-  const headerSettings: ReactElement<HTMLImageElement> = (
-    <img src={Settings} alt="settings" className="cursor-pointer h-px-30 hover:h-9 hover:rotate-45 ease-in-out duration-300" onClick={() => {
-      userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
-    }} />
-  );
-  const headerMenu: ReactElement<HTMLDivElement> = (
-    <div className="flex w-fill gap-3 justify-center items-center">
-      <img src={Logo} alt="logo" className="h-px-50" />
-      <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span>
-    </div>
-  );
+        return (
+          <img src={Settings} alt="settings" className="cursor-pointer h-px-30 hover:h-9 hover:rotate-45 ease-in-out duration-300" onClick={() => {
+            userAPI.logout().then(res => { logout(); }).catch(err => { logout(); });
+          }} />
+        );
+      }
+      case 'headerMenu': {
+        return (
+          <div className="flex w-fill gap-3 justify-center items-center">
+            <img src={Logo} alt="logo" className="h-px-50" />
+            <span className="text-12 px-px-3 pb-px-2 border-b border-primary-100 cursor-pointer">Dashboard</span>
+          </div>
+        );
+      }
+      default:
+        break;
+    }
+  };
 
-  const { backToTop } = useScrollOnTop(300);
-
-  const pocketHistory = (): void => {
-    console.log('pocket history');
-  }
-
-  const walletHistory = (): void => {
-    console.log('wallet history');
-  }
-
-  const addRecord = (): void => {
-    console.log('add record');
-  }
+  const functionStore = {
+    pocketHistory() {
+      console.log('pocket history');
+    },
+    walletHistory() {
+      console.log('wallet history');
+    },
+    addRecord() {
+      setAddRecordModal(!addRecordModal);
+    }
+  };
+  const { pocketHistory, walletHistory, addRecord } = functionStore;
 
   useEffect(() => {
     console.clear();
@@ -180,9 +198,10 @@ function Dashboard() {
     <>
       {addWalletModal && <AddWallet onClickHeader={() => setAddWalletModal(!addWalletModal)} />}
       {addPocketModal && <AddPocket onClickHeader={() => setAddPocketModal(!addPocketModal)} />}
+      {addRecordModal && <AddRecord closeModal={() => setAddRecordModal(!addRecordModal)} />}
 
       <div className={`${style.body.default} flex flex-col gap-6`}>
-        <CardContainer header={true} headerLeft={headerMenu} headerRight={headerSettings} headerClass="pt-0" className="mb-px-12">
+        <CardContainer header={true} headerLeft={elementStore('headerMenu')} headerRight={elementStore('headerSettings')} headerClass="pt-0" className="mb-px-12">
           <div className="flex flex-row gap-5">
             <img src={avatar} alt="profile" className="w-px-110 h-px-110 mr-px-30" />
             <div className="flex flex-col justify-between">
@@ -197,7 +216,7 @@ function Dashboard() {
           </div>
         </CardContainer>
 
-        <CardContainer header={true} headerLeft='Cash Flow' headerRight={headerDate} isDark={true} hr={true}>
+        <CardContainer header={true} headerLeft='Cash Flow' headerRight={elementStore('headerDate')} isDark={true} hr={true}>
           <div className="flex flex-row justify-between items-start mb-px-30">
             <div>
               <h3 className="text-12 opacity-75 mb-px-9">Net Worth</h3>
@@ -223,7 +242,7 @@ function Dashboard() {
           </div>
         </CardContainer>
 
-        <CardContainer header={true} headerLeft='Wallet accounts' headerRight={addWallet} hr={true}>
+        <CardContainer header={true} headerLeft='Wallet accounts' headerRight={elementStore('addWallet')} hr={true}>
           <DropDown options={options.wallet} type="wallet" />
           <div className="dropDown flex flex-col mt-px-30">
             {
@@ -237,7 +256,7 @@ function Dashboard() {
           <Paginate data={walletData} type="wallet" />
         </CardContainer>
 
-        <CardContainer header={true} headerLeft='Pockets' headerRight={addPocket} hr={true}>
+        <CardContainer header={true} headerLeft='Pockets' headerRight={elementStore('addPocket')} hr={true}>
           <DropDown options={options.pocket} type="pocket" />
           <div className="dropDown flex flex-col mt-px-30">
             {
@@ -254,7 +273,7 @@ function Dashboard() {
         <CardContainer header={true} headerLeft='Transaction History' hr={true} headerClass="mb-px-15">
           {historyData?.length === 0
             ? <span className="text-error-100 opacity-80 text-18 grid text-center mt-px-12">No transactions</span>
-            : historyData.slice(0).reverse().map((data: any, index: number) => {
+            : historyData?.slice(0).reverse().map((data: any, index: number) => {
               return index < 5 && <HistoryBox historyData={data} key={index} />;
             })}
           <div className="flex flex-col justify-center items-center">

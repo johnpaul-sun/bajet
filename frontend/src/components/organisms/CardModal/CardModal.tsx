@@ -12,7 +12,7 @@ type CardTypes = {
   onClickHeader?: () => void
 };
 
-function Card({
+function CardModal({
   children,
   className = '',
   header = false,
@@ -35,4 +35,4 @@ function Card({
   );
 }
 
-export default Card;
+export default CardModal;
