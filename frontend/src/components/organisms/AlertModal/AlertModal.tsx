@@ -5,14 +5,14 @@ import success from "src/assets/images/check.png";
 import error from "src/assets/images/error.png";
 import failed from "src/assets/images/failed.png";
 
-type AlertModalTypes = {
+type AlertModalType = {
   text: string,
   type: string,
   onClick?: () => void,
   path: string
 }
 
-function AlertModal({ text, type, onClick, path }: AlertModalTypes) {
+function AlertModal({ text, type, onClick, path }: AlertModalType) {
 
   const alert: any = {
     success,

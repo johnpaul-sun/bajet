@@ -4,17 +4,17 @@ import DropDownIcon from 'src/assets/images/down-light.png'
 import WalletIcon from 'src/assets/images/wallet.png'
 import Button from "../Button/Button";
 import formatNumber from 'src/utils/formatNumber';
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import { pocketAPI, walletAPI } from "src/api/useAPI";
 
-type UnpaidBalanceTypes = {
+type UnpaidBalanceType = {
   onClickHeader: () => void,
   handleSubmit?: () => void,
   pocketId: number,
   unpaid: number
 }
 
-type WalletDataTypes = {
+type WalletDataType = {
   amount: number,
   created_at?: string,
   id?: number,
@@ -26,25 +26,25 @@ type WalletDataTypes = {
   user_id?: number,
 }[]
 
-type PeyeeTypes = {
+type PeyeeType = {
   pocket_id: number,
   wallet_id: number | undefined
 }
 
-function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: UnpaidBalanceTypes) {
+function UnpaidBalance({ onClickHeader, handleSubmit, pocketId, unpaid }: UnpaidBalanceType) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
   const [activeDropDown, setActiveDropDown] = useState<number>(0);
-  const [walletData, setWalletData] = useState<WalletDataTypes>([]);
+  const [walletData, setWalletData] = useState<WalletDataType>([]);
   const [buttonState, setButtonState] = useState<boolean>(false);
 
-  const [payee, setPayee] = useState<PeyeeTypes>({
+  const [payee, setPayee] = useState<PeyeeType>({
     pocket_id: pocketId,
     wallet_id: 0
   });
   const {
     toast: notification,
     refresher: [refresher, setRefresher]
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
   useEffect(() => {
     walletAPI.getAllActiveWallet()

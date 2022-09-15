@@ -6,16 +6,16 @@ import Button from "src/components/molecules/Button/Button";
 import Card from "src/components/organisms/CardModal/CardModal";
 import style from "src/utils/styles";
 import Loading from "src/pages/public/Loading/Loading";
-import { InputTypes, PreventDefault } from "../Register/Register";
+import { InputType, PreventDefault } from "../Register/Register";
 import AlertModal from "src/components/organisms/AlertModal/AlertModal";
 
-type UserCredentialTypes = {
+type UserCredentialType = {
   email?: string,
   password?: string,
   password_confirmation?: string,
 }
 
-type ErrorTypes = {
+type ErrorType = {
   isLoading: boolean,
   isError: {
     password: any,
@@ -29,7 +29,7 @@ function ForgotPassword() {
   const [resend, setResend] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [userCredential, setUserCredential] = useState<UserCredentialTypes>({
+  const [userCredential, setUserCredential] = useState<UserCredentialType>({
     email: '',
     password: '',
     password_confirmation: ''
@@ -39,7 +39,7 @@ function ForgotPassword() {
   const tokenParam = getParams.get('token');
   const emailParam = getParams.get('email');
 
-  const [errors, setErrors] = useState<ErrorTypes>({
+  const [errors, setErrors] = useState<ErrorType>({
     isLoading: false,
     isError: {
       password: '',
@@ -85,7 +85,7 @@ function ForgotPassword() {
       })
   }
 
-  const handleOnChange = (e: InputTypes): void => {
+  const handleOnChange = (e: InputType): void => {
     setUserCredential((prev) => ({
       ...prev,
       [e.target.name]: e.target.value

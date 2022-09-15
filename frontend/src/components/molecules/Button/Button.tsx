@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import style from "src/utils/styles";
 
-type ButtonTypes = {
+type ButtonType = {
   type?: string,
   text: string,
   height?: string,
@@ -22,7 +22,7 @@ function Button({
   onClick = () => { },
   path = "",
   className = ""
-}: ButtonTypes) {
+}: ButtonType) {
 
   const styleType: any = {
     primary: 'bg-secondary-100',

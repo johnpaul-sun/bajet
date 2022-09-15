@@ -7,20 +7,37 @@ import AddWallet from 'src/assets/images/add-wallet.png'
 import WalletTransfer from 'src/assets/images/transfer.png'
 import WalletIncome from 'src/assets/images/income.png'
 import PocketIcon from 'src/assets/images/pocket.png'
+import UnpaidAmount from 'src/assets/images/unpaid-amount.png'
+import AddPocket from 'src/assets/images/add-pocket.png'
+import { MainContext, MainContextType } from "src/context/MainContext";
+import OptionCard from "src/components/organisms/OptionCard/OptionCard";
 import style from "src/utils/styles";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
 
-type AddRecordTypes = {
+type AddRecordType = {
   closeModal: () => void,
 }
 
-function AddRecord({ closeModal }: AddRecordTypes) {
+type OptionsType = {
+  text: string,
+  image: string,
+  color: string,
+  option: string
+}[]
+
+type OptionType = {
+  text: string,
+  image: string,
+  color: string,
+  option: string
+};
+
+function AddRecord({ closeModal }: AddRecordType) {
   const [keyComponent, setKeyComponent] = useState<string>('option');
   const {
+    addRecord: [, setAddRecordModal],
     wallet: { add: [addWalletModal, setAddWalletModal] },
-    addRecord: [, setAddRecordModal]
-  } = useContext(MainContext) as MainContextTypes;
-
+    pocket: { add: [addPocketModal, setAddPocketModal] }
+  } = useContext(MainContext) as MainContextType;
 
   const displayComponent = (key: string) => {
     switch (key) {
@@ -34,7 +51,7 @@ function AddRecord({ closeModal }: AddRecordTypes) {
         }
 
         return (
-          <div className="flex flex-row gap-9 justify-evenly items-center">
+          <div className="flex flex-row gap-6 justify-evenly items-center">
             <div onClick={walletSelected} className="flex flex-col justify-center items-center gap-1 cursor-pointer">
               <Card isDark={true} className="flex flex-col justify-center items-center gap-3 ease-in-out duration-300 hover:bg-slate-600">
                 <div className="bg-primary-100 p-px-15 rounded-px-12 mt-px-6">
@@ -55,9 +72,7 @@ function AddRecord({ closeModal }: AddRecordTypes) {
         )
       }
       case 'wallet': {
-        type OptionTypes = { text: string, image: any, color: string, option: string };
-
-        const options = [
+        const options: OptionsType = [
           {
             text: 'Create new wallet account',
             image: AddWallet,
@@ -99,21 +114,55 @@ function AddRecord({ closeModal }: AddRecordTypes) {
         }
 
         return (
-          options.map((data: OptionTypes, index: number) => {
+          options.map((data: OptionType, index: number) => {
             const lastData = index + 1 === options.length;
             return (
               <Fragment key={index}>
-                <div onClick={() => selectedOption(data.option)} className={`${lastData && "mb-px-60"} bg-background-dark mt-px-9 p-px-12 rounded-px-3 cursor-pointer hover:bg-background-dropdown-active duration-300 ease-in-out`}>
-                  <div className="flex flex-row gap-3 justify-between items-between">
-                    <div className={`${data.color} mr-px-9 h-px-42 w-px-60 px-px-6  box-content flex justify-center items-center rounded-px-3`}>
-                      <img src={data.image} alt="logo" className="h-px-30 w-px-30 opacity-100" />
-                    </div>
-                    <div className="flex flex-col gap-1 items-center justify-center w-full">
-                      <h1 className="text-15 text-light-100">{data.text}</h1>
-                    </div>
-                    <div className="h-px-42 w-px-60"></div>
-                  </div>
-                </div>
+                <OptionCard selectedOption={selectedOption} data={data} isLastData={lastData} />
+                {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out"></Button>}
+              </Fragment>
+            )
+          })
+        )
+      }
+      case 'pocket': {
+        const options: OptionsType = [
+          {
+            text: 'Create new pocket account',
+            image: AddPocket,
+            color: 'bg-secondary-100',
+            option: "create"
+          },
+          {
+            text: 'Add unpaid balance',
+            image: UnpaidAmount,
+            color: 'bg-secondary-100',
+            option: "add"
+          },
+        ];
+
+        const selectedOption = (option: string): void => {
+          switch (option) {
+            case 'create': {
+              setAddRecordModal(false);
+              setAddPocketModal(!addPocketModal);
+              break;
+            }
+            case 'add': {
+
+              break;
+            }
+            default:
+              break;
+          }
+        }
+
+        return (
+          options.map((data: OptionType, index: number) => {
+            const lastData = index + 1 === options.length;
+            return (
+              <Fragment key={index}>
+                <OptionCard selectedOption={selectedOption} data={data} isLastData={lastData} />
                 {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out"></Button>}
               </Fragment>
             )

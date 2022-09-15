@@ -10,12 +10,12 @@ import getMonthWord from "src/utils/getMonthWord";
 import getOrdinalNumber from "src/utils/getOrdinalNumber";
 import moment from "moment";
 import 'moment-timezone';
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import EditPocket from "../EditPocket/EditPocket";
 import UnpaidBalance from "src/components/molecules/UnpaidBalance/UnpaidBalance";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
 
-type PocketDropDownTypes = {
+type PocketDropDownType = {
   pocketData: {
     amount: number,
     amount_to_pay: number,
@@ -56,7 +56,7 @@ function PocketDropDown({
   onClickHistory = () => { },
   onClickEdit = () => { },
   onClickPay = () => { }
-}: PocketDropDownTypes) {
+}: PocketDropDownType) {
   const { amount, name, amount_to_pay, schedule_date, schedule, id } = pocketData;
 
   const [dropDownState, setDropDownState] = useState<boolean>(false);
@@ -77,7 +77,7 @@ function PocketDropDown({
       edit: [editPocketModal, setEditPocketModal],
       id: [, setWalletId]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
   const onEdit = (): void => {
     setWalletId(id || 0);

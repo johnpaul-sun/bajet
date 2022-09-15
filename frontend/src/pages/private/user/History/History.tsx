@@ -16,7 +16,7 @@ import useScrollOnTop from "src/hooks/useScrollOnTop";
 import Cookies from "js-cookie";
 import resetOnTop from "src/utils/resetOnTop";
 import style from "src/utils/styles";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +38,7 @@ function History() {
       logs: [historyLogs],
       pageCount: [sortByPageCount]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
   const { backToTop } = useScrollOnTop(300);
 

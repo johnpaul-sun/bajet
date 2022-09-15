@@ -3,13 +3,13 @@ import success from 'src/assets/images/check.png'
 import error from 'src/assets/images/error.png'
 import failed from 'src/assets/images/failed.png'
 
-type NotificationTypes = {
+type NotificationType = {
   onClick?: () => void,
   status: string,
   message?: string,
 }
 
-function Notification({ onClick = () => { }, status, message = '' }: NotificationTypes) {
+function Notification({ onClick = () => { }, status, message = '' }: NotificationType) {
   const state: any = {
     success: 'bg-success-100 text-light-100',
     error: 'bg-error-100 text-light-100',

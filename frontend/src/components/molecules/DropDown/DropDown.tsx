@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import DropDownIcon from 'src/assets/images/down-light.png'
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 
-type OptionTypes = {
+type OptionType = {
   options: {
     wallet: [
       {
@@ -34,7 +34,7 @@ function DropDown({ options, type, sortText = 'Sort by:' }: any) {
     history: {
       pageCount: [, setSortByPageCount]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
   // Inject context here for active state
 
   const handleDropDown = (): void => {

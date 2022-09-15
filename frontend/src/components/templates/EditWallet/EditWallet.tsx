@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import Card from "src/components/organisms/CardModal/CardModal";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import { walletAPI } from "src/api/useAPI";
-import { WalletDataTypes } from "../AddWallet/AddWallet";
+import { WalletDataType } from "../AddWallet/AddWallet";
 import style from "src/utils/styles";
 
-type EditWalletTypes = {
+type EditWalletType = {
   onClickHeader: () => void,
   handleSubmit?: () => void
 }
 
-function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
+function EditWallet({ onClickHeader, handleSubmit }: EditWalletType) {
   const [archive, setArcive] = useState<number>(0);
   const {
     toast: notification,
@@ -22,8 +22,8 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletTypes) {
       edit: [editWalletModal, setEditWalletModal],
       id: [walletId]
     }
-  } = useContext(MainContext) as MainContextTypes;
-  const [walletData, setWalletData] = useState<WalletDataTypes>({
+  } = useContext(MainContext) as MainContextType;
+  const [walletData, setWalletData] = useState<WalletDataType>({
     name: "",
     amount: 0,
     income: 0,

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-type CardTypes = {
+type CardType = {
   children: any,
   className?: string,
   textCenter?: string,
@@ -22,7 +22,7 @@ function Card({
   headerRight = <></>,
   isDark = false,
   hr = false
-}: CardTypes) {
+}: CardType) {
 
   const theme = isDark ? 'bg-background-dark text-light-100' : 'bg-background-light text-dark-100';
 

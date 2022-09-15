@@ -6,17 +6,17 @@ import { Link, useNavigate } from "react-router-dom";
 import resetOnTop from 'src/utils/resetOnTop';
 import style from "src/utils/styles";
 import { userAPI } from "src/api/useAPI";
-import { InputTypes, PreventDefault } from "../Register/Register";
+import { InputType, PreventDefault } from "../Register/Register";
 import Loading from "../../Loading/Loading";
 import Cookies from "js-cookie";
 import { userApiCall } from "src/api";
 
-type UserCredentialTypes = {
+type UserCredentialType = {
   email: string,
   password: string,
 }
 
-type ErrorTypes = {
+type ErrorType = {
   isLoading: boolean,
   isError: {
     email: string,
@@ -28,11 +28,11 @@ type ErrorTypes = {
 function Login() {
   const navigate = useNavigate();
 
-  const [userCredential, setUserCredential] = useState<UserCredentialTypes>({
+  const [userCredential, setUserCredential] = useState<UserCredentialType>({
     email: '',
     password: ''
   });
-  const [errors, setErrors] = useState<ErrorTypes>({
+  const [errors, setErrors] = useState<ErrorType>({
     isLoading: false,
     isError: {
       email: '',
@@ -55,7 +55,7 @@ function Login() {
     resetOnTop();
   }, [])
 
-  const handleOnChange = (e: InputTypes): void => {
+  const handleOnChange = (e: InputType): void => {
     setUserCredential((prev) => ({
       ...prev,
       [e.target.name]: e.target.value

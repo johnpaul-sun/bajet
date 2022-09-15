@@ -2,12 +2,12 @@ import React from "react";
 import CalendarComponent from "react-select-date";
 import closeIcon from 'src/assets/images/close-light.png';
 
-type CalendarTypes = {
+type CalendarType = {
   closeCalendar: () => void;
   selectedDate: (date: string) => void;
 }
 
-function Calendar({ closeCalendar, selectedDate }: CalendarTypes) {
+function Calendar({ closeCalendar, selectedDate }: CalendarType) {
 
   const selectDate = (date: Date): void => {
     selectedDate(date.toLocaleDateString("en-CA"));

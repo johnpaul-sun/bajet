@@ -25,12 +25,12 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import 'react-toastify/dist/ReactToastify.css';
 import Moment from "react-moment";
 import AddRecord from "src/components/templates/AddRecord/AddRecord";
 
-export type WalletDataTypes = {
+export type WalletDataType = {
   amount: number,
   income_every: string,
   name: string,
@@ -50,7 +50,7 @@ export type WalletDataTypes = {
   }[]
 }
 
-export type PocketDataTypes = {
+export type PocketDataType = {
   amount: number,
   amount_to_pay: number,
   schedule: string,
@@ -121,7 +121,7 @@ function Dashboard() {
       },
       data: [historyData]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
   const elementStore = (key: string) => {
     switch (key) {
@@ -247,7 +247,7 @@ function Dashboard() {
           <div className="dropDown flex flex-col mt-px-30">
             {
               walletData.data?.length > 0
-                ? walletData.data?.map((data: WalletDataTypes, index: number) => {
+                ? walletData.data?.map((data: WalletDataType, index: number) => {
                   return <WalletDropDown walletData={data} onClickHistory={walletHistory} key={index} />
                 })
                 : <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>
@@ -261,7 +261,7 @@ function Dashboard() {
           <div className="dropDown flex flex-col mt-px-30">
             {
               pocketData.data?.length > 0
-                ? pocketData.data?.map((data: PocketDataTypes, index: number) => {
+                ? pocketData.data?.map((data: PocketDataType, index: number) => {
                   return <PocketDropDown pocketData={data} onClickHistory={pocketHistory} key={index} />
                 })
                 : <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>

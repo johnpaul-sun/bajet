@@ -5,7 +5,7 @@ import formatNumber from "src/utils/formatNumber";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
 import Moment from "react-moment";
 
-type HistoryBoxTypes = {
+type HistoryBoxType = {
   historyData: {
     accountType: string,
     type: string,

@@ -5,17 +5,17 @@ import Button from "../../molecules/Button/Button";
 import getOrdinalNumber from "src/utils/getOrdinalNumber";
 import getMonthWord from "src/utils/getMonthWord";
 import Calendar from "src/components/molecules/Calendar/Calendar";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
-import { PocketDataTypes } from "../AddPocket/AddPocket";
+import { MainContext, MainContextType } from "src/context/MainContext";
+import { PocketDataType } from "../AddPocket/AddPocket";
 import style from "src/utils/styles";
 import { pocketAPI } from "src/api/useAPI";
 
-type EditPocketTypes = {
+type EditPocketType = {
   onClickHeader: () => void,
   handleSubmit?: () => void
 }
 
-function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
+function EditPocket({ onClickHeader, handleSubmit }: EditPocketType) {
   const [oneDay, setOneDay] = useState<boolean>(false);
   const [calendar, setCalendar] = useState<boolean>(false);
   const [dateSelected, setDateSelected] = useState<string>('select-date-00');
@@ -32,9 +32,9 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketTypes) {
       edit: [editPocketModal, setEditPocketModal],
       id: [pocketId]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
-  const [pocketData, setPocketData] = useState<PocketDataTypes>({
+  const [pocketData, setPocketData] = useState<PocketDataType>({
     name: "",
     amount: "",
     schedule: "monthly",

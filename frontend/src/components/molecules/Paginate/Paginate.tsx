@@ -2,12 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import ReactPaginate from 'react-paginate';
 import { MainContext } from "src/context/MainContext";
 
-type PaginateTypes = {
+type PaginateType = {
   data: any,
   type: any
 }
 
-function Paginate({ data, type }: PaginateTypes) {
+function Paginate({ data, type }: PaginateType) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemOffset, setItemOffset] = useState(0);

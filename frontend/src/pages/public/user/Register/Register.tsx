@@ -9,7 +9,7 @@ import { userAPI } from "src/api/useAPI";
 import Loading from "src/pages/public/Loading";
 import Cookies from "js-cookie";
 
-type UserCredentialTypes = {
+type UserCredentialType = {
   first_name: string,
   last_name: string,
   email: string,
@@ -17,7 +17,7 @@ type UserCredentialTypes = {
   password_confirmation: string
 }
 
-type ErrorTypes = {
+type ErrorType = {
   isLoading: boolean,
   isError: {
     email: string,
@@ -27,7 +27,7 @@ type ErrorTypes = {
   }
 }
 
-export type InputTypes = {
+export type InputType = {
   target: {
     name: string,
     value: string,
@@ -39,14 +39,14 @@ export type PreventDefault = { preventDefault: () => void }
 function Register() {
   const navigate = useNavigate();
 
-  const [userCredential, setUserCredential] = useState<UserCredentialTypes>({
+  const [userCredential, setUserCredential] = useState<UserCredentialType>({
     first_name: '',
     last_name: '',
     email: '',
     password: '',
     password_confirmation: ''
   });
-  const [errors, setErrors] = useState<ErrorTypes>({
+  const [errors, setErrors] = useState<ErrorType>({
     isLoading: false,
     isError: {
       email: '',
@@ -72,7 +72,7 @@ function Register() {
     resetOnTop();
   }, [])
 
-  const handleOnChange = (e: InputTypes): void => {
+  const handleOnChange = (e: InputType): void => {
     setUserCredential((prev) => ({
       ...prev,
       [e.target.name]: e.target.value

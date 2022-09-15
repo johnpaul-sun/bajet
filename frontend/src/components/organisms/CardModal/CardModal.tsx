@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../molecules/Header/Header";
 
-type CardTypes = {
+type CardType = {
   children: any,
   className?: string,
   header?: boolean,
@@ -21,7 +21,7 @@ function CardModal({
   opacity = .6,
   closeModal = () => { },
   onClickHeader = () => { }
-}: CardTypes) {
+}: CardType) {
   return (
     <div className="w-screen top-0 left-0 h-screen z-10 flex flex-col justify-center items-center p-px-30 fixed overflow-scroll">
       <div className="shadow-lg z-30 w-full overflow-scroll rounded-px-18">

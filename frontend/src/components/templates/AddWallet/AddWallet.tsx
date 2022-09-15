@@ -3,31 +3,31 @@ import Card from "src/components/organisms/CardModal/CardModal";
 import DropDownIcon from 'src/assets/images/down-light.png'
 import Button from "src/components/molecules/Button/Button";
 import { walletAPI } from "src/api/useAPI";
-import { MainContext, MainContextTypes } from "src/context/MainContext";
+import { MainContext, MainContextType } from "src/context/MainContext";
 import style from "src/utils/styles";
 
-type AddWalletTypes = {
+type AddWalletType = {
   onClickHeader: () => void,
   handleSubmit?: () => void
 }
 
-export type WalletDataTypes = {
+export type WalletDataType = {
   name: string,
   amount: number | string,
   income: number | string,
   income_every: string,
 }
 
-function AddWallet({ onClickHeader, handleSubmit }: AddWalletTypes) {
+function AddWallet({ onClickHeader, handleSubmit }: AddWalletType) {
   const {
     toast: notification,
     refresher: [refresher, setRefresher],
     wallet: {
       add: [addWalletModal, setAddWalletModal]
     }
-  } = useContext(MainContext) as MainContextTypes;
+  } = useContext(MainContext) as MainContextType;
 
-  const [walletData, setWalletData] = useState<WalletDataTypes>({
+  const [walletData, setWalletData] = useState<WalletDataType>({
     name: "",
     amount: "",
     income: "",
