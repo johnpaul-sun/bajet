@@ -42,17 +42,9 @@ function AddRecord({ closeModal }: AddRecordType) {
   const displayComponent = (key: string) => {
     switch (key) {
       case 'option': {
-        const walletSelected = (): void => {
-          setKeyComponent('wallet');
-
-        }
-        const pocketSelected = (): void => {
-          setKeyComponent('pocket');
-        }
-
         return (
           <div className="flex flex-row gap-6 justify-evenly items-center">
-            <div onClick={walletSelected} className="flex flex-col justify-center items-center gap-1 cursor-pointer">
+            <div onClick={() => setKeyComponent('wallet')} className="flex flex-col justify-center items-center gap-1 cursor-pointer">
               <Card isDark={true} className="flex flex-col justify-center items-center gap-3 ease-in-out duration-300 hover:bg-slate-600">
                 <div className="bg-primary-100 p-px-15 rounded-px-12 mt-px-6">
                   <img src={WalletIcon} alt="wallet" className="h-9 w-9" />
@@ -60,7 +52,7 @@ function AddRecord({ closeModal }: AddRecordType) {
               </Card>
               <h1 className="text-18 font-semibold">Wallet</h1>
             </div>
-            <div onClick={pocketSelected} className="flex flex-col justify-center items-center gap-1 cursor-pointer">
+            <div onClick={() => setKeyComponent('pocket')} className="flex flex-col justify-center items-center gap-1 cursor-pointer">
               <Card isDark={true} className="flex flex-col justify-center items-center gap-3 ease-in-out duration-300 hover:bg-slate-600">
                 <div className="bg-secondary-100 p-px-15 rounded-px-12 mt-px-6">
                   <img src={PocketIcon} alt="wallet" className="h-9 w-9" />
@@ -71,6 +63,8 @@ function AddRecord({ closeModal }: AddRecordType) {
           </div>
         )
       }
+
+      // Wallet cases
       case 'wallet': {
         const options: OptionsType = [
           {
@@ -101,17 +95,17 @@ function AddRecord({ closeModal }: AddRecordType) {
               break;
             }
             case 'add': {
-
+              setKeyComponent('add_income');
               break;
             }
             case 'transfer': {
-
+              setKeyComponent('transfer_balance');
               break;
             }
             default:
               break;
           }
-        }
+        };
 
         return (
           options.map((data: OptionType, index: number) => {
@@ -119,12 +113,26 @@ function AddRecord({ closeModal }: AddRecordType) {
             return (
               <Fragment key={index}>
                 <OptionCard selectedOption={selectedOption} data={data} isLastData={lastData} />
-                {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out"></Button>}
+                {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />}
               </Fragment>
             )
           })
-        )
+        );
       }
+      case 'add_income': {
+
+        return (
+          <Button text={"Go Back"} onClick={() => setKeyComponent('wallet')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+        );
+      }
+      case 'transfer_balance': {
+
+        return (
+          <Button text={"Go Back"} onClick={() => setKeyComponent('wallet')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+        );
+      }
+
+      // Pocket cases
       case 'pocket': {
         const options: OptionsType = [
           {
@@ -149,13 +157,13 @@ function AddRecord({ closeModal }: AddRecordType) {
               break;
             }
             case 'add': {
-
+              setKeyComponent('add_unpaid_balance');
               break;
             }
             default:
               break;
           }
-        }
+        };
 
         return (
           options.map((data: OptionType, index: number) => {
@@ -163,14 +171,21 @@ function AddRecord({ closeModal }: AddRecordType) {
             return (
               <Fragment key={index}>
                 <OptionCard selectedOption={selectedOption} data={data} isLastData={lastData} />
-                {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out"></Button>}
+                {lastData && <Button text={"Go Back"} onClick={() => setKeyComponent('option')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />}
               </Fragment>
             )
           })
-        )
+        );
       }
+      case 'add_unpaid_balance': {
+
+        return (
+          <Button text={"Go Back"} onClick={() => setKeyComponent('pocket')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+        );
+      }
+
       default: {
-        return <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>
+        return <h1 className="text-error-100 text-center mb-px-15">No Available Data</h1>;
       }
     }
   }
