@@ -14,6 +14,7 @@ import { MainContext, MainContextType } from "src/context/MainContext";
 import EditPocket from "../EditPocket/EditPocket";
 import UnpaidBalance from "src/components/molecules/UnpaidBalance/UnpaidBalance";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
+import upperCaseFirstLetter from "src/utils/upperCaseFirstLetter";
 
 type PocketDropDownType = {
   pocketData: {
@@ -139,7 +140,7 @@ function PocketDropDown({
                     </div>
                     <div className="flex flex-col items-start justify-center">
                       <h1 className="text-light-100 text-14">{transactionType === 'update' ? pocketData.name : transaction.wallet?.name}</h1>
-                      <span className={`text-10 ${getTransactionTypeStyle(transactionType, '60')}`}>{transaction.transaction_type.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
+                      <span className={`text-10 ${getTransactionTypeStyle(transactionType, '60')}`}>{upperCaseFirstLetter(transaction.transaction_type)}</span>
                     </div>
                   </div>
                   <div className="flex flex-col justify-end items-end">

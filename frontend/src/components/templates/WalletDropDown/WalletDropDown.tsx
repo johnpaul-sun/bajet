@@ -8,6 +8,7 @@ import Moment from 'react-moment';
 import EditWallet from "../EditWallet/EditWallet";
 import { MainContext, MainContextType } from "src/context/MainContext";
 import getTransactionTypeStyle from "src/utils/getTransactionTypeStyle";
+import upperCaseFirstLetter from "src/utils/upperCaseFirstLetter";
 
 export type WalletDropDownType = {
   walletData: {
@@ -79,7 +80,7 @@ function WalletDropDown({
               </div>
               <div className="flex flex-col justify-start items-end">
                 <span className={`text-15 ${getTransactionTypeStyle(transactionType)}`}>{transactionType === 'expense' && '-'} ₱ {formatNumber(transaction.amount)}</span>
-                <span className={`text-12 ${getTransactionTypeStyle(transactionType, '60')}`}>{transactionType.replace(/^(.)|\s+(.)/g, (c: string) => c.toUpperCase())}</span>
+                <span className={`text-12 ${getTransactionTypeStyle(transactionType, '60')}`}>{upperCaseFirstLetter(transactionType)}</span>
               </div>
             </div>)
         })}

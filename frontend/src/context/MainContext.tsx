@@ -4,9 +4,14 @@ import { toast, ToastContainer } from 'react-toastify';
 import { historyAPI, pocketAPI, userAPI, walletAPI } from "src/api/useAPI";
 
 export type MainContextType = {
+  api: {
+    getActiveAccount: (value: string) => void
+  },
+  activeAccount: [any],
   toast: (value: string) => void,
   refresher: [boolean, (value: boolean) => void],
   addRecord: [boolean, (value: boolean) => void],
+  dropDownData: [any, (value: any) => void],
   user: {
     api: {
       getNetWorth: () => void
@@ -91,8 +96,10 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
   // Other States
   const [refresher, setRefresher] = useState<boolean>(false);
   const [addRecordModal, setAddRecordModal] = useState<boolean>(false);
+  const [selectedAccountData, setSelectedAccountData] = useState<any>([]);
+  const [activeAccount, setActiveAccount] = useState<any>([]);
 
-  // Method List
+  // Function List
   const notification = (message: string) => {
     toast.success(message, {
       position: "top-right",
@@ -104,7 +111,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
       progress: undefined,
     });
   }
-
   const getNetWorth = (): void => {
     userAPI.netWorth()
       .then(res => {
@@ -116,7 +122,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         setNetWorth(income - expense);
       })
   }
-
   const getWallet = (): void => {
     walletAPI.getAllWallet(walletPage, sortByWallet)
       .then(res => {
@@ -126,7 +131,34 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         console.log(err.response.data);
       });
   }
-
+  const getActiveAccount = (key: string): void => {
+    switch (key) {
+      case 'wallet': {
+        walletAPI.getAllActiveWallet()
+          .then(res => {
+            setActiveAccount(res.data);
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          })
+        break;
+      }
+      case 'pocket': {
+        pocketAPI.getAllActivePocket()
+          .then(res => {
+            setActiveAccount(res.data);
+          })
+          .catch(err => {
+            console.log(err.response.data);
+          })
+        break;
+      }
+      default: {
+        setActiveAccount(['loading']);
+        break;
+      }
+    }
+  }
   const getAllActiveAccounts = (account: string): void => {
     switch (account) {
       case 'wallet': {
@@ -153,7 +185,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         break;
     }
   }
-
   const getPocket = (): void => {
     pocketAPI.getAllPocket(pocketPage, sortByPocket)
       .then(res => {
@@ -163,7 +194,6 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
         console.log(err.response.data);
       });
   }
-
   const getHistory = (type: string): void => {
     switch (type) {
       case 'all': {
@@ -203,9 +233,14 @@ export const ContextProvider = ({ children }: { children: ReactElement }) => {
 
   return (
     <MainContext.Provider value={{
+      api: {
+        getActiveAccount
+      },
+      activeAccount: [activeAccount],
       toast: notification,
       refresher: [refresher, setRefresher],
       addRecord: [addRecordModal, setAddRecordModal],
+      dropDownData: [selectedAccountData, setSelectedAccountData],
       user: {
         api: {
           getNetWorth

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import Button from "src/components/molecules/Button/Button";
 import Card from "src/components/organisms/CardContainer/CardContainer";
 import CardPopup from "src/components/organisms/CardModal/CardModal";
@@ -12,6 +12,7 @@ import AddPocket from 'src/assets/images/add-pocket.png'
 import { MainContext, MainContextType } from "src/context/MainContext";
 import OptionCard from "src/components/organisms/OptionCard/OptionCard";
 import style from "src/utils/styles";
+import AccountDropDown from "src/components/organisms/AccountDropDown/AccountDropDown";
 
 type AddRecordType = {
   closeModal: () => void,
@@ -31,13 +32,33 @@ type OptionType = {
   option: string
 };
 
+type WalletInputDataType = {
+  income_amount: string,
+  wallet_id: number
+}
+
+type PocketInputDataType = {
+  unpaid_amount: string,
+  pocket_id: number
+}
+
 function AddRecord({ closeModal }: AddRecordType) {
   const [keyComponent, setKeyComponent] = useState<string>('option');
+  const [walletInputData, setWalletInputData] = useState<WalletInputDataType>({ income_amount: "", wallet_id: 0 });
+  const [pocketInputData, setPocketInputData] = useState<PocketInputDataType>({ unpaid_amount: "", pocket_id: 0 });
   const {
+    refresher: [refresher, setRefresher],
+    activeAccount: [activeAccount],
+    dropDownData: [selectedAccountData],
     addRecord: [, setAddRecordModal],
-    wallet: { add: [addWalletModal, setAddWalletModal] },
-    pocket: { add: [addPocketModal, setAddPocketModal] }
+    wallet: { add: [addWalletModal, setAddWalletModal], id: [walletId] },
+    pocket: { add: [addPocketModal, setAddPocketModal], id: [pocketId] }
   } = useContext(MainContext) as MainContextType;
+
+  useEffect(() => {
+    walletInputData.wallet_id = walletId;
+    pocketInputData.pocket_id = pocketId;
+  });
 
   const displayComponent = (key: string) => {
     switch (key) {
@@ -120,15 +141,47 @@ function AddRecord({ closeModal }: AddRecordType) {
         );
       }
       case 'add_income': {
+        const goBack = (): void => {
+          setRefresher(!refresher);
+          setKeyComponent('wallet');
+        }
+
+        const handleChange = (e: any): void => {
+          const value = e.target.value;
+          setWalletInputData({ income_amount: value, wallet_id: walletId });
+        };
+
+        const handleSubmit = (): void => {
+          console.log(walletInputData);
+        };
 
         return (
-          <Button text={"Go Back"} onClick={() => setKeyComponent('wallet')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+          <>
+            <div className="flex flex-col gap-6 ">
+              <h1 className="text-left text-18">Generate wallet income</h1>
+              <AccountDropDown accountData={activeAccount} accountType="wallet" />
+              <div className="flex flex-col">
+                <label htmlFor="wallet_name" className="text-13 font-medium">Income Amount</label>
+                <input value={walletInputData.income_amount} onChange={handleChange} name="income_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+                {/* <span className={style.inputError}>{nameError}</span> */}
+              </div>
+            </div>
+            <div className="flex flex-row gap-3 mt-px-60">
+              <Button text={"Go Back"} onClick={goBack} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+              <Button text={"Submit"} onClick={handleSubmit} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+            </div>
+          </>
         );
       }
       case 'transfer_balance': {
 
         return (
-          <Button text={"Go Back"} onClick={() => setKeyComponent('wallet')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+          <>
+            <div className="flex flex-row gap-3 mt-px-60">
+              <Button text={"Go Back"} onClick={() => { setKeyComponent('wallet') }} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+              <Button text={"Submit"} onClick={() => console.log('submit')} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+            </div>
+          </>
         );
       }
 
@@ -178,9 +231,35 @@ function AddRecord({ closeModal }: AddRecordType) {
         );
       }
       case 'add_unpaid_balance': {
+        const goBack = (): void => {
+          setRefresher(!refresher);
+          setKeyComponent('pocket');
+        }
+
+        const handleChange = (e: any): void => {
+          const value = e.target.value;
+          setPocketInputData({ unpaid_amount: value, pocket_id: selectedAccountData.id });
+        };
+
+        const handleSubmit = (): void => {
+          console.log(pocketInputData);
+        };
 
         return (
-          <Button text={"Go Back"} onClick={() => setKeyComponent('pocket')} type="secondary" className="hover:opacity-75 duration-300 ease-in-out" />
+          <><div className="flex flex-col gap-6 ">
+            <h1 className="text-left text-18">Add unpaid balance</h1>
+            <AccountDropDown accountData={activeAccount} accountType="pocket" />
+            <div className="flex flex-col">
+              <label htmlFor="wallet_name" className="text-13 font-medium">Unpaid balance amount</label>
+              <input value={pocketInputData.unpaid_amount} onChange={handleChange} name="unpaid_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+              {/* <span className={style.inputError}>{nameError}</span> */}
+            </div>
+          </div>
+            <div className="flex flex-row gap-3 mt-px-60">
+              <Button text={"Go Back"} onClick={goBack} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+              <Button text={"Submit"} onClick={handleSubmit} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+            </div>
+          </>
         );
       }
 
