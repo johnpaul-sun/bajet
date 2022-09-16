@@ -56,7 +56,7 @@ function AccountDropDown({ accountData, className = "", accountType }: any) {
 
   return (
     <div className={`${className} flex flex-col`}>
-      <p className="text-13 font-medium">Select {upperCaseFirstLetter(accountType)}: {accountData[activeDropDown]?.id}</p>
+      <p className="text-13 font-medium">Select {upperCaseFirstLetter(accountType)}: </p>
       {
         accountDataState
           ? <>

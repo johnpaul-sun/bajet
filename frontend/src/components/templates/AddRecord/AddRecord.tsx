@@ -58,7 +58,7 @@ function AddRecord({ closeModal }: AddRecordType) {
   useEffect(() => {
     walletInputData.wallet_id = walletId;
     pocketInputData.pocket_id = pocketId;
-  });
+  }, [walletId, pocketId]);
 
   const displayComponent = (key: string) => {
     switch (key) {
