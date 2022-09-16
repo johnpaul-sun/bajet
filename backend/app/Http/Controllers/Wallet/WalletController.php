@@ -74,8 +74,8 @@ class WalletController extends Controller
 
         $wallet->update([
             "name" => $request->name ? $request->name : $wallet->name,
-            "income" => $request->income ? $request->income : $wallet->income,
-            "amount" => $request->amount ? $request->amount : $wallet->amount,
+            "income" => $request->income >= 0 ? $request->income : $wallet->income,
+            "amount" => $request->amount >= 0 ? $request->amount : $wallet->amount,
             "income_every" => $request->income_every ? $request->income_every : $wallet->income_every,
         ]);
 
