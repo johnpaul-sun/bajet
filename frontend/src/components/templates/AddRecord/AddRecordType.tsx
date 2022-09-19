@@ -27,7 +27,7 @@ export type PocketInputDataType = {
 }
 
 export type WalletTransferDataType = {
-  from: number;
-  to: number;
-  transfer_amount: number | undefined;
+  from_wallet: number;
+  to_wallet: number;
+  amount: number | undefined;
 }

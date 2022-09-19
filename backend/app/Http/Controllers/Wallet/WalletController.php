@@ -162,7 +162,7 @@ class WalletController extends Controller
             'user_id' => $user_id
         ]);
 
-        return response($user_id);
+        return response()->json(["message" => "Amount transfered successfully!"]);
     }
 
     public function income(Request $request)

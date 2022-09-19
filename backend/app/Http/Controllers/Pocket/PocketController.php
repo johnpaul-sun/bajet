@@ -215,6 +215,6 @@ class PocketController extends Controller
             'user_id' => $user_id
         ]);
 
-        return response()->json(["message" => "Unpaid amount added to unpaid balance successfully!"]);
+        return response()->json(["message" => "Unpaid balance has been added successfully!"]);
     }
 }

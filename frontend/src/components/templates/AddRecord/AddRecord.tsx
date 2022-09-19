@@ -14,13 +14,13 @@ import OptionCard from "src/components/organisms/OptionCard/OptionCard";
 import style from "src/utils/styles";
 import AccountDropDown from "src/components/organisms/AccountDropDown/AccountDropDown";
 import { AddRecordType, WalletInputDataType, PocketInputDataType, WalletTransferDataType, OptionsType, OptionType } from "./AddRecordType";
-import { walletAPI } from "src/api/useAPI";
+import { pocketAPI, walletAPI } from "src/api/useAPI";
 
 function AddRecord({ closeModal }: AddRecordType) {
   const [keyComponent, setKeyComponent] = useState<string>('option');
   const [walletInputData, setWalletInputData] = useState<WalletInputDataType>({ income_amount: "", wallet_id: 0 });
   const [pocketInputData, setPocketInputData] = useState<PocketInputDataType>({ unpaid_amount: "", pocket_id: 0 });
-  const [walletTransferData, setWalletTransferData] = useState<WalletTransferDataType>({ from: 0, to: 1, transfer_amount: undefined });
+  const [walletTransferData, setWalletTransferData] = useState<WalletTransferDataType>({ from_wallet: 0, to_wallet: 1, amount: undefined });
   const {
     toast: notification,
     refresher: [refresher, setRefresher],
@@ -30,7 +30,7 @@ function AddRecord({ closeModal }: AddRecordType) {
     wallet: { add: [addWalletModal, setAddWalletModal], id: [walletId] },
     pocket: { add: [addPocketModal, setAddPocketModal], id: [pocketId] }
   } = useContext(MainContext) as MainContextType;
-  const [generateIncomeError, setGenerateIncomeError] = useState<string>("");
+  const [recordError, setRecordError] = useState<string>("");
 
   useEffect(() => {
     walletInputData.wallet_id = walletId;
@@ -133,10 +133,11 @@ function AddRecord({ closeModal }: AddRecordType) {
             .then(res => {
               notification(res.data.message);
               setRefresher(!refresher);
+              setRecordError("");
               closeModal();
             })
             .catch(err => {
-              setGenerateIncomeError(err.response.data.message);
+              setRecordError(err.response.data.message);
             })
         };
 
@@ -148,7 +149,7 @@ function AddRecord({ closeModal }: AddRecordType) {
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Income Amount</label>
                 <input value={walletInputData.income_amount || ""} placeholder="0.00" onChange={handleChange} name="income_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
-                <span className={style.inputError}>{generateIncomeError}</span>
+                <span className={style.inputError}>{recordError}</span>
               </div>
             </div>
             <div className="flex flex-row gap-3 mt-px-60">
@@ -159,19 +160,28 @@ function AddRecord({ closeModal }: AddRecordType) {
         );
       }
       case 'transfer_balance': {
-        const isSameDestination = walletTransferData.from === walletTransferData.to;
+        const isSameDestination = walletTransferData.from_wallet === walletTransferData.to_wallet;
 
         const handleChange = (e: { target: { value: any } }): void => {
           const value = e.target.value;
-          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, transfer_amount: value }));
+          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, amount: Number(value) }));
         };
 
         const onSelect = (data: { id: number }, type: string): void => {
-          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, [type]: data?.id }));
+          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, [`${type}_wallet`]: data?.id }));
         }
 
         const onSubmit = (): void => {
-          console.log(walletTransferData);
+          walletAPI.transferFunds(walletTransferData)
+            .then(res => {
+              notification(res.data.message);
+              setRefresher(!refresher);
+              setRecordError("");
+              closeModal();
+            })
+            .catch(err => {
+              setRecordError(err.response.data.message);
+            })
         }
 
         return (
@@ -182,8 +192,8 @@ function AddRecord({ closeModal }: AddRecordType) {
               <AccountDropDown accountData={activeAccount} accountType="wallet" text="From" selected={onSelect} />
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Transfer Amount</label>
-                <input value={walletTransferData.transfer_amount || ""} placeholder="0.00" onChange={handleChange} name="transfer_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
-                {/* <span className={style.inputError}>{'nameError'}</span> */}
+                <input value={walletTransferData.amount || ""} placeholder="0.00" onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+                <span className={style.inputError}>{recordError}</span>
               </div>
               <AccountDropDown accountData={activeAccount} accountType="wallet" text="To" selected={onSelect} setActive={1} />
             </div>
@@ -252,7 +262,16 @@ function AddRecord({ closeModal }: AddRecordType) {
         };
 
         const handleSubmit = (): void => {
-          console.log(pocketInputData);
+          pocketAPI.generateUnpaid(pocketInputData)
+            .then(res => {
+              notification(res.data.message);
+              setRefresher(!refresher);
+              setRecordError("");
+              closeModal();
+            })
+            .catch(err => {
+              setRecordError(err.response.data.message);
+            })
         };
 
         return (
@@ -262,7 +281,7 @@ function AddRecord({ closeModal }: AddRecordType) {
             <div className="flex flex-col">
               <label htmlFor="wallet_name" className="text-13 font-medium">Unpaid balance amount</label>
               <input value={pocketInputData.unpaid_amount || ""} placeholder="0.00" onChange={handleChange} name="unpaid_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
-              {/* <span className={style.inputError}>{nameError}</span> */}
+              <span className={style.inputError}>{recordError}</span>
             </div>
           </div>
             <div className="flex flex-row gap-3 mt-px-60">
