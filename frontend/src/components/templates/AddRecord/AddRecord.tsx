@@ -156,7 +156,10 @@ function AddRecord({ closeModal }: AddRecordType) {
                   <h1 className="text-left text-13 font-medium">Input your income every {selectedAccountData?.income_every}</h1>
                   <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.income)}</h1>
                 </div>
-                <button onClick={inputIncome} className="text-light-100 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
+
+                <div className="flex flex-col items-end justify-end">
+                  <button onClick={inputIncome} className="text-light-100 h-px-30 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
+                </div>
               </div>
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Income Amount</label>
@@ -173,6 +176,7 @@ function AddRecord({ closeModal }: AddRecordType) {
       }
       case 'transfer_balance': {
         const isSameDestination = walletTransferData.from_wallet === walletTransferData.to_wallet;
+        const buttonStyle = "text-dark-100  h-px-30 w-px-100 border-primary-100 border-2 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer";
 
         const handleChange = (e: { target: { value: any } }): void => {
           const value = e.target.value;
@@ -181,6 +185,16 @@ function AddRecord({ closeModal }: AddRecordType) {
 
         const onSelect = (data: { id: number }, type: string): void => {
           setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, [`${type}_wallet`]: data?.id }));
+        }
+
+        const inputPercentage = (percentage: number): void => {
+          const getAmount = activeAccount.map((data: any) => {
+            return walletTransferData.from_wallet === data?.id && data?.amount;
+          }).filter(Boolean)[0];
+
+          const setPercentageAmount = (percentage / 100) * getAmount;
+
+          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, amount: setPercentageAmount }));
         }
 
         const onSubmit = (): void => {
@@ -202,6 +216,14 @@ function AddRecord({ closeModal }: AddRecordType) {
               <h1 className="text-left text-18">Transfer wallet funds</h1>
               {isSameDestination && <span className={`${style.inputError} text-center`}> From, and To, wallets cannot be the same.</span>}
               <AccountDropDown accountData={activeAccount} accountType="wallet" text="From" selected={onSelect} />
+              <div className="flex flex-col gap-2">
+                <h1 className="text-left text-13 font-medium">Input by percentage</h1>
+                <div className="flex flex-row justify-between items-center">
+                  {[25, 50, 75, 100].map((percentage: number) => {
+                    return <button key={percentage} onClick={() => inputPercentage(percentage)} className={buttonStyle}>{percentage}%</button>;
+                  })}
+                </div>
+              </div>
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Transfer Amount</label>
                 <input value={walletTransferData.amount || ""} placeholder="0.00" onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
@@ -300,7 +322,7 @@ function AddRecord({ closeModal }: AddRecordType) {
                 <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.amount)}</h1>
               </div>
               <div className="flex flex-col items-end justify-end">
-                <button onClick={inputUnpaid} className="text-light-100 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
+                <button onClick={inputUnpaid} className="text-light-100 h-px-30 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
               </div>
             </div>
             <div className="flex flex-col">
