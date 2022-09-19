@@ -15,6 +15,7 @@ import style from "src/utils/styles";
 import AccountDropDown from "src/components/organisms/AccountDropDown/AccountDropDown";
 import { AddRecordType, WalletInputDataType, PocketInputDataType, WalletTransferDataType, OptionsType, OptionType } from "./AddRecordType";
 import { pocketAPI, walletAPI } from "src/api/useAPI";
+import formatNumber from "src/utils/formatNumber";
 
 function AddRecord({ closeModal }: AddRecordType) {
   const [keyComponent, setKeyComponent] = useState<string>('option');
@@ -123,6 +124,10 @@ function AddRecord({ closeModal }: AddRecordType) {
           setKeyComponent('wallet');
         }
 
+        const inputIncome = (): void => {
+          setWalletInputData({ income_amount: selectedAccountData?.income, wallet_id: walletId });
+        }
+
         const handleChange = (e: any): void => {
           const value = e.target.value;
           setWalletInputData({ income_amount: value, wallet_id: walletId });
@@ -146,6 +151,13 @@ function AddRecord({ closeModal }: AddRecordType) {
             <div className="flex flex-col gap-6 ">
               <h1 className="text-left text-18">Generate wallet income</h1>
               <AccountDropDown accountData={activeAccount} accountType="wallet" />
+              <div className="flex flex-row justify-between">
+                <div className="flex flex-col">
+                  <h1 className="text-left text-13 font-medium">Input your income every {selectedAccountData?.income_every}</h1>
+                  <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.income)}</h1>
+                </div>
+                <button onClick={inputIncome} className="text-light-100 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
+              </div>
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Income Amount</label>
                 <input value={walletInputData.income_amount || ""} placeholder="0.00" onChange={handleChange} name="income_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
@@ -256,6 +268,10 @@ function AddRecord({ closeModal }: AddRecordType) {
           setKeyComponent('pocket');
         }
 
+        const inputUnpaid = (): void => {
+          setPocketInputData({ unpaid_amount: selectedAccountData?.amount, pocket_id: selectedAccountData.id });
+        }
+
         const handleChange = (e: any): void => {
           const value = e.target.value;
           setPocketInputData({ unpaid_amount: value, pocket_id: selectedAccountData.id });
@@ -278,6 +294,15 @@ function AddRecord({ closeModal }: AddRecordType) {
           <><div className="flex flex-col gap-6 ">
             <h1 className="text-left text-18">Add unpaid balance</h1>
             <AccountDropDown accountData={activeAccount} accountType="pocket" />
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-left text-13 font-medium">Input your scheduled {selectedAccountData?.schedule} balance</h1>
+                <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.amount)}</h1>
+              </div>
+              <div className="flex flex-col items-end justify-end">
+                <button onClick={inputUnpaid} className="text-light-100 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
+              </div>
+            </div>
             <div className="flex flex-col">
               <label htmlFor="wallet_name" className="text-13 font-medium">Unpaid balance amount</label>
               <input value={pocketInputData.unpaid_amount || ""} placeholder="0.00" onChange={handleChange} name="unpaid_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />

@@ -233,7 +233,7 @@ function Dashboard() {
               <span>₱ {formatNumber(income)}</span>
             </div>
             <div className="income h-px-27 bg-success-100 my-px-9 flex justify-end items-end">
-              <div className="expense h-px-27 bg-error-100" style={{ width: `${netWorth < 0 ? "100" : (expense / income) * 100}%` }}></div>
+              <div className="duration-1000 ease-in-out expense h-px-27 bg-error-100" style={{ width: `${netWorth < 0 ? "100" : (expense / income) * 100}%` }}></div>
             </div>
             <div className="text-12 flex flex-row-reverse justify-between text-error-100">
               <span>Total Expenses</span>
