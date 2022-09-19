@@ -50,7 +50,7 @@ function WalletDropDown({
 
   const [dropDownState, setDropDownState] = useState<boolean>(false);
 
-  const walletState: boolean = parseFloat(amount?.toString().split(",").join("")) < 0;
+  const walletState: boolean = parseFloat(amount?.toString().split(",").join("")) <= 0;
 
   const onEdit = (): void => {
     setWalletId(id || 0);

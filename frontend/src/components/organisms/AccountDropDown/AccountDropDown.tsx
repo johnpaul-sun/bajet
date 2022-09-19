@@ -13,6 +13,7 @@ function AccountDropDown({ setActive = 0, accountData, className = "", accountTy
     api: {
       getActiveAccount
     },
+    refresher: [refresher],
     dropDownData: [, setSelectedAccountData],
     wallet: { id: [, setWalletId] },
     pocket: { id: [, setPocketId] }
@@ -45,11 +46,11 @@ function AccountDropDown({ setActive = 0, accountData, className = "", accountTy
 
   useEffect(() => {
     getActiveAccount(accountType);
-    setSelectedAccountData(accountData[activeDropDown]);
     returnSelected(accountData[activeDropDown]);
-  }, [accountDataState]);
+  }, [accountDataState, refresher]);
 
   useEffect(() => {
+    setSelectedAccountData(accountData[activeDropDown]);
     accountType === "wallet" ? setWalletId(accountData[activeDropDown]?.id) : setPocketId(accountData[activeDropDown]?.id);
   });
 

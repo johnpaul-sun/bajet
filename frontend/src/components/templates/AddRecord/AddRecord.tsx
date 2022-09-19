@@ -23,6 +23,9 @@ function AddRecord({ closeModal }: AddRecordType) {
   const [pocketInputData, setPocketInputData] = useState<PocketInputDataType>({ unpaid_amount: "", pocket_id: 0 });
   const [walletTransferData, setWalletTransferData] = useState<WalletTransferDataType>({ from_wallet: 0, to_wallet: 1, amount: undefined });
   const {
+    api: {
+      getActiveAccount
+    },
     toast: notification,
     refresher: [refresher, setRefresher],
     activeAccount: [activeAccount],
@@ -37,6 +40,10 @@ function AddRecord({ closeModal }: AddRecordType) {
     walletInputData.wallet_id = walletId;
     pocketInputData.pocket_id = pocketId;
   }, [walletId, pocketId]);
+
+  useEffect(() => {
+    getActiveAccount('reset');
+  }, [keyComponent])
 
   const displayComponent = (key: string) => {
     switch (key) {
@@ -95,9 +102,11 @@ function AddRecord({ closeModal }: AddRecordType) {
             }
             case 'add': {
               setKeyComponent('add_income');
+              setRefresher(!refresher);
               break;
             }
             case 'transfer': {
+              setRefresher(!refresher);
               setKeyComponent('transfer_balance');
               break;
             }
@@ -154,7 +163,7 @@ function AddRecord({ closeModal }: AddRecordType) {
               <div className="flex flex-row justify-between">
                 <div className="flex flex-col">
                   <h1 className="text-left text-13 font-medium">Input your income every {selectedAccountData?.income_every}</h1>
-                  <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.income)}</h1>
+                  <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.income || 0)}</h1>
                 </div>
 
                 <div className="flex flex-col items-end justify-end">
@@ -175,6 +184,11 @@ function AddRecord({ closeModal }: AddRecordType) {
         );
       }
       case 'transfer_balance': {
+        const goBack = (): void => {
+          setKeyComponent('wallet');
+          getActiveAccount('reset');
+        };
+
         const isSameDestination = walletTransferData.from_wallet === walletTransferData.to_wallet;
         const buttonStyle = "text-dark-100  h-px-30 w-px-100 border-primary-100 border-2 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer";
 
@@ -232,7 +246,7 @@ function AddRecord({ closeModal }: AddRecordType) {
               <AccountDropDown accountData={activeAccount} accountType="wallet" text="To" selected={onSelect} setActive={1} />
             </div>
             <div className="flex flex-row gap-3 mt-px-60">
-              <Button text={"Go Back"} onClick={() => { setKeyComponent('wallet') }} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+              <Button text={"Go Back"} onClick={goBack} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
               <Button text={"Submit"} disabled={isSameDestination} onClick={onSubmit} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
             </div>
           </>
@@ -264,6 +278,7 @@ function AddRecord({ closeModal }: AddRecordType) {
               break;
             }
             case 'add': {
+              setRefresher(!refresher);
               setKeyComponent('add_unpaid_balance');
               break;
             }
@@ -291,7 +306,7 @@ function AddRecord({ closeModal }: AddRecordType) {
         }
 
         const inputUnpaid = (): void => {
-          setPocketInputData({ unpaid_amount: selectedAccountData?.amount, pocket_id: selectedAccountData.id });
+          setPocketInputData({ unpaid_amount: selectedAccountData?.amount, pocket_id: pocketId });
         }
 
         const handleChange = (e: any): void => {
@@ -319,7 +334,7 @@ function AddRecord({ closeModal }: AddRecordType) {
             <div className="flex flex-row justify-between">
               <div className="flex flex-col">
                 <h1 className="text-left text-13 font-medium">Input your scheduled {selectedAccountData?.schedule} balance</h1>
-                <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.amount)}</h1>
+                <h1 className="text-left text-18 font-medium text-success-100">₱ {formatNumber(selectedAccountData?.amount || 0)}</h1>
               </div>
               <div className="flex flex-col items-end justify-end">
                 <button onClick={inputUnpaid} className="text-light-100 h-px-30 w-px-100 bg-primary-100 rounded-px-3 hover:bg-primary-60 duration-300 ease-in-out cursor-pointer">Add</button>
