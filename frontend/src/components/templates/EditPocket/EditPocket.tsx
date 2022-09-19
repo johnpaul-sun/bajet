@@ -141,7 +141,7 @@ function EditPocket({ onClickHeader, handleSubmit }: EditPocketType) {
         </div>
         <div className="flex flex-col">
           <label htmlFor="amount" className="text-13 font-medium">Amount</label>
-          <input value={pocketData.amount} onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <input value={pocketData.amount || ""} placeholder="0.00" onChange={handleChange} name="amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>
       </div>

@@ -6,9 +6,9 @@ import PocketIcon from 'src/assets/images/pocket.png'
 import { MainContext, MainContextType } from "src/context/MainContext";
 import upperCaseFirstLetter from "src/utils/upperCaseFirstLetter";
 
-function AccountDropDown({ accountData, className = "", accountType }: any) {
+function AccountDropDown({ setActive = 0, accountData, className = "", accountType, text = "", selected = () => { } }: any) {
   const [dropDownState, setDropDownState] = useState<boolean>(false);
-  const [activeDropDown, setActiveDropDown] = useState<number>(0);
+  const [activeDropDown, setActiveDropDown] = useState<number>(setActive);
   const {
     api: {
       getActiveAccount
@@ -18,11 +18,40 @@ function AccountDropDown({ accountData, className = "", accountType }: any) {
     pocket: { id: [, setPocketId] }
   } = useContext(MainContext) as MainContextType;
 
+  const returnSelected = (data: number) => {
+    const type = text.toLowerCase();
+    switch (type) {
+      case "from": {
+        return selected(data, type);
+      }
+      case "to": {
+        return selected(data, type);
+      }
+
+      default: {
+        return selected(data);
+      }
+    }
+  };
+
   const selectPayee = (index: number, id: number): void => {
     setActiveDropDown(index);
     setDropDownState(!dropDownState);
     setSelectedAccountData(accountData[index]);
+    returnSelected(accountData[index]);
   }
+
+  const accountDataState = accountData[0] === 'loading' || accountData.length === 0;
+
+  useEffect(() => {
+    getActiveAccount(accountType);
+    setSelectedAccountData(accountData[activeDropDown]);
+    returnSelected(accountData[activeDropDown]);
+  }, [accountDataState]);
+
+  useEffect(() => {
+    accountType === "wallet" ? setWalletId(accountData[activeDropDown]?.id) : setPocketId(accountData[activeDropDown]?.id);
+  });
 
   const moreData = accountData?.map((data: any, index: number) => {
     return (
@@ -43,20 +72,9 @@ function AccountDropDown({ accountData, className = "", accountType }: any) {
     )
   });
 
-  const accountDataState = accountData[0] === 'loading' || accountData.length === 0;
-
-  useEffect(() => {
-    getActiveAccount(accountType);
-    setSelectedAccountData(accountData[activeDropDown]);
-  }, [accountDataState]);
-
-  useEffect(() => {
-    accountType === "wallet" ? setWalletId(accountData[activeDropDown]?.id) : setPocketId(accountData[activeDropDown]?.id);
-  });
-
   return (
     <div className={`${className} flex flex-col`}>
-      <p className="text-13 font-medium">Select {upperCaseFirstLetter(accountType)}: </p>
+      <p className="text-13 font-medium">{text || `Select ${upperCaseFirstLetter(accountType)}`}: </p>
       {
         accountDataState
           ? <>

@@ -150,7 +150,7 @@ function History() {
       const accountType = allTransactions ? data.account_type : data.pocket_id ? "pocket" : "wallet";
       const transactionType = data.data?.transaction_type || data.transaction_type;
 
-      const amount = data.data?.amount || data.amount;
+      const amount = data.data?.amount || data.amount || 0;
       const name = activeDropDown < 0 ? data.data?.name || data?.name || data.data?.pocket?.name || data?.wallet?.name || data?.pocket?.name : transactionType === 'expense' ? data.name : selectedDropDown.name;
       const date = data?.data?.created_at || data.created_at;
 

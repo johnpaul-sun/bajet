@@ -145,12 +145,12 @@ function EditWallet({ onClickHeader, handleSubmit }: EditWalletType) {
         </div>
         <div className="flex flex-col">
           <label htmlFor="amount" className="text-13 font-medium">Automated Income Amount</label>
-          <input name="income" value={walletData.income} onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <input name="income" value={walletData.income || ""} placeholder="0.00" onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>
         <div className="flex flex-col">
           <label htmlFor="amount" className="text-13 font-medium">Starting Amount</label>
-          <input name="amount" value={walletData.amount} onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+          <input name="amount" value={walletData.amount || ""} placeholder="0.00" onChange={handleChange} type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
           <span className={style.inputError}>{amountError}</span>
         </div>
       </div>

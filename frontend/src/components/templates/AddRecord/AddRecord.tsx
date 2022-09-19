@@ -13,40 +13,16 @@ import { MainContext, MainContextType } from "src/context/MainContext";
 import OptionCard from "src/components/organisms/OptionCard/OptionCard";
 import style from "src/utils/styles";
 import AccountDropDown from "src/components/organisms/AccountDropDown/AccountDropDown";
-
-type AddRecordType = {
-  closeModal: () => void,
-}
-
-type OptionsType = {
-  text: string,
-  image: string,
-  color: string,
-  option: string
-}[]
-
-type OptionType = {
-  text: string,
-  image: string,
-  color: string,
-  option: string
-};
-
-type WalletInputDataType = {
-  income_amount: string,
-  wallet_id: number
-}
-
-type PocketInputDataType = {
-  unpaid_amount: string,
-  pocket_id: number
-}
+import { AddRecordType, WalletInputDataType, PocketInputDataType, WalletTransferDataType, OptionsType, OptionType } from "./AddRecordType";
+import { walletAPI } from "src/api/useAPI";
 
 function AddRecord({ closeModal }: AddRecordType) {
   const [keyComponent, setKeyComponent] = useState<string>('option');
   const [walletInputData, setWalletInputData] = useState<WalletInputDataType>({ income_amount: "", wallet_id: 0 });
   const [pocketInputData, setPocketInputData] = useState<PocketInputDataType>({ unpaid_amount: "", pocket_id: 0 });
+  const [walletTransferData, setWalletTransferData] = useState<WalletTransferDataType>({ from: 0, to: 1, transfer_amount: undefined });
   const {
+    toast: notification,
     refresher: [refresher, setRefresher],
     activeAccount: [activeAccount],
     dropDownData: [selectedAccountData],
@@ -54,6 +30,7 @@ function AddRecord({ closeModal }: AddRecordType) {
     wallet: { add: [addWalletModal, setAddWalletModal], id: [walletId] },
     pocket: { add: [addPocketModal, setAddPocketModal], id: [pocketId] }
   } = useContext(MainContext) as MainContextType;
+  const [generateIncomeError, setGenerateIncomeError] = useState<string>("");
 
   useEffect(() => {
     walletInputData.wallet_id = walletId;
@@ -152,7 +129,15 @@ function AddRecord({ closeModal }: AddRecordType) {
         };
 
         const handleSubmit = (): void => {
-          console.log(walletInputData);
+          walletAPI.generateIncome(walletInputData)
+            .then(res => {
+              notification(res.data.message);
+              setRefresher(!refresher);
+              closeModal();
+            })
+            .catch(err => {
+              setGenerateIncomeError(err.response.data.message);
+            })
         };
 
         return (
@@ -162,8 +147,8 @@ function AddRecord({ closeModal }: AddRecordType) {
               <AccountDropDown accountData={activeAccount} accountType="wallet" />
               <div className="flex flex-col">
                 <label htmlFor="wallet_name" className="text-13 font-medium">Income Amount</label>
-                <input value={walletInputData.income_amount} onChange={handleChange} name="income_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
-                {/* <span className={style.inputError}>{nameError}</span> */}
+                <input value={walletInputData.income_amount || ""} placeholder="0.00" onChange={handleChange} name="income_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+                <span className={style.inputError}>{generateIncomeError}</span>
               </div>
             </div>
             <div className="flex flex-row gap-3 mt-px-60">
@@ -174,12 +159,37 @@ function AddRecord({ closeModal }: AddRecordType) {
         );
       }
       case 'transfer_balance': {
+        const isSameDestination = walletTransferData.from === walletTransferData.to;
+
+        const handleChange = (e: { target: { value: any } }): void => {
+          const value = e.target.value;
+          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, transfer_amount: value }));
+        };
+
+        const onSelect = (data: { id: number }, type: string): void => {
+          setWalletTransferData((prev: WalletTransferDataType) => ({ ...prev, [type]: data?.id }));
+        }
+
+        const onSubmit = (): void => {
+          console.log(walletTransferData);
+        }
 
         return (
           <>
+            <div className="flex flex-col gap-5 ">
+              <h1 className="text-left text-18">Transfer wallet funds</h1>
+              {isSameDestination && <span className={`${style.inputError} text-center`}> From, and To, wallets cannot be the same.</span>}
+              <AccountDropDown accountData={activeAccount} accountType="wallet" text="From" selected={onSelect} />
+              <div className="flex flex-col">
+                <label htmlFor="wallet_name" className="text-13 font-medium">Transfer Amount</label>
+                <input value={walletTransferData.transfer_amount || ""} placeholder="0.00" onChange={handleChange} name="transfer_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+                {/* <span className={style.inputError}>{'nameError'}</span> */}
+              </div>
+              <AccountDropDown accountData={activeAccount} accountType="wallet" text="To" selected={onSelect} setActive={1} />
+            </div>
             <div className="flex flex-row gap-3 mt-px-60">
               <Button text={"Go Back"} onClick={() => { setKeyComponent('wallet') }} type="secondaryInvert" fontType="dark" className="w-full hover:opacity-75 duration-300 ease-in-out" />
-              <Button text={"Submit"} onClick={() => console.log('submit')} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
+              <Button text={"Submit"} disabled={isSameDestination} onClick={onSubmit} type="secondary" className="w-full hover:opacity-75 duration-300 ease-in-out" />
             </div>
           </>
         );
@@ -251,7 +261,7 @@ function AddRecord({ closeModal }: AddRecordType) {
             <AccountDropDown accountData={activeAccount} accountType="pocket" />
             <div className="flex flex-col">
               <label htmlFor="wallet_name" className="text-13 font-medium">Unpaid balance amount</label>
-              <input value={pocketInputData.unpaid_amount} onChange={handleChange} name="unpaid_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
+              <input value={pocketInputData.unpaid_amount || ""} placeholder="0.00" onChange={handleChange} name="unpaid_amount" type="number" className="bg-background-dropdown-selected h-px-30 rounded-px-3 text-success-100 text-13 px-px-12" />
               {/* <span className={style.inputError}>{nameError}</span> */}
             </div>
           </div>

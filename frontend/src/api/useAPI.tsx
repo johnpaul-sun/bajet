@@ -1,3 +1,4 @@
+import { WalletTransferDataType } from 'src/components/templates/AddRecord/AddRecordType';
 import { userApiCall, adminApiCall } from '.';
 
 // Update Type in integration 
@@ -68,7 +69,13 @@ export const walletAPI = {
   },
   deleteWallet: (id: number) => {
     return userApiCall.delete(`/wallets/${id}`);
-  }
+  },
+  transferFunds: (data: WalletTransferDataType) => {
+    return userApiCall.post('/wallets/transfer', data);
+  },
+  generateIncome: (data: any) => {
+    return userApiCall.post('/wallets/income', data);
+  },
 }
 
 export const pocketAPI = {
@@ -102,7 +109,10 @@ export const pocketAPI = {
   },
   payBalance: (data: any) => {
     return userApiCall.post('/pockets/pay', data);
-  }
+  },
+  generateUnpaid: (data: any) => {
+    return userApiCall.post('/pockets/add-amount-to-pay', data);
+  },
 }
 
 export const historyAPI = {
