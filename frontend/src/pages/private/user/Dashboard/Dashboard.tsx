@@ -25,10 +25,11 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from "src/redux/Slices/TokenSlice/TokenSlice";
-import { MainContext, MainContextType } from "src/context/MainContext";
 import 'react-toastify/dist/ReactToastify.css';
 import Moment from "react-moment";
 import AddRecord from "src/components/templates/AddRecord/AddRecord";
+import { MainContext } from "src/context/MainContext";
+import { MainContextType } from "src/context/MainContextType";
 
 export type WalletDataType = {
   amount: number,
